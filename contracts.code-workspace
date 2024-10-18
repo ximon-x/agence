@@ -1,0 +1,10 @@
+{
+  "folders": [
+    {
+      "path": "./modules/algorand"
+    },
+    {
+      "path": "./modules/near"
+    }
+  ]
+}
