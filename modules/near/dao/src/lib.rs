@@ -5,6 +5,7 @@ use near_sdk::{log, near};
 #[near(contract_state)]
 pub struct Contract {
     greeting: String,
+    stress: u32,
 }
 
 // Define the default, which automatically initializes the contract
@@ -12,6 +13,7 @@ impl Default for Contract {
     fn default() -> Self {
         Self {
             greeting: "Hello".to_string(),
+            stress: 0,
         }
     }
 }
