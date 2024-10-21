@@ -1,57 +1,219 @@
-// Find all our documentation at https://docs.near.org
-use near_sdk::{log, near};
+mod types;
+mod views;
 
-// Define the contract structure
+use near_sdk::{
+    env, json_types::U64, near, require, store::IterableMap, AccountId, BorshStorageKey, Gas,
+    PanicOnDefault,
+};
+use types::{Gig, GigStatus, RejectionReason};
+
+#[near]
+#[derive(BorshStorageKey)]
+pub enum Prefix {
+    Gigs,
+}
+
+pub const GIG_CREATION_FEE: Gas = Gas::from_gas(1_000_000_000_000);
+
 #[near(contract_state)]
+#[derive(PanicOnDefault)]
 pub struct Contract {
-    greeting: String,
-    stress: u32,
+    governance_id: AccountId,
+    gigs: IterableMap<U64, Gig>,
+    next_gig_id: U64,
 }
 
-// Define the default, which automatically initializes the contract
-impl Default for Contract {
-    fn default() -> Self {
-        Self {
-            greeting: "Hello".to_string(),
-            stress: 0,
-        }
-    }
-}
-
-// Implement the contract structure
 #[near]
 impl Contract {
-    // Public method - returns the greeting saved, defaulting to DEFAULT_GREETING
-    pub fn get_greeting(&self) -> String {
-        self.greeting.clone()
+    #[init]
+    #[private]
+    pub fn init(governance_id: AccountId) -> Self {
+        Self {
+            governance_id,
+            next_gig_id: U64(1),
+            gigs: IterableMap::new(Prefix::Gigs),
+        }
     }
 
-    // Public method - accepts a greeting, such as "howdy", and records it
-    pub fn set_greeting(&mut self, greeting: String) {
-        log!("Saving greeting: {greeting}");
-        self.greeting = greeting;
+    pub fn create_gig(
+        &mut self,
+        kind: types::GigKind,
+        agency: AccountId,
+        min_hourly_rate: u8,
+        max_hourly_rate: u8,
+    ) -> U64 {
+        require!(
+            env::predecessor_account_id() == self.governance_id,
+            "Only governance can call this method."
+        );
+
+        let curr_id: u64 = self.next_gig_id.into();
+        let next_id: U64 = U64::from(curr_id + 1);
+
+        let gig = Gig {
+            kind,
+            ace: None,
+            min_hourly_rate,
+            max_hourly_rate,
+            agency: agency.clone(),
+            id: U64(curr_id),
+            status: GigStatus::Pending,
+        };
+
+        self.gigs.insert(U64(curr_id), gig);
+        self.next_gig_id = next_id;
+
+        U64(curr_id)
+    }
+
+    pub fn start_gig(&mut self, gig_id: U64, ace: AccountId) {
+        require!(
+            env::predecessor_account_id() == self.governance_id,
+            "Only governance can call this method."
+        );
+
+        require!(self.gigs.get(&gig_id).is_some(), "Gig not found.");
+        require!(self.gigs.get(&gig_id).unwrap().status == GigStatus::Pending);
+
+        let gig = self.gigs.get_mut(&gig_id).unwrap();
+        gig.ace = Some(ace);
+
+        self.update_gig_status(gig_id, GigStatus::Active);
+    }
+
+    pub fn update_gig_status(&mut self, gig_id: U64, status: GigStatus) {
+        require!(
+            env::predecessor_account_id() == self.governance_id,
+            "Only governance can call this method."
+        );
+
+        require!(
+            !matches!(
+                self.gigs.get(&gig_id).unwrap().status,
+                GigStatus::Rejected { .. }
+            ),
+            "Gig has been rejected."
+        );
+
+        let gig = self.gigs.get_mut(&gig_id).expect("Gig not found");
+        gig.status = status;
+    }
+
+    pub fn flag_gig(&mut self, gig_id: U64, reason: RejectionReason) {
+        require!(
+            env::predecessor_account_id() == self.governance_id,
+            "Only governance can call this method."
+        );
+
+        require!(self.gigs.get(&gig_id).is_some(), "Gig not found.");
+
+        let gig = self.gigs.get_mut(&gig_id).unwrap();
+        gig.status = GigStatus::Rejected { reason };
     }
 }
 
-/*
- * The rest of this file holds the inline tests for the code above
- * Learn more about Rust tests: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
- */
 #[cfg(test)]
 mod tests {
+    use near_sdk::{test_utils::VMContextBuilder, testing_env};
+    use types::GigKind;
+
     use super::*;
 
+    const GOVERNOR: &str = "governor";
+    const AGENCY: &str = "agency";
+    const ACE: &str = "ace";
+
+    const MIN_HOURLY_RATE: u8 = 10;
+    const MAX_HOURLY_RATE: u8 = 20;
+
     #[test]
-    fn get_default_greeting() {
-        let contract = Contract::default();
-        // this test did not call set_greeting so should return the default "Hello" greeting
-        assert_eq!(contract.get_greeting(), "Hello");
+    fn governor_create_gig() {
+        set_context(GOVERNOR);
+        let mut contract = Contract::init(GOVERNOR.parse().unwrap());
+
+        let id = contract.create_gig(
+            GigKind::FullTime,
+            AGENCY.parse().unwrap(),
+            MIN_HOURLY_RATE,
+            MAX_HOURLY_RATE,
+        );
+
+        assert_eq!(id, U64(1));
     }
 
     #[test]
-    fn set_then_get_greeting() {
-        let mut contract = Contract::default();
-        contract.set_greeting("howdy".to_string());
-        assert_eq!(contract.get_greeting(), "howdy");
+    #[should_panic]
+    fn non_governor_create_gig() {
+        set_context(ACE);
+        let mut contract = Contract::init(GOVERNOR.parse().unwrap());
+
+        let id = contract.create_gig(
+            GigKind::FullTime,
+            AGENCY.parse().unwrap(),
+            MIN_HOURLY_RATE,
+            MAX_HOURLY_RATE,
+        );
+
+        // This should not be equal as the above call should panic.
+        assert_ne!(id, U64(1));
+    }
+
+    #[test]
+    fn update_pending_gig() {
+        set_context(GOVERNOR);
+        let mut contract = Contract::init(GOVERNOR.parse().unwrap());
+
+        let id = contract.create_gig(
+            GigKind::FullTime,
+            AGENCY.parse().unwrap(),
+            MIN_HOURLY_RATE,
+            MAX_HOURLY_RATE,
+        );
+
+        contract.start_gig(id, AGENCY.parse().unwrap());
+        assert_eq!(contract.get_gig(id).unwrap().status, GigStatus::Active);
+
+        contract.update_gig_status(id, GigStatus::Completed);
+        assert_eq!(contract.get_gig(id).unwrap().status, GigStatus::Completed);
+    }
+
+    #[test]
+    #[should_panic]
+    fn update_non_pending_gig() {
+        set_context(GOVERNOR);
+        let mut contract = Contract::init(GOVERNOR.parse().unwrap());
+
+        let id = contract.create_gig(
+            GigKind::FullTime,
+            AGENCY.parse().unwrap(),
+            MIN_HOURLY_RATE,
+            MAX_HOURLY_RATE,
+        );
+
+        contract.update_gig_status(
+            id,
+            GigStatus::Rejected {
+                reason: RejectionReason::Scam,
+            },
+        );
+
+        // Starting the flagged gig should panic.
+        contract.start_gig(id, ACE.parse().unwrap());
+
+        // Completing the flagged gig should panic.
+        contract.update_gig_status(id, GigStatus::Completed);
+
+        // Canceling the flagged gig should panic.
+        contract.update_gig_status(id, GigStatus::Canceled);
+
+        // Expiring the flagged gig should panic.
+        contract.update_gig_status(id, GigStatus::Expired);
+    }
+
+    fn set_context(predecessor: &str) {
+        let mut builder = VMContextBuilder::new();
+        builder.predecessor_account_id(predecessor.parse().unwrap());
+
+        testing_env!(builder.build());
     }
 }

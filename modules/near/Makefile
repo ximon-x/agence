@@ -1,5 +1,14 @@
-build-dao:
-	@cd dao && ./scripts/build.sh
+test-gigs:
+	@cd gigs && cargo test
+
+test-staking:
+	@cd staking && cargo test
+
+test-governance:
+	@cd governance && cargo test
+
+test: test-gigs test-staking test-governance
+
 
 build-gigs:
 	@cd gigs && ./scripts/build.sh
@@ -10,6 +19,4 @@ build-staking:
 build-governance:
 	@cd governance && ./scripts/build.sh
 
-build: build-dao build-gigs build-staking build-governance
-
-
+build: build-gigs build-staking build-governance

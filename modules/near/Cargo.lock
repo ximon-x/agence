@@ -535,16 +535,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dao"
-version = "0.1.0"
-dependencies = [
- "near-sdk",
- "near-workspaces",
- "serde_json",
- "tokio",
-]
-
-[[package]]
 name = "darling"
 version = "0.20.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
