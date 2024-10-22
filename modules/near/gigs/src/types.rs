@@ -20,6 +20,7 @@ pub enum RejectionReason {
 #[derive(PartialEq, Debug)]
 #[near(serializers=[json, borsh])]
 pub enum GigStatus {
+    Unverified,
     Pending,
     Active,
     Completed,

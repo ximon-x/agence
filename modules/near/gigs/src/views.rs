@@ -1,7 +1,8 @@
-use near_sdk::{json_types::U64, AccountId};
+use near_sdk::{json_types::U64, near, AccountId};
 
-use crate::{Contract, Gig};
+use crate::{Contract, ContractExt, Gig};
 
+#[near]
 impl Contract {
     pub fn get_gigs(&self, account: AccountId) -> Vec<(&U64, &Gig)> {
         self.gigs
@@ -18,13 +19,14 @@ impl Contract {
 #[cfg(test)]
 mod tests {
 
-    use near_sdk::{test_utils::VMContextBuilder, testing_env, NearToken};
-
     use crate::types::GigKind;
+    use near_sdk::{test_utils::VMContextBuilder, testing_env, NearToken};
 
     use super::*;
 
     const GOVERNOR: &str = "governor";
+    const STAKING: &str = "staking";
+
     const AGENCY: &str = "agency";
     const ACE: &str = "ace";
 
@@ -33,9 +35,10 @@ mod tests {
 
     #[test]
     fn get_gig() {
-        let mut contract = Contract::init(GOVERNOR.parse().unwrap());
         set_context(GOVERNOR);
+        let mut contract = Contract::init(GOVERNOR.parse().unwrap(), STAKING.parse().unwrap());
 
+        set_context(STAKING);
         for i in 1..=10 {
             contract.create_gig(
                 GigKind::FullTime,
@@ -60,9 +63,10 @@ mod tests {
 
     #[test]
     fn get_gigs_by_account() {
-        let mut contract = Contract::init(GOVERNOR.parse().unwrap());
         set_context(GOVERNOR);
+        let mut contract = Contract::init(GOVERNOR.parse().unwrap(), STAKING.parse().unwrap());
 
+        set_context(STAKING);
         // Create 5 gigs for AGENCY and 5 for ACE
         for i in 1..=10 {
             // Create alternating gigs for ACE and AGENCY
@@ -91,11 +95,11 @@ mod tests {
         set_context(ACE);
         assert_eq!(contract.get_gigs(ACE.parse().unwrap()).len(), 5);
 
-        println!("Breakpoint");
         // Set ACE as ace for all AGENCY's pending gigs
-        set_context(GOVERNOR);
+        set_context(STAKING);
         for i in 1..=10 {
             if i % 2 == 0 {
+                contract.verify_gig(U64(i));
                 contract.start_gig(U64(i), ACE.parse().unwrap());
             }
         }

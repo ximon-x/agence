@@ -7,7 +7,7 @@
       "compiler": "rustc 1.79.0",
       "builder": "cargo-near cargo-near-build 0.1.1"
     },
-    "wasm_hash": "64YyyjvuFrW3bDm53xjVfFcCXnBz5Z3vq18H5fn6Hkx5"
+    "wasm_hash": "7SZ4KkGxZMjmKCe574idkwidtGEVA7kC42uKtrZWtDH1"
   },
   "body": {
     "functions": [
@@ -65,6 +65,21 @@
         }
       },
       {
+        "name": "create_gig_callback",
+        "kind": "view",
+        "modifiers": [
+          "private"
+        ],
+        "callbacks": [
+          {
+            "serialization_type": "json",
+            "type_schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      {
         "name": "flag_gig",
         "kind": "call",
         "params": {
@@ -95,7 +110,13 @@
           "serialization_type": "json",
           "args": [
             {
-              "name": "governance_id",
+              "name": "governance_account",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "staking_account",
               "type_schema": {
                 "$ref": "#/definitions/AccountId"
               }
@@ -168,6 +189,7 @@
             {
               "type": "string",
               "enum": [
+                "Unverified",
                 "Pending",
                 "Active",
                 "Completed",
