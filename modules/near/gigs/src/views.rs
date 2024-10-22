@@ -18,7 +18,7 @@ impl Contract {
 #[cfg(test)]
 mod tests {
 
-    use near_sdk::{test_utils::VMContextBuilder, testing_env};
+    use near_sdk::{test_utils::VMContextBuilder, testing_env, NearToken};
 
     use crate::types::GigKind;
 
@@ -40,6 +40,7 @@ mod tests {
             contract.create_gig(
                 GigKind::FullTime,
                 AGENCY.parse().unwrap(),
+                NearToken::from_millinear(5 * 10u128.pow(3)),
                 MIN_HOURLY_RATE + i,
                 MAX_HOURLY_RATE + i,
             );
@@ -69,6 +70,7 @@ mod tests {
                 contract.create_gig(
                     GigKind::FullTime,
                     AGENCY.parse().unwrap(),
+                    NearToken::from_millinear(5 * 10u128.pow(3)),
                     MIN_HOURLY_RATE,
                     MAX_HOURLY_RATE,
                 );
@@ -76,6 +78,7 @@ mod tests {
                 contract.create_gig(
                     GigKind::FullTime,
                     ACE.parse().unwrap(),
+                    NearToken::from_millinear(5 * 10u128.pow(3)),
                     MIN_HOURLY_RATE,
                     MAX_HOURLY_RATE,
                 );

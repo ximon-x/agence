@@ -3,7 +3,7 @@ mod views;
 
 use near_sdk::{
     env, json_types::U64, near, require, store::IterableMap, AccountId, BorshStorageKey, Gas,
-    PanicOnDefault,
+    NearToken, PanicOnDefault,
 };
 use types::{Gig, GigStatus, RejectionReason};
 
@@ -39,6 +39,7 @@ impl Contract {
         &mut self,
         kind: types::GigKind,
         agency: AccountId,
+        binding_amount: NearToken,
         min_hourly_rate: u8,
         max_hourly_rate: u8,
     ) -> U64 {
@@ -53,6 +54,7 @@ impl Contract {
         let gig = Gig {
             kind,
             ace: None,
+            binding_amount,
             min_hourly_rate,
             max_hourly_rate,
             agency: agency.clone(),
@@ -134,6 +136,7 @@ mod tests {
         let id = contract.create_gig(
             GigKind::FullTime,
             AGENCY.parse().unwrap(),
+            NearToken::from_millinear(5 * 10u128.pow(3)),
             MIN_HOURLY_RATE,
             MAX_HOURLY_RATE,
         );
@@ -150,6 +153,7 @@ mod tests {
         let id = contract.create_gig(
             GigKind::FullTime,
             AGENCY.parse().unwrap(),
+            NearToken::from_millinear(5 * 10u128.pow(3)),
             MIN_HOURLY_RATE,
             MAX_HOURLY_RATE,
         );
@@ -166,6 +170,7 @@ mod tests {
         let id = contract.create_gig(
             GigKind::FullTime,
             AGENCY.parse().unwrap(),
+            NearToken::from_millinear(5 * 10u128.pow(3)),
             MIN_HOURLY_RATE,
             MAX_HOURLY_RATE,
         );
@@ -186,6 +191,7 @@ mod tests {
         let id = contract.create_gig(
             GigKind::FullTime,
             AGENCY.parse().unwrap(),
+            NearToken::from_millinear(5 * 10u128.pow(3)),
             MIN_HOURLY_RATE,
             MAX_HOURLY_RATE,
         );

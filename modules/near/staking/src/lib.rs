@@ -1,57 +1,58 @@
-// Find all our documentation at https://docs.near.org
-use near_sdk::{log, near};
+mod external;
+mod slashing;
+mod staking;
+pub mod types;
 
-// Define the contract structure
+use near_sdk::{
+    env, near, require, store::LookupMap, AccountId, BorshStorageKey, NearToken, PanicOnDefault,
+};
+use types::Stake;
+
+#[near]
+#[derive(BorshStorageKey)]
+pub enum Prefix {
+    Stakes,
+}
+
+pub const GIG_CREATION_FEE: NearToken = NearToken::from_millinear(500);
+
 #[near(contract_state)]
+#[derive(PanicOnDefault)]
 pub struct Contract {
-    greeting: String,
-    stress: u32,
+    governance_account: AccountId,
+    gigs_account: AccountId,
+    stakes: LookupMap<AccountId, Stake>,
 }
 
-// Define the default, which automatically initializes the contract
-impl Default for Contract {
-    fn default() -> Self {
-        Self {
-            greeting: "Hello".to_string(),
-            stress: 0,
-        }
-    }
-}
-
-// Implement the contract structure
 #[near]
 impl Contract {
-    // Public method - returns the greeting saved, defaulting to DEFAULT_GREETING
-    pub fn get_greeting(&self) -> String {
-        self.greeting.clone()
+    #[init]
+    #[private]
+    pub fn init(governance_account: AccountId, gigs_account: AccountId) -> Self {
+        Self {
+            governance_account,
+            gigs_account,
+            stakes: LookupMap::new(Prefix::Stakes),
+        }
     }
 
-    // Public method - accepts a greeting, such as "howdy", and records it
-    pub fn set_greeting(&mut self, greeting: String) {
-        log!("Saving greeting: {greeting}");
-        self.greeting = greeting;
+    fn only_governance_or_gigs(&self) {
+        require!(
+            env::predecessor_account_id() == self.governance_account
+                || env::predecessor_account_id() == self.gigs_account,
+            "Only the governance or the gigs contract can call this method."
+        );
     }
 }
 
-/*
- * The rest of this file holds the inline tests for the code above
- * Learn more about Rust tests: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
- */
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn get_default_greeting() {
-        let contract = Contract::default();
-        // this test did not call set_greeting so should return the default "Hello" greeting
-        assert_eq!(contract.get_greeting(), "Hello");
-    }
-
-    #[test]
-    fn set_then_get_greeting() {
-        let mut contract = Contract::default();
-        contract.set_greeting("howdy".to_string());
-        assert_eq!(contract.get_greeting(), "howdy");
+    fn init() {
+        let contract = Contract::init("governor".parse().unwrap(), "gigs".parse().unwrap());
+        assert_eq!(contract.governance_account, "governor");
+        assert_eq!(contract.gigs_account, "gigs");
     }
 }

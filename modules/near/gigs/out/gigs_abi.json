@@ -7,7 +7,7 @@
       "compiler": "rustc 1.79.0",
       "builder": "cargo-near cargo-near-build 0.1.1"
     },
-    "wasm_hash": "E6F1BYWbLRHi2QmhYgho9KA8G1ksTEM4xw9ftQ3hDaqd"
+    "wasm_hash": "64YyyjvuFrW3bDm53xjVfFcCXnBz5Z3vq18H5fn6Hkx5"
   },
   "body": {
     "functions": [
@@ -31,6 +31,12 @@
               "name": "agency",
               "type_schema": {
                 "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "binding_amount",
+              "type_schema": {
+                "type": "string"
               }
             },
             {

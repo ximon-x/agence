@@ -1,4 +1,4 @@
-use near_sdk::{json_types::U64, near, AccountId};
+use near_sdk::{json_types::U64, near, AccountId, NearToken};
 use std::fmt::Debug;
 
 #[derive(PartialEq, Debug)]
@@ -33,6 +33,7 @@ pub struct Gig {
     pub id: U64,
     pub kind: GigKind,
     pub ace: Option<AccountId>,
+    pub binding_amount: NearToken,
     pub agency: AccountId,
     pub status: GigStatus,
     pub min_hourly_rate: u8,
