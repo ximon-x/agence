@@ -4,6 +4,7 @@
     "prettier-plugin-tailwindcss"
   ],
   "importOrder": [
+    "<THIRD_PARTY_MODULES>",
     "^@lib/(.*)$",
     "^@api/(.*)$",
     "^@app/(.*)$",

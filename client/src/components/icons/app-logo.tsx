@@ -27,20 +27,20 @@ export default function AppLogo({ size, axis }: Props) {
         <filter x="0%" y="0%" width="100%" height="100%" id="7cb966aeda">
           <feColorMatrix
             values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           />
         </filter>
         <filter x="0%" y="0%" width="100%" height="100%" id="ba961cdd12">
           <feColorMatrix
             values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.2126 0.7152 0.0722 0 0"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           />
         </filter>
         <g />
         <clipPath id="4034bd89a4">
           <path
             d="M 24.109375 17.394531 L 61.796875 17.394531 L 61.796875 55 L 24.109375 55 Z M 24.109375 17.394531 "
-            clip-rule="nonzero"
+            clipRule="nonzero"
           />
         </clipPath>
         <image
@@ -79,7 +79,7 @@ export default function AppLogo({ size, axis }: Props) {
           preserveAspectRatio="xMidYMid meet"
         />
       </defs>
-      <g clip-path="url(#4034bd89a4)">
+      <g clipPath="url(#4034bd89a4)">
         <g mask="url(#6ea55299d3)">
           <g transform="matrix(0.150752, 0, 0, 0.150752, 24.107981, 17.392941)">
             <image
@@ -93,7 +93,7 @@ export default function AppLogo({ size, axis }: Props) {
           </g>
         </g>
       </g>
-      <g fill="#000000" fill-opacity="1">
+      <g fill="#000000" fillOpacity="1">
         <g transform="translate(76.833619, 50.985331)">
           <g>
             <path d="M 25.65625 0 L 22.0625 0 L 19.4375 -7.8125 L 7.296875 -7.8125 L 4.640625 0 L 1.125 0 L 11.078125 -28.5 L 15.71875 -28.5 Z M 13.125 -25.046875 L 8.21875 -10.625 L 18.484375 -10.625 L 13.609375 -25.046875 Z M 13.125 -25.046875 " />
