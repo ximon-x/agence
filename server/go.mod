@@ -1,4 +1,4 @@
-module github.com/ximon-x/ace-space
+module github.com/ximon-x/agence
 
 go 1.23.0
 
