@@ -4,10 +4,10 @@
     "name": "gigs",
     "version": "0.1.0",
     "build": {
-      "compiler": "rustc 1.79.0",
+      "compiler": "rustc 1.82.0",
       "builder": "cargo-near cargo-near-build 0.1.1"
     },
-    "wasm_hash": "7SZ4KkGxZMjmKCe574idkwidtGEVA7kC42uKtrZWtDH1"
+    "wasm_hash": "12w7o8LBF8jKMkznyAZyCopGRYTHfd2SAyEcvWdgRZvd"
   },
   "body": {
     "functions": [
@@ -65,21 +65,6 @@
         }
       },
       {
-        "name": "create_gig_callback",
-        "kind": "view",
-        "modifiers": [
-          "private"
-        ],
-        "callbacks": [
-          {
-            "serialization_type": "json",
-            "type_schema": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      {
         "name": "flag_gig",
         "kind": "call",
         "params": {
@@ -98,6 +83,68 @@
               }
             }
           ]
+        }
+      },
+      {
+        "name": "get_gig",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "gig_id",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Gig"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "get_gigs",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/definitions/Gig"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2
+            }
+          }
         }
       },
       {
@@ -165,6 +212,21 @@
             }
           ]
         }
+      },
+      {
+        "name": "verify_gig",
+        "kind": "call",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "gig_id",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        }
       }
     ],
     "root_schema": {
@@ -175,6 +237,55 @@
         "AccountId": {
           "description": "NEAR Account Identifier.\n\nThis is a unique, syntactically valid, human-readable account identifier on the NEAR network.\n\n[See the crate-level docs for information about validation.](index.html#account-id-rules)\n\nAlso see [Error kind precedence](AccountId#error-kind-precedence).\n\n## Examples\n\n``` use near_account_id::AccountId;\n\nlet alice: AccountId = \"alice.near\".parse().unwrap();\n\nassert!(\"ƒelicia.near\".parse::<AccountId>().is_err()); // (ƒ is not f) ```",
           "type": "string"
+        },
+        "Gig": {
+          "type": "object",
+          "required": [
+            "agency",
+            "binding_amount",
+            "id",
+            "kind",
+            "max_hourly_rate",
+            "min_hourly_rate",
+            "status"
+          ],
+          "properties": {
+            "ace": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/AccountId"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "agency": {
+              "$ref": "#/definitions/AccountId"
+            },
+            "binding_amount": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "$ref": "#/definitions/GigKind"
+            },
+            "max_hourly_rate": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0.0
+            },
+            "min_hourly_rate": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0.0
+            },
+            "status": {
+              "$ref": "#/definitions/GigStatus"
+            }
+          }
         },
         "GigKind": {
           "type": "string",

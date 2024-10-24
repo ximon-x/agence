@@ -4,10 +4,10 @@
     "name": "staking",
     "version": "0.1.0",
     "build": {
-      "compiler": "rustc 1.79.0",
+      "compiler": "rustc 1.82.0",
       "builder": "cargo-near cargo-near-build 0.1.1"
     },
-    "wasm_hash": "BwM581KcskEw2eDAoUpbS35xWN2pM3sFcwEDJarvHxBB"
+    "wasm_hash": "AoWKnNvEsnsxbqrXWiZ7aYDquLLFiuNRFc8nzYGM7EzQ"
   },
   "body": {
     "functions": [
@@ -124,6 +124,23 @@
         "modifiers": [
           "private"
         ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "user_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
         "callbacks": [
           {
             "serialization_type": "json",

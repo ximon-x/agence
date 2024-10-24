@@ -4,10 +4,10 @@
     "name": "governance",
     "version": "0.1.0",
     "build": {
-      "compiler": "rustc 1.79.0",
+      "compiler": "rustc 1.82.0",
       "builder": "cargo-near cargo-near-build 0.1.1"
     },
-    "wasm_hash": "GqZjYZX3CEJS47F2fC9H6diZLsg9kYMkiM1q8PN7At6E"
+    "wasm_hash": "AGjLc824n8JzkgXjaUWfq9wCx393zrx4Nt72rfmKfiQz"
   },
   "body": {
     "functions": [
@@ -16,25 +16,24 @@
         "kind": "view"
       },
       {
-        "name": "get_greeting",
-        "kind": "view",
-        "result": {
-          "serialization_type": "json",
-          "type_schema": {
-            "type": "string"
-          }
-        }
-      },
-      {
-        "name": "set_greeting",
+        "name": "init",
         "kind": "call",
+        "modifiers": [
+          "init"
+        ],
         "params": {
           "serialization_type": "json",
           "args": [
             {
-              "name": "greeting",
+              "name": "staking_account",
               "type_schema": {
-                "type": "string"
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "gigs_account",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
               }
             }
           ]
@@ -44,7 +43,13 @@
     "root_schema": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "String",
-      "type": "string"
+      "type": "string",
+      "definitions": {
+        "AccountId": {
+          "description": "NEAR Account Identifier.\n\nThis is a unique, syntactically valid, human-readable account identifier on the NEAR network.\n\n[See the crate-level docs for information about validation.](index.html#account-id-rules)\n\nAlso see [Error kind precedence](AccountId#error-kind-precedence).\n\n## Examples\n\n``` use near_account_id::AccountId;\n\nlet alice: AccountId = \"alice.near\".parse().unwrap();\n\nassert!(\"ƒelicia.near\".parse::<AccountId>().is_err()); // (ƒ is not f) ```",
+          "type": "string"
+        }
+      }
     }
   }
 }

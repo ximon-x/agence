@@ -10,18 +10,20 @@ impl Contract {
     pub fn register(&mut self, user_id: AccountId, amount: NearToken) -> Promise {
         let promise = governance::ext(self.governance_account.clone())
             .with_static_gas(Gas::from_tgas(5))
-            .create_member(user_id, amount);
+            .create_member(user_id.clone(), amount);
 
         return promise.then(
             Self::ext(env::current_account_id())
                 .with_static_gas(Gas::from_tgas(10))
-                .register_callback(),
+                .register_callback(user_id.clone(), amount),
         );
     }
 
     #[private]
     pub fn register_callback(
         &mut self,
+        user_id: AccountId,
+        amount: NearToken,
         #[callback_result] call_result: Result<(AccountId, NearToken), PromiseError>,
     ) {
         match call_result {
@@ -38,7 +40,8 @@ impl Contract {
                 log!("Registered {} in DAO.", user_id);
             }
             Err(_) => {
-                // ! Figure out how to return user's fund.
+                Promise::new(user_id.clone()).transfer(amount);
+
                 log!("Failed to register user in DAO.");
             }
         }
