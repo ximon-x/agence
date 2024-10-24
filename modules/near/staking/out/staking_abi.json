@@ -7,13 +7,53 @@
       "compiler": "rustc 1.82.0",
       "builder": "cargo-near cargo-near-build 0.1.1"
     },
-    "wasm_hash": "AoWKnNvEsnsxbqrXWiZ7aYDquLLFiuNRFc8nzYGM7EzQ"
+    "wasm_hash": "9nUwqN3LG8iF4vw4Fme2LwtJN3mfQHSeZS52GDADZWaw"
   },
   "body": {
     "functions": [
       {
         "name": "contract_source_metadata",
         "kind": "view"
+      },
+      {
+        "name": "create_user",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "role",
+              "type_schema": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "delete_user",
+        "kind": "call",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "beneficiary",
+              "type_schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AccountId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "name": "get_stake",
@@ -34,7 +74,7 @@
           "type_schema": {
             "anyOf": [
               {
-                "$ref": "#/definitions/Stake"
+                "$ref": "#/definitions/User"
               },
               {
                 "type": "null"
@@ -89,11 +129,8 @@
         }
       },
       {
-        "name": "register",
+        "name": "slash_stake",
         "kind": "call",
-        "modifiers": [
-          "private"
-        ],
         "params": {
           "serialization_type": "json",
           "args": [
@@ -110,73 +147,14 @@
               }
             }
           ]
-        },
-        "result": {
-          "serialization_type": "json",
-          "type_schema": {
-            "$ref": "#/definitions/Promise"
-          }
         }
-      },
-      {
-        "name": "register_callback",
-        "kind": "call",
-        "modifiers": [
-          "private"
-        ],
-        "params": {
-          "serialization_type": "json",
-          "args": [
-            {
-              "name": "user_id",
-              "type_schema": {
-                "$ref": "#/definitions/AccountId"
-              }
-            },
-            {
-              "name": "amount",
-              "type_schema": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "callbacks": [
-          {
-            "serialization_type": "json",
-            "type_schema": {
-              "type": "array",
-              "items": [
-                {
-                  "$ref": "#/definitions/AccountId"
-                },
-                {
-                  "type": "string"
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2
-            }
-          }
-        ]
       },
       {
         "name": "stake",
         "kind": "call",
         "modifiers": [
           "payable"
-        ],
-        "params": {
-          "serialization_type": "json",
-          "args": [
-            {
-              "name": "user_id",
-              "type_schema": {
-                "$ref": "#/definitions/AccountId"
-              }
-            }
-          ]
-        }
+        ]
       },
       {
         "name": "unlock_stake",
@@ -206,15 +184,22 @@
           "serialization_type": "json",
           "args": [
             {
-              "name": "user_id",
-              "type_schema": {
-                "$ref": "#/definitions/AccountId"
-              }
-            },
-            {
               "name": "amount",
               "type_schema": {
                 "type": "string"
+              }
+            },
+            {
+              "name": "benefiary",
+              "type_schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AccountId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             }
           ]
@@ -230,12 +215,20 @@
           "description": "NEAR Account Identifier.\n\nThis is a unique, syntactically valid, human-readable account identifier on the NEAR network.\n\n[See the crate-level docs for information about validation.](index.html#account-id-rules)\n\nAlso see [Error kind precedence](AccountId#error-kind-precedence).\n\n## Examples\n\n``` use near_account_id::AccountId;\n\nlet alice: AccountId = \"alice.near\".parse().unwrap();\n\nassert!(\"ƒelicia.near\".parse::<AccountId>().is_err()); // (ƒ is not f) ```",
           "type": "string"
         },
-        "Promise": true,
-        "Stake": {
+        "Role": {
+          "type": "string",
+          "enum": [
+            "Ace",
+            "Admin",
+            "Agency"
+          ]
+        },
+        "User": {
           "type": "object",
           "required": [
             "available_stake",
             "locked_stake",
+            "role",
             "total_stake"
           ],
           "properties": {
@@ -244,6 +237,9 @@
             },
             "locked_stake": {
               "type": "string"
+            },
+            "role": {
+              "$ref": "#/definitions/Role"
             },
             "total_stake": {
               "type": "string"

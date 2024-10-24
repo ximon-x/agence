@@ -1,27 +1,23 @@
 mod external;
-mod slashing;
 mod staking;
 pub mod types;
+mod user;
 
-use near_sdk::{
-    env, near, require, store::LookupMap, AccountId, BorshStorageKey, NearToken, PanicOnDefault,
-};
-use types::Stake;
+use near_sdk::{env, near, require, store::LookupMap, AccountId, BorshStorageKey, PanicOnDefault};
+use types::User;
 
 #[near]
 #[derive(BorshStorageKey)]
 pub enum Prefix {
-    Stakes,
+    User,
 }
-
-pub const GIG_CREATION_FEE: NearToken = NearToken::from_millinear(500);
 
 #[near(contract_state)]
 #[derive(PanicOnDefault)]
 pub struct Contract {
     governance_account: AccountId,
     gigs_account: AccountId,
-    stakes: LookupMap<AccountId, Stake>,
+    users: LookupMap<AccountId, User>,
 }
 
 #[near]
@@ -32,7 +28,7 @@ impl Contract {
         Self {
             governance_account,
             gigs_account,
-            stakes: LookupMap::new(Prefix::Stakes),
+            users: LookupMap::new(Prefix::User),
         }
     }
 
@@ -49,10 +45,14 @@ impl Contract {
 mod tests {
     use super::*;
 
+    const GOVERNANCE: &str = "governance";
+    const GIGS: &str = "gigs";
+
     #[test]
     fn init() {
-        let contract = Contract::init("governor".parse().unwrap(), "gigs".parse().unwrap());
-        assert_eq!(contract.governance_account, "governor");
-        assert_eq!(contract.gigs_account, "gigs");
+        let contract = Contract::init(GOVERNANCE.parse().unwrap(), GIGS.parse().unwrap());
+
+        assert_eq!(contract.governance_account, GOVERNANCE);
+        assert_eq!(contract.gigs_account, GIGS);
     }
 }

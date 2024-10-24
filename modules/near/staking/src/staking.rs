@@ -1,151 +1,119 @@
-use near_sdk::{env, log, near, require, AccountId, Gas, NearToken, Promise, PromiseError};
+use near_sdk::{env, log, near, require, AccountId, NearToken, Promise};
 
-use crate::{external::governance, types::Stake, Contract, ContractExt};
+use crate::{Contract, ContractExt};
 
 pub const MIN_STAKE: NearToken = NearToken::from_millinear(100);
 
 #[near]
 impl Contract {
-    #[private]
-    pub fn register(&mut self, user_id: AccountId, amount: NearToken) -> Promise {
-        let promise = governance::ext(self.governance_account.clone())
-            .with_static_gas(Gas::from_tgas(5))
-            .create_member(user_id.clone(), amount);
-
-        return promise.then(
-            Self::ext(env::current_account_id())
-                .with_static_gas(Gas::from_tgas(10))
-                .register_callback(user_id.clone(), amount),
-        );
-    }
-
-    #[private]
-    pub fn register_callback(
-        &mut self,
-        user_id: AccountId,
-        amount: NearToken,
-        #[callback_result] call_result: Result<(AccountId, NearToken), PromiseError>,
-    ) {
-        match call_result {
-            Ok((user_id, amount)) => {
-                self.stakes.insert(
-                    user_id.clone(),
-                    Stake {
-                        locked_stake: NearToken::from_millinear(0),
-                        available_stake: amount,
-                        total_stake: amount,
-                    },
-                );
-
-                log!("Registered {} in DAO.", user_id);
-            }
-            Err(_) => {
-                Promise::new(user_id.clone()).transfer(amount);
-
-                log!("Failed to register user in DAO.");
-            }
-        }
-    }
-
     #[payable]
-    pub fn stake(&mut self, user_id: AccountId) {
+    pub fn stake(&mut self) {
         require!(
             env::attached_deposit() >= MIN_STAKE,
             "Minimum stake amount is 100 millinear."
         );
 
-        match self.stakes.get(&user_id) {
-            Some(stake) => {
-                let locked_stake = stake.locked_stake;
-                let total_stake = stake.total_stake.saturating_add(env::attached_deposit());
-                let available_stake = total_stake.saturating_sub(locked_stake);
-
-                self.stakes.insert(
-                    user_id,
-                    Stake {
-                        total_stake,
-                        locked_stake,
-                        available_stake,
-                    },
-                );
+        match self.users.get_mut(&env::predecessor_account_id()) {
+            Some(user) => {
+                user.total_stake = user.total_stake.saturating_add(env::attached_deposit());
+                user.available_stake = user.total_stake.saturating_sub(user.locked_stake);
             }
+
             None => {
-                self.register(user_id, env::attached_deposit());
+                log!("User {} does not exist", env::predecessor_account_id());
+                Promise::new(env::predecessor_account_id()).transfer(env::attached_deposit());
             }
         };
     }
 
-    pub fn unstake(&mut self, user_id: AccountId, amount: NearToken) {
-        require!(self.stakes.get(&user_id).is_some(), "User has no stake.");
+    pub fn unstake(&mut self, amount: NearToken, benefiary: Option<AccountId>) {
+        match self.users.get_mut(&env::predecessor_account_id()) {
+            Some(user) => {
+                require!(
+                    user.available_stake >= amount,
+                    "User does not have enough available stake."
+                );
 
-        let stake = self.stakes.get(&user_id).unwrap();
+                Promise::new(benefiary.unwrap_or(env::predecessor_account_id())).transfer(amount);
 
-        require!(
-            stake.available_stake >= amount,
-            "User does not have enough available stake."
-        );
+                user.total_stake = user.total_stake.saturating_sub(amount);
 
-        Promise::new(user_id.clone()).transfer(amount);
+                if user.total_stake.is_zero() {
+                    self.users.remove(&env::predecessor_account_id());
+                } else {
+                    user.available_stake = user.total_stake.saturating_sub(user.locked_stake);
+                }
+            }
 
-        let locked_stake = stake.locked_stake;
-        let total_stake = stake.total_stake.saturating_sub(amount);
-        let available_stake = total_stake.saturating_sub(locked_stake);
-
-        if available_stake.is_zero() {
-            self.stakes.remove(&user_id);
-        } else {
-            self.stakes.insert(
-                user_id,
-                Stake {
-                    locked_stake,
-                    available_stake,
-                    total_stake,
-                },
-            );
-        }
+            None => {
+                log!("User {} does not exist", env::predecessor_account_id());
+            }
+        };
     }
 
     pub fn lock_stake(&mut self, user_id: AccountId, amount: NearToken) {
         self.only_governance_or_gigs();
-        require!(self.stakes.get(&user_id).is_some(), "User has no stake.");
 
-        let stake = self.stakes.get(&user_id).unwrap();
+        match self.users.get_mut(&user_id) {
+            Some(user) => {
+                require!(
+                    user.available_stake >= amount,
+                    "User does not have enough available stake."
+                );
 
-        let total_stake = stake.total_stake;
-        let locked_stake = stake.locked_stake.saturating_add(amount);
-        let available_stake = total_stake.saturating_sub(locked_stake);
+                user.locked_stake = user.locked_stake.saturating_add(amount);
+                user.available_stake = user.total_stake.saturating_sub(user.locked_stake);
+            }
 
-        self.stakes.insert(
-            user_id,
-            Stake {
-                locked_stake,
-                available_stake,
-                total_stake,
-            },
-        );
+            None => {
+                log!("User {} does not exist", user_id);
+            }
+        }
     }
 
     pub fn unlock_stake(&mut self, user_id: AccountId, amount: NearToken) {
         self.only_governance_or_gigs();
-        require!(self.stakes.get(&user_id).is_some(), "User has no stake.");
 
-        let stake = self.stakes.get(&user_id).unwrap();
+        match self.users.get_mut(&user_id) {
+            Some(user) => {
+                require!(
+                    user.locked_stake >= amount,
+                    "User does not have enough locked stake."
+                );
 
-        let total_stake = stake.total_stake;
-        let locked_stake = stake.locked_stake.saturating_sub(amount);
-        let available_stake = total_stake.saturating_sub(locked_stake);
+                user.locked_stake = user.locked_stake.saturating_sub(amount);
+                user.available_stake = user.total_stake.saturating_sub(user.locked_stake);
+            }
 
-        self.stakes.insert(
-            user_id,
-            Stake {
-                locked_stake,
-                available_stake,
-                total_stake,
-            },
-        );
+            None => {
+                log!("User {} does not exist", user_id);
+            }
+        };
     }
 
-    pub fn get_stake(&self, user_id: AccountId) -> Option<&Stake> {
-        self.stakes.get(&user_id)
+    pub fn slash_stake(&mut self, user_id: AccountId, amount: NearToken) {
+        self.only_governance_or_gigs();
+
+        match self.users.get_mut(&user_id) {
+            Some(user) => {
+                require!(
+                    user.locked_stake >= amount,
+                    "User does not have enough locked stake.",
+                );
+
+                user.locked_stake = user.locked_stake.saturating_sub(amount);
+                user.total_stake = user.total_stake.saturating_sub(amount);
+
+                if user.total_stake.is_zero() {
+                    self.users.remove(&user_id);
+                } else {
+                    user.available_stake = user.total_stake.saturating_sub(user.locked_stake);
+                }
+            }
+
+            None => {
+                log!("User {} does not exist", user_id);
+            }
+        }
     }
 }

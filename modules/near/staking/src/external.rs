@@ -1,7 +1,9 @@
-use near_sdk::{ext_contract, AccountId, NearToken};
+use near_sdk::ext_contract;
 
 #[allow(dead_code)]
 #[ext_contract(governance)]
-pub trait Governance {
-    fn create_member(&mut self, user_id: AccountId, amount: NearToken) -> (AccountId, NearToken);
-}
+pub trait Governance {}
+
+#[allow(dead_code)]
+#[ext_contract(gigs)]
+pub trait Gigs {}
