@@ -5,8 +5,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ace Space",
-  description: "Meet your next top Ace",
+  title: "Agence",
+  description: "Where Agencies meet their next Ace.",
 };
 
 const geistSans = localFont({
@@ -31,7 +31,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
