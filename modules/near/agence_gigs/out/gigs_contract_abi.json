@@ -4,10 +4,10 @@
     "name": "agence_gigs",
     "version": "0.1.0",
     "build": {
-      "compiler": "rustc 1.82.0",
-      "builder": "cargo-near cargo-near-build 0.1.1"
+      "compiler": "rustc 1.81.0",
+      "builder": "cargo-near cargo-near-build 0.2.0"
     },
-    "wasm_hash": "4zXDxXF6oP5TdzKbL2JG36KPwNw8KLRUyZPj9fVcHW7P"
+    "wasm_hash": "RKp5MFLiUCQnFwntCY9SEp1PwVC3wxtdstNZvC5vuCg"
   },
   "body": {
     "functions": [

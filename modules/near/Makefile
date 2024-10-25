@@ -30,3 +30,6 @@ build: build-gigs build-staking build-governance build-factory
 
 deploy: build
 	@./agence_factory/scripts/deploy.sh
+
+reset:
+	@./agence_factory/scripts/create.sh

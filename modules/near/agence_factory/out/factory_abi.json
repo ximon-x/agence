@@ -4,10 +4,10 @@
     "name": "agence_factory",
     "version": "0.1.0",
     "build": {
-      "compiler": "rustc 1.82.0",
-      "builder": "cargo-near cargo-near-build 0.1.1"
+      "compiler": "rustc 1.81.0",
+      "builder": "cargo-near cargo-near-build 0.2.0"
     },
-    "wasm_hash": "ZN5qd72i3SSCDkLqymPiGLEpm1WhaMMzQrnwvwannNQ"
+    "wasm_hash": "CKxbGWQYoYEN3pTAWghS2xGd9uid8Aj3nU8SLvhYepqv"
   },
   "body": {
     "functions": [
@@ -18,6 +18,9 @@
       {
         "name": "deploy_contracts",
         "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
         "params": {
           "serialization_type": "json",
           "args": [

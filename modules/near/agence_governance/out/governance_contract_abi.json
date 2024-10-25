@@ -4,10 +4,10 @@
     "name": "agence_governance",
     "version": "0.1.0",
     "build": {
-      "compiler": "rustc 1.82.0",
-      "builder": "cargo-near cargo-near-build 0.1.1"
+      "compiler": "rustc 1.81.0",
+      "builder": "cargo-near cargo-near-build 0.2.0"
     },
-    "wasm_hash": "GNDQND9wEyWAHCGQ94YHkPxineESP5zQQyi3kvQrQP3s"
+    "wasm_hash": "Hh8dYSABikggYNcodP7crLJHgGkujiCGTkqUMwJyyuhm"
   },
   "body": {
     "functions": [
