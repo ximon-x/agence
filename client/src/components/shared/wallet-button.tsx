@@ -18,7 +18,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
-export default function ConnectWallet() {
+export default function WalletButton() {
   const [copied, setCopied] = useState(false);
   const { chain, setChain } = useChain();
   const { wallet, signedAccountId } = useWallet();

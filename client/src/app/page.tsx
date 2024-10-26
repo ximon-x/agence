@@ -1,7 +1,9 @@
-import ConnectWallet from "@/components/shared/connect-wallet";
 import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
+import { Button } from "@/components/ui/button";
+import { LogIn } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Agence",
@@ -13,18 +15,12 @@ export default function Home() {
     <div className="flex min-h-screen w-screen flex-col items-center justify-between">
       <Header />
       <main className="flex h-full w-full flex-col items-center justify-center">
-        <ConnectWallet />
-        {/* <ShineBorder className="my-10 flex flex-col items-center justify-evenly bg-secondary dark:bg-secondary">
-          <section className="m-10 flex flex-col items-center justify-center gap-2">
-            <Text variant="massive">Friendly Finance</Text>
-            <Text variant="lead">Your Friendly Neighbourhood Bank</Text>
-          </section>
-          <section className="m-10 flex items-center justify-center">
-            <RainbowNavigationButton path="/sign-up">
-              Get Started
-            </RainbowNavigationButton>
-          </section>
-        </ShineBorder> */}
+        <Button>
+          <Link href="/sign-up" className="flex">
+            Join for Free
+            <LogIn className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </main>
       <Footer />
     </div>
