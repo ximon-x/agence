@@ -1,3 +1,7 @@
+import { Toaster } from "@/components/ui/toaster";
+import configs from "@/lib/configs";
+import { ChainProvider } from "@/lib/hooks/providers/chain-provider";
+import { NearProvider } from "@/lib/hooks/providers/near-provider";
 import { ThemeProvider } from "@/lib/hooks/providers/theme-provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -37,7 +41,10 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
+          <ChainProvider>
+            <NearProvider network={configs.network}>{children}</NearProvider>
+          </ChainProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
