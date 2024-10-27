@@ -1,27 +1,44 @@
 import { env } from "@/lib/utils";
+import Link from "next/link";
 
-import AgenceLogo from "../icons/agence-logo";
+import AgenceIcon from "../icons/agence-icon";
 import GithubIcon from "../icons/github-icon";
 import { Button } from "../ui/button";
-import NavBar from "./nav-bar";
 import ThemeToggle from "./theme-toggle";
 
 export default function Header() {
   return (
-    <header className="flex h-fit w-full items-center justify-evenly py-5">
-      <section className="py-cs-4 flex w-full items-center justify-evenly">
-        <AgenceLogo size={150} axis="width" />
-        <NavBar />
-        <div className="flex h-full items-center gap-4">
-          <Button variant="outline" size="icon">
-            <a target="_blank" href={env.NEXT_PUBLIC_CODE_URL}>
-              <GithubIcon />
-            </a>
-          </Button>
+    <header className="flex h-fit w-full items-center justify-between">
+      <div className="flex h-full items-center gap-5 px-5">
+        <Link href="/">
+          <AgenceIcon size={75} />
+        </Link>
+      </div>
 
-          <ThemeToggle />
-        </div>
-      </section>
+      <nav className="flex h-full items-center gap-5 px-5">
+        <Link
+          href="/dashboard"
+          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        >
+          Overview
+        </Link>
+        <Link
+          href="/gigs"
+          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        >
+          Gigs
+        </Link>
+      </nav>
+
+      <div className="flex h-full items-center gap-5 px-5">
+        <a target="_blank" href={env.NEXT_PUBLIC_CODE_URL}>
+          <Button variant="outline" size="icon">
+            <GithubIcon />
+          </Button>
+        </a>
+
+        <ThemeToggle />
+      </div>
     </header>
   );
 }

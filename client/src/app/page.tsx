@@ -1,6 +1,6 @@
-import Footer from "@/components/shared/footer";
-import Header from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
+import Footer from "@/modules/auth/components/footer";
+import Header from "@/modules/auth/components/header";
 import { LogIn } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";

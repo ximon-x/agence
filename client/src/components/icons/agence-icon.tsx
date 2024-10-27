@@ -24,7 +24,7 @@ const sizeToDimensions = (size?: number): Dimensions => {
       };
 };
 
-function AgenceDarkIcon({ size }: Props) {
+function AgenceLightIcon({ size }: Props) {
   const { width, height } = sizeToDimensions(size);
 
   return (
@@ -251,7 +251,7 @@ function AgenceDarkIcon({ size }: Props) {
     </svg>
   );
 }
-function AgenceLightIcon({ size }: Props) {
+function AgenceDarkIcon({ size }: Props) {
   const { width, height } = sizeToDimensions(size);
 
   return (
