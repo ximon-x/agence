@@ -541,7 +541,6 @@ function AgenceLightLogo({ size, axis }: Props) {
 }
 
 export default function AgenceLogo({ size, axis }: Props) {
-  const { width, height } = sizeToDimensions({ size, axis });
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
 
@@ -550,12 +549,12 @@ export default function AgenceLogo({ size, axis }: Props) {
   }, []);
 
   if (!mounted) {
-    return null;
+    return <Skeleton className={`h-10 w-40 p-4`} />;
   }
 
   if (theme === "dark") {
     return <AgenceDarKLogo size={size} axis={axis} />;
   } else if (theme === "light") {
     return <AgenceLightLogo size={size} axis={axis} />;
-  } else return <Skeleton className={`h-[${height}px] w-[${width}px]`} />;
+  }
 }

@@ -28,3 +28,42 @@ near contract call-function \
     sign-with-keychain \
     send
 
+near contract call-function \
+    as-transaction governance.agence.testnet init \
+    json-args '{
+        "staking_account": "staking.agence.testnet",
+        "gigs_account": "gigs.agence.testnet"
+    }' \
+    prepaid-gas 5TGAS \
+    attached-deposit 0NEAR \
+    sign-as agence.testnet \
+    network-config testnet \
+    sign-with-keychain \
+    send
+
+
+near contract call-function \
+    as-transaction staking.agence.testnet init \
+    json-args '{
+        "governance_account": "governance.agence.testnet",
+        "gigs_account": "gigs.agence.testnet"
+    }' \
+    prepaid-gas 5TGAS \
+    attached-deposit 0NEAR \
+    sign-as agence.testnet \
+    network-config testnet \
+    sign-with-keychain \
+    send
+
+near contract call-function \
+    as-transaction gigs.agence.testnet init \
+    json-args '{
+        "governance_account": "governance.agence.testnet",
+        "staking_account": "staking.agence.testnet"
+    }' \
+    prepaid-gas 5TGAS \
+    attached-deposit 0NEAR \
+    sign-as agence.testnet \
+    network-config testnet \
+    sign-with-keychain \
+    send

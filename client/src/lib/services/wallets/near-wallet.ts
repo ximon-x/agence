@@ -39,7 +39,7 @@ export class NearWallet implements IWallet {
       modules: [
         setupBitteWallet({
           walletUrl: env.NEXT_PUBLIC_WALLET_URL,
-          callbackUrl: env.NEXT_PUBLIC_APP_URL,
+          callbackUrl: `${env.NEXT_PUBLIC_APP_URL}/transactions`,
           deprecated: false,
         }),
       ],

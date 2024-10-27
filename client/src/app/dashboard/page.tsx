@@ -1,14 +1,11 @@
+import { revalidateCache } from "@/api/cache";
 import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  HashIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-  WalletIcon,
-} from "lucide-react";
+import AddStakeDialog from "@/modules/staking/components/add-stake-dialog";
+import { LockIcon, TrendingUpIcon, WalletIcon, UnlockIcon } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,13 +17,8 @@ export default function DashboardPage() {
   return (
     <div className="h-screen flex-col md:flex">
       <Header />
-      <main className="flex-1 space-y-4 p-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
-          <div className="flex items-center space-x-4">
-            <Button variant="default">Deposit Funds</Button>
-            <Button variant="destructive">Withdraw Funds</Button>
-          </div>
-        </div>
+      <main className="flex-1 space-y-4 p-8">
+        <div className="flex items-center justify-between space-y-2"></div>
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -38,45 +30,45 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Account Number
+                    Available Balance
                   </CardTitle>
-                  <HashIcon className="h-4 w-4" />
+                  <UnlockIcon className="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold"></div>
+                  <div className="text-2xl font-bold">$30</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Account Balance
+                    Locked Balance
                   </CardTitle>
-                  <WalletIcon className="h-4 w-4" />
+                  <LockIcon className="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold"></div>
+                  <div className="text-2xl font-bold">$30</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Income
+                    Accrued Interest
                   </CardTitle>
                   <TrendingUpIcon className="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold"></div>
+                  <div className="text-2xl font-bold">$30</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Expense
+                    Total Balance
                   </CardTitle>
-                  <TrendingDownIcon className="h-4 w-4" />
+                  <WalletIcon className="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold"></div>
+                  <div className="text-2xl font-bold">$30</div>
                 </CardContent>
               </Card>
             </div>
@@ -95,6 +87,11 @@ export default function DashboardPage() {
             Analytics
           </TabsContent>
         </Tabs>
+
+        <div className="flex items-center justify-end space-x-4">
+          <AddStakeDialog revalidateCache={revalidateCache} />
+          <Button variant="destructive">Withdraw Funds</Button>
+        </div>
       </main>
       <Footer
         logout={async () => {

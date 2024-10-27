@@ -13,15 +13,26 @@ import { toast } from "@/lib/hooks/use-toast";
 import useWallet from "@/lib/hooks/use-wallet";
 import { Text } from "@/lib/styles/typography";
 import { Check, Copy, Globe, LogIn, UserCheck2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { Skeleton } from "../ui/skeleton";
 
 export default function WalletButton() {
   const [copied, setCopied] = useState(false);
   const { chain, setChain } = useChain();
   const { wallet, signedAccountId } = useWallet();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <Skeleton className="h-10 w-40" />;
+  }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -41,7 +52,7 @@ export default function WalletButton() {
     <Dialog>
       <DialogTrigger asChild>
         {signedAccountId ? (
-          <Button>{signedAccountId}</Button>
+          <Button variant="outline">{signedAccountId}</Button>
         ) : (
           <Button>
             Sign in
