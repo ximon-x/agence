@@ -1,22 +1,35 @@
 test-gigs:
-	@cd gigs && cargo test
+	@cd agence_gigs && cargo test
+
+test-factory:
+	@cd agence_factory && cargo test
 
 test-staking:
-	@cd staking && cargo test
+	@cd agence_staking && cargo test
 
 test-governance:
-	@cd governance && cargo test
+	@cd agence_governance && cargo test
 
-test: test-gigs test-staking test-governance
+test: test-gigs test-staking test-governance test-factory
 
 
 build-gigs:
-	@cd gigs && ./scripts/build.sh
+	@cd agence_gigs && ./build.sh
+
+build-factory:
+	@cd agence_factory && ./scripts/build.sh
 
 build-staking:
-	@cd staking && ./scripts/build.sh
+	@cd agence_staking && ./build.sh
 
 build-governance:
-	@cd governance && ./scripts/build.sh
+	@cd agence_governance && ./build.sh
 
-build: build-gigs build-staking build-governance
+build: build-gigs build-staking build-governance build-factory
+
+
+deploy: build
+	@./agence_factory/scripts/deploy.sh
+
+reset:
+	@./agence_factory/scripts/create.sh

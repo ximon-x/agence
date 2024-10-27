@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.4.0",
+  "metadata": {
+    "name": "agence_factory",
+    "version": "0.1.0",
+    "build": {
+      "compiler": "rustc 1.81.0",
+      "builder": "cargo-near cargo-near-build 0.2.0"
+    },
+    "wasm_hash": "CKxbGWQYoYEN3pTAWghS2xGd9uid8Aj3nU8SLvhYepqv"
+  },
+  "body": {
+    "functions": [
+      {
+        "name": "contract_source_metadata",
+        "kind": "view"
+      },
+      {
+        "name": "deploy_contracts",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "public_key",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/Promise"
+          }
+        }
+      },
+      {
+        "name": "deploy_contracts_callback",
+        "kind": "call",
+        "modifiers": [
+          "private"
+        ],
+        "callbacks": [
+          {
+            "serialization_type": "json",
+            "type_schema": {
+              "type": "null"
+            }
+          },
+          {
+            "serialization_type": "json",
+            "type_schema": {
+              "type": "null"
+            }
+          },
+          {
+            "serialization_type": "json",
+            "type_schema": {
+              "type": "null"
+            }
+          }
+        ]
+      }
+    ],
+    "root_schema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "String",
+      "type": "string",
+      "definitions": {
+        "Promise": true
+      }
+    }
+  }
+}
