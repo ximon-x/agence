@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Where Agencies meet their next Ace.",
 };
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="flex min-h-screen w-screen flex-col items-center justify-between">
       <Header />
