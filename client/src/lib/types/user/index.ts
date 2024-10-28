@@ -1,14 +1,19 @@
+export type Role = "admin" | "ace" | "agency";
+
 export type User = {
   id: string;
+  role: Role;
   firstName: string;
   lastName: string;
   emailAddress: string;
   phoneNumber: string;
-  accountNumber: string;
-  accountBalance: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
 };
 
 export * from "./create";
+export * from "./delete";
+export * from "./list";
+export * from "./update";
+export * from "./view";

@@ -24,29 +24,25 @@ export default function SignupPage() {
     <div className="flex h-screen flex-col items-center justify-between">
       <Header />
       <main>
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <Card className="w-[350px]">
-              <CardHeader>
-                <CardTitle>Sign Up</CardTitle>
-                <CardDescription>
-                  Enter your details to create an Account
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <SignupForm signupAction={signup} />
-              </CardContent>
-              <CardFooter className="flex items-center justify-center gap-2">
-                <Text variant="muted">Already have an account?</Text>
-                <Text variant="muted">
-                  <Link href="/auth/sign-in" className="underline">
-                    Sign In
-                  </Link>
-                </Text>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle>Sign Up</CardTitle>
+            <CardDescription>
+              Enter your details to create an Account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SignupForm signupAction={signup} />
+          </CardContent>
+          <CardFooter className="flex items-center justify-center gap-2">
+            <Text variant="muted">Already have an account?</Text>
+            <Text variant="muted">
+              <Link href="/auth/sign-in" className="underline">
+                Sign In
+              </Link>
+            </Text>
+          </CardFooter>
+        </Card>
       </main>
       <Footer />
     </div>

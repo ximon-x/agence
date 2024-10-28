@@ -24,29 +24,25 @@ export default function SigninPage() {
     <div className="flex min-h-screen flex-col items-center justify-between">
       <Header />
       <main>
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <Card className="w-[350px]">
-              <CardHeader>
-                <CardTitle>Sign in</CardTitle>
-                <CardDescription>
-                  Enter your credentials to access your account
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <SigninForm signinAction={signin} />
-              </CardContent>
-              <CardFooter className="flex items-center justify-center gap-2">
-                <Text variant="muted">Don&apos;t have an account?</Text>
-                <Text variant="muted">
-                  <Link href="/auth/sign-up" className="underline">
-                    Sign Up
-                  </Link>
-                </Text>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
+        <Card className="w-96">
+          <CardHeader>
+            <CardTitle>Sign in</CardTitle>
+            <CardDescription>
+              Enter your credentials to access your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SigninForm signinAction={signin} />
+          </CardContent>
+          <CardFooter className="flex items-center justify-center gap-2">
+            <Text variant="muted">Don&apos;t have an account?</Text>
+            <Text variant="muted">
+              <Link href="/auth/sign-up" className="underline">
+                Sign Up
+              </Link>
+            </Text>
+          </CardFooter>
+        </Card>
       </main>
       <Footer />
     </div>

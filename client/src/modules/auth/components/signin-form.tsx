@@ -28,7 +28,7 @@ const formSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters long" }),
 });
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+type Props = React.HTMLAttributes<HTMLDivElement> & {
   signinAction: ({
     email,
     password,
@@ -36,7 +36,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     email: string;
     password: string;
   }) => Promise<void>;
-}
+};
 
 export function SigninForm({ signinAction }: Props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +62,7 @@ export function SigninForm({ signinAction }: Props) {
       toast({
         title: "Something went wrong",
         description: `${err}`,
+        variant: "destructive",
       });
     } finally {
       setIsLoading(() => false);

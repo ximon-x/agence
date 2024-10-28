@@ -50,3 +50,29 @@ export async function signup({ email, password }: Credentials) {
   revalidatePath("/", "layout");
   redirect("/onboarding");
 }
+
+export async function onboarded() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const data = {
+    ...user,
+    options: {
+      data: {
+        onboarded: true,
+      },
+    },
+  };
+
+  const { error } = await supabase.auth.updateUser(data);
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/dashboard");
+}

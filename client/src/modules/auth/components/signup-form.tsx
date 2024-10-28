@@ -41,9 +41,9 @@ const formSchema = z
     }
   });
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+type Props = React.HTMLAttributes<HTMLDivElement> & {
   signupAction: (params: { email: string; password: string }) => Promise<void>;
-}
+};
 
 export function SignupForm({ signupAction }: Props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +69,7 @@ export function SignupForm({ signupAction }: Props) {
       toast({
         title: "Something went wrong",
         description: `${err}`,
+        variant: "destructive",
       });
     } finally {
       setIsLoading(() => false);
