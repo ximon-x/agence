@@ -18,7 +18,15 @@ export default function DashboardPage() {
     <div className="h-screen flex-col md:flex">
       <Header />
       <main className="flex-1 space-y-4 p-8">
-        <div className="flex items-center justify-between space-y-2"></div>
+        <div className="flex items-center justify-between space-y-2">
+          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+
+          <div className="flex items-center justify-end space-x-4">
+            <AddStakeDialog revalidateCache={revalidateCache} />
+            <Button variant="destructive">Withdraw Stake</Button>
+          </div>
+        </div>
+
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -87,11 +95,6 @@ export default function DashboardPage() {
             Analytics
           </TabsContent>
         </Tabs>
-
-        <div className="flex items-center justify-end space-x-4">
-          <AddStakeDialog revalidateCache={revalidateCache} />
-          <Button variant="destructive">Withdraw Funds</Button>
-        </div>
       </main>
       <Footer
         logout={async () => {

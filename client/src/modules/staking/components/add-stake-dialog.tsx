@@ -39,17 +39,16 @@ type Props = {
 };
 
 export default function DepositDialog({ revalidateCache }: Props) {
+  const { wallet, signedAccountId } = useWallet();
   const [loading, setLoading] = useState(false);
 
   const { chain } = useChain();
-
-  const { wallet, signedAccountId } = useWallet();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
+      amount: 0.1,
     },
   });
 
@@ -58,9 +57,8 @@ export default function DepositDialog({ revalidateCache }: Props) {
   }
 
   const handleDeposit = async (values: z.infer<typeof formSchema>) => {
-    setLoading(true);
-
     const { amount } = values;
+    setLoading(true);
 
     try {
       const balance = await wallet.getBalance(signedAccountId!);
@@ -74,20 +72,22 @@ export default function DepositDialog({ revalidateCache }: Props) {
         return;
       }
 
-      const parsedAmount = nearUtils.format.parseNearAmount(amount.toString());
-
-      const tx = await wallet.callMethod({
-        contractId: "staking.agence.testnet",
-        deposit: parsedAmount!,
-        method: "stake",
-      });
-
-      console.log(`tx: ${JSON.stringify(tx, null, 2)}`);
-
       toast({
-        title: "Deposited funds",
-        description: `Deposited ${amount} ${chain} into the smart contract`,
+        title: "Please Sign Transaction",
+        description: `You'll be redirected shortly to sign the transaction.`,
       });
+
+      setTimeout(async () => {
+        const parsedAmount = nearUtils.format.parseNearAmount(
+          amount.toString(),
+        );
+
+        await wallet.callMethod({
+          contractId: "staking.agence.testnet",
+          deposit: parsedAmount!,
+          method: "stake",
+        });
+      }, 3000);
     } catch (error) {
       console.error(error);
     } finally {
@@ -130,16 +130,15 @@ export default function DepositDialog({ revalidateCache }: Props) {
             />
 
             <Button
-              variant="secondary"
+              variant="default"
               className="w-full"
               type="submit"
               disabled={loading}
             >
-              {loading ? (
+              {loading && (
                 <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                "Deposit"
               )}
+              Deposit
             </Button>
           </form>
         </Form>

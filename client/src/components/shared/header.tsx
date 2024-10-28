@@ -4,6 +4,7 @@ import Link from "next/link";
 import AgenceLogo from "../icons/agence-logo";
 import GithubIcon from "../icons/github-icon";
 import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 import ThemeToggle from "./theme-toggle";
 import WalletButton from "./wallet-button";
 
@@ -42,6 +43,8 @@ export default function Header() {
 
         <ThemeToggle />
       </div>
+
+      <Separator />
     </header>
   );
 }
