@@ -10,37 +10,37 @@ import {
 import { Text } from "@/lib/styles/typography";
 import Footer from "@/modules/auth/components/footer";
 import Header from "@/modules/auth/components/header";
-import { SignupForm } from "@/modules/auth/components/signup-form";
-import { signup } from "@/modules/auth/lib/services/actions";
+import { SigninForm } from "@/modules/auth/components/signin-form";
+import { signin } from "@/modules/auth/lib/services/actions";
 import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sign Up | Agence",
+  title: "Sign In | Agence",
 };
 
-export default function SignupPage() {
+export default function SigninPage() {
   return (
-    <div className="flex h-screen flex-col items-center justify-between">
+    <div className="flex min-h-screen flex-col items-center justify-between">
       <Header />
       <main>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <Card className="w-[350px]">
               <CardHeader>
-                <CardTitle>Sign Up</CardTitle>
+                <CardTitle>Sign in</CardTitle>
                 <CardDescription>
-                  Enter your details to create an Account
+                  Enter your credentials to access your account
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <SignupForm signupAction={signup} />
+                <SigninForm signinAction={signin} />
               </CardContent>
               <CardFooter className="flex items-center justify-center gap-2">
-                <Text variant="muted">Already have an account?</Text>
+                <Text variant="muted">Don&apos;t have an account?</Text>
                 <Text variant="muted">
-                  <Link href="/auth/sign-in" className="underline">
-                    Sign In
+                  <Link href="/auth/sign-up" className="underline">
+                    Sign Up
                   </Link>
                 </Text>
               </CardFooter>

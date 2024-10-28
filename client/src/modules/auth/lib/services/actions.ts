@@ -10,10 +10,7 @@ type Credentials = {
   password: string;
 };
 
-export async function login({
-  email,
-  password,
-}: Credentials): Promise<Error | void> {
+export async function signin({ email, password }: Credentials) {
   const supabase = await createClient();
 
   const data = {
@@ -24,7 +21,7 @@ export async function login({
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    return error;
+    throw error;
   }
 
   revalidatePath("/", "layout");

@@ -18,35 +18,29 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = z
-  .object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required" })
-      .email("This is not a valid email."),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" }),
-    confirmPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" }),
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Passwords did not match",
-        path: ["confirmPassword"],
-      });
-    }
-  });
+const formSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email can not be blank" })
+    .email("This is not a valid email."),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" }),
+});
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  signupAction: (params: { email: string; password: string }) => Promise<void>;
+  signinAction: ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => Promise<void>;
 }
 
-export function SignupForm({ signupAction }: Props) {
+export function SigninForm({ signinAction }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,7 +48,6 @@ export function SignupForm({ signupAction }: Props) {
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
@@ -64,7 +57,7 @@ export function SignupForm({ signupAction }: Props) {
     const { email, password } = values;
 
     try {
-      await signupAction({ email, password });
+      await signinAction({ email, password });
     } catch (err) {
       toast({
         title: "Something went wrong",
@@ -101,24 +94,6 @@ export function SignupForm({ signupAction }: Props) {
               <FormControl>
                 <Input
                   placeholder="Enter secure password"
-                  type="password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem className="space-y-1">
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Confirm your password"
                   type="password"
                   {...field}
                 />
