@@ -58,16 +58,13 @@ export async function onboarded() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const data = {
-    ...user,
-    options: {
-      data: {
-        onboarded: true,
-      },
-    },
-  };
+  if (!user) {
+    throw new Error("User not found");
+  }
 
-  const { error } = await supabase.auth.updateUser(data);
+  const { error } = await supabase.auth.updateUser({
+    data: { onboarded: true },
+  });
 
   if (error) {
     throw error;

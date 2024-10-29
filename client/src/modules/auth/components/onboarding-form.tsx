@@ -22,6 +22,7 @@ import {
 import { toast } from "@/lib/hooks/use-toast";
 import { CreateUserParams, CreateUserResponse } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,12 +43,9 @@ type Props = React.HTMLAttributes<HTMLDivElement> & {
   onboarded: () => Promise<void>;
 };
 
-export default function OnboardingForm({
-  createUser,
-  id,
-  emailAddress,
-  onboarded,
-}: Props) {
+export default function OnboardingForm(props: Props) {
+  const { id, emailAddress, createUser, onboarded } = props;
+
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -62,7 +60,6 @@ export default function OnboardingForm({
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(() => true);
-
     const { firstName, lastName, phoneNumber, role } = values;
 
     try {
@@ -121,7 +118,7 @@ export default function OnboardingForm({
           name="lastName"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>Last Name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter Last Name" {...field} />
               </FormControl>
@@ -148,7 +145,7 @@ export default function OnboardingForm({
           control={form.control}
           name="role"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-1">
               <FormLabel>Are you an Ace or Agency?</FormLabel>
               <Select onValueChange={field.onChange}>
                 <FormControl>
@@ -166,11 +163,12 @@ export default function OnboardingForm({
             </FormItem>
           )}
         />
-      </form>
 
-      <Button className="w-full" type="submit" disabled={isLoading}>
-        Submit
-      </Button>
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+          Submit
+        </Button>
+      </form>
     </Form>
   );
 }

@@ -1,15 +1,10 @@
-package models
+package interfaces
 
-import (
-	"gorm.io/gorm"
-)
-
-type User struct {
-	gorm.Model
+type CreateUserDTO struct {
 	Id           string `json:"id"`
 	FirstName    string `json:"firstName"`
 	LastName     string `json:"lastName"`
-	PhoneNumber  string `json:"phoneNumber"`
 	EmailAddress string `json:"emailAddress"`
+	PhoneNumber  string `json:"phoneNumber"`
 	Role         string `json:"role"`
 }
