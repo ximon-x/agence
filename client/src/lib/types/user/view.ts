@@ -6,4 +6,6 @@ export type GetUserParams = {
 
 export type GetUserResponse = {
   data: User;
+  message: string;
+  status: "success" | "error";
 };

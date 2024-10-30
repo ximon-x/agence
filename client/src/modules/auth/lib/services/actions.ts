@@ -28,6 +28,19 @@ export async function signin({ email, password }: Credentials) {
   redirect("/dashboard");
 }
 
+export async function signout() {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
+}
+
 export async function signup({ email, password }: Credentials) {
   const supabase = await createClient();
 

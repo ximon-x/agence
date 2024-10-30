@@ -10,12 +10,33 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NAVIGATION_DATA } from "@/data/navigation";
+import { toast } from "@/lib/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-export default function Footer({ logout }: { logout: () => void }) {
+type Props = {
+  signout: () => void;
+};
+
+export default function Footer(props: Props) {
+  const { signout } = props;
+
+  const handleSignout = () => {
+    try {
+      signout();
+    } catch (err) {
+      console.error(err);
+
+      toast({
+        title: "Error",
+        description: "Failed to signout",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <footer className="my-8">
       <TooltipProvider>
@@ -68,7 +89,7 @@ export default function Footer({ logout }: { logout: () => void }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  onClick={() => logout()}
+                  onClick={handleSignout}
                   aria-label={"Logout"}
                   variant={"ghost"}
                   size={"icon"}

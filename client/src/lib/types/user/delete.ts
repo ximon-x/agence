@@ -6,4 +6,6 @@ export type DeleteUserParams = {
 
 export type DeleteUserResponse = {
   data: User;
+  message: string;
+  status: "success" | "error";
 };

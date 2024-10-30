@@ -1,3 +1,5 @@
+"use server";
+
 import {
   CreateUserParams,
   CreateUserResponse,
@@ -30,8 +32,6 @@ export const getUsers = (params: GetUsersParams) => {
 };
 
 export const createUser = async (params: CreateUserParams) => {
-  "use server";
-
   return apiRequest<CreateUserParams, CreateUserResponse>({
     url: `/users/`,
     method: "POST",
@@ -40,8 +40,6 @@ export const createUser = async (params: CreateUserParams) => {
 };
 
 export const updateUser = async (params: UpdateUserParams) => {
-  "use server";
-
   return apiRequest<UpdateUserParams, UpdateUserResponse>({
     url: `/users/${params.id}`,
     method: "PATCH",
@@ -50,8 +48,6 @@ export const updateUser = async (params: UpdateUserParams) => {
 };
 
 export const deleteUser = async (params: DeleteUserParams) => {
-  "use server";
-
   return apiRequest<DeleteUserParams, DeleteUserResponse>({
     url: `/users/`,
     method: "DELETE",

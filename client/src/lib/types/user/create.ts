@@ -15,4 +15,6 @@ export type CreateUserParams = {
 
 export type CreateUserResponse = {
   data: User;
+  message: string;
+  status: "success" | "error";
 };

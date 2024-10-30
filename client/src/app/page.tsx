@@ -16,8 +16,8 @@ export default function HomePage() {
       <Header />
       <main className="flex h-full w-full flex-col items-center justify-center">
         <Button>
-          <Link href="/auth/sign-up" className="flex">
-            Join for Free
+          <Link href="/auth/sign-in" className="flex items-center">
+            Get Started
             <LogIn className="ml-2 h-4 w-4" />
           </Link>
         </Button>
