@@ -1,4 +1,5 @@
 import { Role, User } from ".";
+import { Chains } from "..";
 
 export type CreateUserParams = {
   id: string;
@@ -7,6 +8,9 @@ export type CreateUserParams = {
   lastName: string;
   phoneNumber: string;
   emailAddress: string;
+  minHourlyRate?: number;
+  maxHourlyRate?: number;
+  preferredBlockchain: Chains;
 };
 
 export type CreateUserResponse = {

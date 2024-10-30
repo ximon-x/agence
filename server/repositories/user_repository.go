@@ -9,7 +9,7 @@ import (
 
 type UserRepository interface {
 	SaveUser(user *models.User) (*models.User, error)
-	FindUserById(id uint64) (*models.User, error)
+	FindUserById(id string) (*models.User, error)
 	FindUserByEmail(email string) (*models.User, error)
 	FindAllUsers() (*[]models.User, error)
 }
@@ -53,7 +53,7 @@ func (r *userRepository) FindAllUsers() (*[]models.User, error) {
 	return &users, nil
 }
 
-func (r *userRepository) FindUserById(id uint64) (*models.User, error) {
+func (r *userRepository) FindUserById(id string) (*models.User, error) {
 	var user models.User
 	err := r.db.Where("id = ?", id).First(&user).Error
 	if err != nil {

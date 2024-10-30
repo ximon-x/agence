@@ -1,11 +1,4 @@
 import { createUser } from "@/api/users";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Footer from "@/modules/auth/components/footer";
 import Header from "@/modules/auth/components/header";
 import OnboardingForm from "@/modules/auth/components/onboarding-form";
@@ -25,30 +18,20 @@ export default async function OnboardingPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect("/sign-in");
+  if (!user || !user.email) {
+    return redirect("/auth/sign-in");
   }
 
   return (
     <div className="flex h-screen flex-col items-center justify-between">
       <Header />
       <main>
-        <Card className="w-96">
-          <CardHeader>
-            <CardTitle>User Onboarding</CardTitle>
-            <CardDescription>
-              Please fill in the information below
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <OnboardingForm
-              id={user.id}
-              emailAddress={user.email!}
-              createUser={createUser}
-              onboarded={onboarded}
-            />
-          </CardContent>
-        </Card>
+        <OnboardingForm
+          id={user.id}
+          emailAddress={user.email}
+          createUser={createUser}
+          onboarded={onboarded}
+        />
       </main>
       <Footer />
     </div>

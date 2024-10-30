@@ -4,6 +4,7 @@ import Header from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Text } from "@/lib/styles/typography";
 import AddStakeDialog from "@/modules/staking/components/add-stake-dialog";
 import { LockIcon, TrendingUpIcon, WalletIcon, UnlockIcon } from "lucide-react";
 import { Metadata } from "next";
@@ -18,12 +19,17 @@ export default function DashboardPage() {
     <div className="h-screen flex-col md:flex">
       <Header />
       <main className="flex-1 space-y-4 p-8">
-        <div className="flex items-center justify-between space-y-2"></div>
+        <div className="flex items-center justify-between space-y-2">
+          <Text variant="h2">Dashboard</Text>
+          <div className="flex items-center justify-end space-x-4">
+            <AddStakeDialog revalidateCache={revalidateCache} />
+            <Button variant="destructive">Withdraw Funds</Button>
+          </div>
+        </div>
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="staking">Stakings</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
@@ -87,11 +93,6 @@ export default function DashboardPage() {
             Analytics
           </TabsContent>
         </Tabs>
-
-        <div className="flex items-center justify-end space-x-4">
-          <AddStakeDialog revalidateCache={revalidateCache} />
-          <Button variant="destructive">Withdraw Funds</Button>
-        </div>
       </main>
       <Footer
         logout={async () => {

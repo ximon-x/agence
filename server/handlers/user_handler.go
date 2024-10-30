@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/ximon-x/agence/database"
 	"github.com/ximon-x/agence/interfaces"
@@ -30,14 +28,7 @@ func GetUsersHandler(c *fiber.Ctx) error {
 }
 
 func GetUserHandler(c *fiber.Ctx) error {
-	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":  "error",
-			"message": "Invalid ID",
-			"data":    nil,
-		})
-	}
+	id := c.Params("id")
 
 	userRepo := repositories.NewUserRepository(database.DB)
 	user, err := userRepo.FindUserById(id)
@@ -61,6 +52,7 @@ func PostUserHandler(c *fiber.Ctx) error {
 	body := new(interfaces.CreateUserDTO)
 
 	if err := c.BodyParser(body); err != nil {
+
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
@@ -68,7 +60,7 @@ func PostUserHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	if body.Role != "ace" && body.Role != "agency" && body.Role != "admin" {
+	if body.Role != "Ace" && body.Role != "Agency" && body.Role != "admin" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Invalid role",
@@ -77,12 +69,15 @@ func PostUserHandler(c *fiber.Ctx) error {
 	}
 
 	newUser := models.User{
-		FirstName:    body.FirstName,
-		LastName:     body.LastName,
-		PhoneNumber:  body.PhoneNumber,
-		EmailAddress: body.EmailAddress,
-		Role:         body.Role,
-		Id:           body.Id,
+		FirstName:           body.FirstName,
+		LastName:            body.LastName,
+		PhoneNumber:         body.PhoneNumber,
+		EmailAddress:        body.EmailAddress,
+		Role:                body.Role,
+		Id:                  body.Id,
+		MinHourlyRate:       body.MinHourlyRate,
+		MaxHourlyRate:       body.MaxHourlyRate,
+		PreferredBlockchain: body.PreferredBlockchain,
 	}
 
 	userRepo := repositories.NewUserRepository(database.DB)

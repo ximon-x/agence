@@ -1,4 +1,6 @@
-export type Role = "admin" | "ace" | "agency";
+import { Chains } from "..";
+
+export type Role = "Ace" | "Agency";
 
 export type User = {
   id: string;
@@ -7,6 +9,9 @@ export type User = {
   lastName: string;
   emailAddress: string;
   phoneNumber: string;
+  minHourlyRate?: number;
+  maxHourlyRate?: number;
+  preferredBlockchain: Chains;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
