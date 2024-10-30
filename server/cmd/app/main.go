@@ -34,5 +34,11 @@ func main() {
 	userGroup.Get("/:id", handlers.GetUserHandler)
 	userGroup.Post("/", handlers.PostUserHandler)
 
+	gigGroup := app.Group("/gigs")
+
+	gigGroup.Get("/", handlers.GetGigsHandler)
+	gigGroup.Get("/:id", handlers.GetGigHandler)
+	gigGroup.Post("/", handlers.PostGigHandler)
+
 	app.Listen(":3001")
 }

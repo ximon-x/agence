@@ -34,7 +34,7 @@ func Migrate() error {
 		return err
 	}
 
-	err = DB.AutoMigrate(&models.User{})
+	err = DB.AutoMigrate(&models.User{}, &models.Gig{})
 	if err != nil {
 		return err
 	}
