@@ -12,7 +12,13 @@ export function formatInitialCapitalize(str = ``): string {
   return str ? `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}` : str;
 }
 
+export function shortenID(id: string) {
+  const idLength = id.length;
+  return `${id.slice(0, 3)}...${id.slice(idLength - 3, idLength)}`;
+}
+
 const format = {
+  shortenID,
   formatToNearGas,
   formatAddressToEllipsis,
   formatInitialCapitalize,

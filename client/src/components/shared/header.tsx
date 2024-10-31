@@ -1,35 +1,24 @@
+import { Text } from "@/lib/styles/typography";
 import { env } from "@/lib/utils";
-import Link from "next/link";
 
-import AgenceLogo from "../icons/agence-logo";
 import GithubIcon from "../icons/github-icon";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import ThemeToggle from "./theme-toggle";
 import WalletButton from "./wallet-button";
 
 export default function Header() {
   return (
-    <header className="flex h-fit w-full items-center justify-between p-4">
-      <div className="flex h-full items-center">
-        <Link href="/">
-          <AgenceLogo size={200} axis="width" />
-        </Link>
-      </div>
+    <header className="flex h-fit w-full items-center justify-between p-8">
+      <div className="flex h-full w-fit items-center justify-between gap-8">
+        <Text variant="h1">Dashboard</Text>
 
-      {/* <nav className="flex h-full items-center gap-5">
-        <Link
-          href="/dashboard"
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-        >
-          Overview
-        </Link>
-        <Link
-          href="/gigs"
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-        >
-          Gigs
-        </Link>
-      </nav> */}
+        <Input
+          type="search"
+          placeholder="Enter Gig ID"
+          className="md:w-[100px] lg:w-[300px]"
+        />
+      </div>
 
       <div className="flex h-full items-center gap-5 px-5">
         <WalletButton />
