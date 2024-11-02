@@ -5,13 +5,12 @@ import (
 	"github.com/ximon-x/agence/database"
 	"github.com/ximon-x/agence/interfaces"
 	"github.com/ximon-x/agence/models"
-	"github.com/ximon-x/agence/repositories"
 )
 
 func GetUsersHandler(c *fiber.Ctx) error {
-	userRepo := repositories.NewUserRepository(database.DB)
+	userModel := models.NewUserModel(database.DB)
+	users, err := userModel.FindAllUsers()
 
-	users, err := userRepo.FindAllUsers()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
@@ -30,8 +29,8 @@ func GetUsersHandler(c *fiber.Ctx) error {
 func GetUserHandler(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	userRepo := repositories.NewUserRepository(database.DB)
-	user, err := userRepo.FindUserById(id)
+	userModel := models.NewUserModel(database.DB)
+	user, err := userModel.FindUserById(id)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -80,8 +79,8 @@ func PostUserHandler(c *fiber.Ctx) error {
 		PreferredBlockchain: body.PreferredBlockchain,
 	}
 
-	userRepo := repositories.NewUserRepository(database.DB)
-	user, err := userRepo.SaveUser(&newUser)
+	userModel := models.NewUserModel(database.DB)
+	user, err := userModel.SaveUser(&newUser)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

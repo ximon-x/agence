@@ -5,13 +5,12 @@ import (
 	"github.com/ximon-x/agence/database"
 	"github.com/ximon-x/agence/interfaces"
 	"github.com/ximon-x/agence/models"
-	"github.com/ximon-x/agence/repositories"
 )
 
 func GetGigsHandler(c *fiber.Ctx) error {
-	gigRepo := repositories.NewGigRepository(database.DB)
+	gigModel := models.NewGigModel(database.DB)
+	gigs, err := gigModel.FindAllGigs()
 
-	gigs, err := gigRepo.FindAllGigs()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
@@ -29,9 +28,9 @@ func GetGigsHandler(c *fiber.Ctx) error {
 }
 
 func GetGigHandler(c *fiber.Ctx) error {
-	gigRepo := repositories.NewGigRepository(database.DB)
+	gigModel := models.NewGigModel(database.DB)
+	gig, err := gigModel.FindGigById(c.Params("id"))
 
-	gig, err := gigRepo.FindGigById(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
@@ -51,7 +50,6 @@ func PostGigHandler(c *fiber.Ctx) error {
 	body := new(interfaces.CreateGigDTO)
 
 	if err := c.BodyParser(body); err != nil {
-
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
@@ -71,8 +69,9 @@ func PostGigHandler(c *fiber.Ctx) error {
 		BindingAmount: body.BindingAmount,
 	}
 
-	gigRepo := repositories.NewGigRepository(database.DB)
-	gig, err := gigRepo.SaveGig(&newGig)
+	gigsModel := models.NewGigModel(database.DB)
+	gig, err := gigsModel.SaveGig(&newGig)
+
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
