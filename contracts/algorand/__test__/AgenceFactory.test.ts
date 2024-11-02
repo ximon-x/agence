@@ -1,14 +1,14 @@
 import { describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing';
 import * as algokit from '@algorandfoundation/algokit-utils';
-import { JobClient } from '../contracts/clients/JobClient';
+import { AgenceFactoryClient } from '../contracts/clients/AgenceFactoryClient';
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });
 
-let appClient: JobClient;
+let appClient: AgenceFactoryClient;
 
-describe('Job', () => {
+describe('AgenceFactory', () => {
   beforeEach(fixture.beforeEach);
 
   beforeAll(async () => {
@@ -16,7 +16,7 @@ describe('Job', () => {
     const { testAccount } = fixture.context;
     const { algorand } = fixture;
 
-    appClient = new JobClient(
+    appClient = new AgenceFactoryClient(
       {
         sender: testAccount,
         resolveBy: 'id',

@@ -1,6 +1,6 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
-export class Job extends Contract {
+export class AgenceFactory extends Contract {
   /**
    * Calculates the sum of two numbers
    *
