@@ -59,7 +59,7 @@ export default function ConnectButton() {
     <Dialog>
       <DialogTrigger asChild>
         {activeAddress ? (
-          <Button>
+          <Button variant={"outline"}>
             Connected: {formatAddressToEllipsis(activeAddress, 3)}
           </Button>
         ) : (

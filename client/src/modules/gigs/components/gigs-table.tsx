@@ -1,10 +1,12 @@
 "use client";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { formatInitialCapitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDistance } from "date-fns";
+import { ArrowUpDown } from "lucide-react";
 
 type GigsTableInput = {
   id: number;
@@ -39,7 +41,20 @@ const columns: ColumnDef<GigsTableInput>[] = [
   },
   {
     accessorKey: "bindingAmount",
-    header: () => <div className="text-center">Binding Amount</div>,
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-center gap-2">
+          Binding Amount
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       const amount = parseInt(row.getValue("bindingAmount"));
       const formatted = new Intl.NumberFormat("en-US", {
@@ -84,7 +99,20 @@ const columns: ColumnDef<GigsTableInput>[] = [
   },
   {
     accessorKey: "creationDate",
-    header: () => <div className="text-right">Creation Date</div>,
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-end gap-2">
+          Creation Date
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       const rawDate = row.getValue("creationDate") as Date;
       const date = new Date(rawDate);
@@ -347,6 +375,18 @@ const data: GigsTableInput[] = [
   },
 ];
 
-export function GigsTable() {
-  return <DataTable columns={columns} data={data} />;
+type Props = {
+  pageSize?: number;
+  className?: string;
+};
+
+export default function GigsTable({ pageSize, className }: Props) {
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      pageSize={pageSize}
+      className={className}
+    />
+  );
 }

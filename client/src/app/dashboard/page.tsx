@@ -8,8 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AuthProvider } from "@/modules/auth/lib/hooks/providers/auth-provider";
 import { signout } from "@/modules/auth/lib/services/actions";
 import { createClient } from "@/modules/auth/lib/services/supabase/server";
-import { GigsTable } from "@/modules/gigs/components/gigs-table";
-import { ProposalsTable } from "@/modules/governance/components/proposals-table";
+import GigsTable from "@/modules/gigs/components/gigs-table";
+import ProposalsTable from "@/modules/governance/components/proposals-table";
 import AddStakeDialog from "@/modules/staking/components/add-stake-dialog";
 import { LockIcon, TrendingUpIcon, WalletIcon, UnlockIcon } from "lucide-react";
 import { Metadata } from "next";
@@ -94,11 +94,11 @@ export default async function DashboardPage() {
               <TabsTrigger value="proposals">Recent Proposals</TabsTrigger>
             </TabsList>
             <TabsContent value="gigs" className="space-y-8">
-              <GigsTable />
+              <GigsTable pageSize={5} />
             </TabsContent>
 
             <TabsContent value="proposals" className="space-y-4">
-              <ProposalsTable />
+              <ProposalsTable pageSize={5} />
             </TabsContent>
           </Tabs>
         </main>

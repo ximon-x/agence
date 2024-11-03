@@ -1,11 +1,12 @@
 "use client";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { formatInitialCapitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDistance } from "date-fns";
-import { ArrowBigDownDash, ArrowBigUpDash } from "lucide-react";
+import { ArrowBigDownDash, ArrowBigUpDash, ArrowUpDown } from "lucide-react";
 
 type ProposalStatus =
   | "Pending"
@@ -136,7 +137,21 @@ const columns: ColumnDef<ProposalsTableInput>[] = [
   },
   {
     accessorKey: "submissionTime",
-    header: () => <div className="text-center">Submission Time</div>,
+
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-center gap-2">
+          Submission Time
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       const rawDate = row.getValue("submissionTime") as Date;
       const date = new Date(rawDate);
@@ -831,6 +846,10 @@ const data: ProposalsTableInput[] = [
   },
 ];
 
-export function ProposalsTable() {
-  return <DataTable columns={columns} data={data} />;
+type Props = {
+  pageSize?: number;
+};
+
+export default function ProposalsTable({ pageSize }: Props) {
+  return <DataTable columns={columns} data={data} pageSize={pageSize} />;
 }

@@ -25,11 +25,16 @@ import { useState } from "react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pageSize?: number;
+  searchable?: boolean;
+  className?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  pageSize,
+  className,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -49,13 +54,13 @@ export function DataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 5,
+        pageSize: pageSize ?? 10,
       },
     },
   });
 
   return (
-    <div>
+    <div className={className}>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
