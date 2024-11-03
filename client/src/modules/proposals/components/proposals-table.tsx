@@ -848,8 +848,16 @@ const data: ProposalsTableInput[] = [
 
 type Props = {
   pageSize?: number;
+  className?: string;
 };
 
-export default function ProposalsTable({ pageSize }: Props) {
-  return <DataTable columns={columns} data={data} pageSize={pageSize} />;
+export default function ProposalsTable({ pageSize, className }: Props) {
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      pageSize={pageSize}
+      className={className}
+    />
+  );
 }

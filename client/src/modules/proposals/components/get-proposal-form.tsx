@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { GetGigParams, GetGigResponse } from "../types";
+import { GetProposalParams, GetProposalResponse } from "../types";
 
 const formSchema = z.object({
   id: z.string().min(1, { message: "ID is required" }),
@@ -25,10 +25,12 @@ const formSchema = z.object({
 
 type Props = {
   revalidateCache: (path: string) => Promise<void>;
-  getGig: (params: GetGigParams) => Promise<GetGigResponse | Error>;
+  getProposal: (
+    params: GetProposalParams,
+  ) => Promise<GetProposalResponse | Error>;
 };
 
-export default function GetGigForm({}: Props) {
+export default function GetProposalForm({}: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -65,10 +67,10 @@ export default function GetGigForm({}: Props) {
         render={({ field }) => (
           <FormItem className="space-y-1">
             <FormLabel>
-              <span className="text-red-500">*</span> Gig ID
+              <span className="text-red-500">*</span> Proposal ID
             </FormLabel>
             <FormControl>
-              <Input placeholder="Enter Gig ID" {...field} />
+              <Input placeholder="Enter Proposal ID" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
