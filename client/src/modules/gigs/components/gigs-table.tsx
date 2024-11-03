@@ -2,7 +2,9 @@
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { DataTable } from "@/components/ui/data-table";
+import { formatInitialCapitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { formatDistance } from "date-fns";
 
 type GigsTableInput = {
   id: number;
@@ -82,12 +84,19 @@ const columns: ColumnDef<GigsTableInput>[] = [
   },
   {
     accessorKey: "creationDate",
-    header: () => <div className="text-center">Creation Date</div>,
+    header: () => <div className="text-right">Creation Date</div>,
     cell: ({ row }) => {
       const rawDate = row.getValue("creationDate") as Date;
       const date = new Date(rawDate);
 
-      return <div className="text-center"> {date.toLocaleDateString()}</div>;
+      return (
+        <div className="text-right">
+          {" "}
+          {formatInitialCapitalize(
+            formatDistance(date, new Date(), { addSuffix: true }),
+          )}
+        </div>
+      );
     },
   },
 ];

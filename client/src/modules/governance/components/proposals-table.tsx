@@ -2,7 +2,9 @@
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { DataTable } from "@/components/ui/data-table";
+import { formatInitialCapitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { formatDistance } from "date-fns";
 import { ArrowBigDownDash, ArrowBigUpDash } from "lucide-react";
 
 type ProposalStatus =
@@ -139,7 +141,14 @@ const columns: ColumnDef<ProposalsTableInput>[] = [
       const rawDate = row.getValue("submissionTime") as Date;
       const date = new Date(rawDate);
 
-      return <div className="text-center">{date.toLocaleString()}</div>;
+      return (
+        <div className="text-right">
+          {" "}
+          {formatInitialCapitalize(
+            formatDistance(date, new Date(), { addSuffix: true }),
+          )}
+        </div>
+      );
     },
   },
 ];
