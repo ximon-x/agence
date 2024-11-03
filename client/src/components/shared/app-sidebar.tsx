@@ -1,12 +1,10 @@
-/* eslint-disable react/jsx-key */
 import {
   Home,
   Inbox,
-  Search,
   Settings,
   BriefcaseBusiness,
   Vote,
-  HandCoins,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -26,7 +24,7 @@ import {
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
@@ -45,36 +43,13 @@ const items = [
     ],
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Gigs",
-    url: "/gigs",
+    title: "Applications",
+    url: "/applications",
     icon: BriefcaseBusiness,
-    items: [
-      {
-        title: "Active Gigs",
-        url: "/gigs/active",
-        icon: BriefcaseBusiness,
-      },
-    ],
   },
   {
-    title: "Staking",
-    url: "#",
-    icon: HandCoins,
-    items: [
-      {
-        title: "Active Stakes",
-        url: "/gigs/active",
-      },
-    ],
-  },
-  {
-    title: "Governance",
-    url: "#",
+    title: "Proposals",
+    url: "/proposals",
     icon: Vote,
     items: [
       {
@@ -82,6 +57,11 @@ const items = [
         url: "/gigs/active",
       },
     ],
+  },
+  {
+    title: "Profile",
+    url: "#",
+    icon: User,
   },
   {
     title: "Settings",

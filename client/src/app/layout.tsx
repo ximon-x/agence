@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import configs from "@/lib/configs";
+import AlgorandProvider from "@/lib/hooks/providers/algorand-provider";
 import { ChainProvider } from "@/lib/hooks/providers/chain-provider";
 import { NearProvider } from "@/lib/hooks/providers/near-provider";
 import { ThemeProvider } from "@/lib/hooks/providers/theme-provider";
@@ -42,7 +43,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ChainProvider>
-            <NearProvider network={configs.network}>{children}</NearProvider>
+            <AlgorandProvider>
+              <NearProvider network={configs.network}>{children}</NearProvider>
+            </AlgorandProvider>
           </ChainProvider>
           <Toaster />
         </ThemeProvider>

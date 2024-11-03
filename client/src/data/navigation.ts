@@ -2,24 +2,22 @@ import { env } from "@/lib/utils";
 import {
   HomeIcon,
   BookOpenIcon,
-  ListOrderedIcon,
-  LayoutDashboardIcon,
   CodeXmlIcon,
+  Inbox,
+  BriefcaseBusiness,
+  Vote,
+  Settings,
 } from "lucide-react";
 
 export const NAVIGATION_DATA = {
-  navbar: [{ href: "/", icon: HomeIcon, label: "Home" }],
+  navbar: [
+    { href: "/dashboard", icon: HomeIcon, label: "Home" },
+    { href: "/inbox", icon: Inbox, label: "Inbox" },
+    { href: "/gigs", icon: BriefcaseBusiness, label: "Gigs" },
+    { href: "proposals", icon: Vote, label: "Proposals" },
+    { href: "/settings", icon: Settings, label: "Settings" },
+  ],
   external: {
-    Dashboard: {
-      name: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboardIcon,
-    },
-    Gigs: {
-      name: "Gigs",
-      url: "/gigs",
-      icon: ListOrderedIcon,
-    },
     Documentation: {
       name: "Documentation",
       url: `${env.NEXT_PUBLIC_DOC_URL}`,

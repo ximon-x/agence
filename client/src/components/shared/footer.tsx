@@ -38,8 +38,8 @@ export default function Footer(props: Props) {
   };
 
   return (
-    <footer className="my-8">
-      <TooltipProvider>
+    <TooltipProvider>
+      <footer className="flex items-center justify-center py-4">
         <Dock direction="middle">
           {NAVIGATION_DATA.navbar.map((item) => (
             <DockIcon key={item.label}>
@@ -58,28 +58,6 @@ export default function Footer(props: Props) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{item.label}</p>
-                </TooltipContent>
-              </Tooltip>
-            </DockIcon>
-          ))}
-          <Separator orientation="vertical" className="h-full py-2" />
-          {Object.entries(NAVIGATION_DATA.external).map(([name, social]) => (
-            <DockIcon key={name}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={social.url}
-                    aria-label={social.name}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full",
-                    )}
-                  >
-                    <social.icon className="size-4" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{name}</p>
                 </TooltipContent>
               </Tooltip>
             </DockIcon>
@@ -103,7 +81,7 @@ export default function Footer(props: Props) {
             </Tooltip>
           </DockIcon>
         </Dock>
-      </TooltipProvider>
-    </footer>
+      </footer>
+    </TooltipProvider>
   );
 }

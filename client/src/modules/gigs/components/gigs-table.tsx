@@ -5,8 +5,8 @@ import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 
 type GigsTableInput = {
-  id: string;
-  agencyImage: string;
+  id: number;
+  image: string;
   agency: string;
   ace?: string;
   bindingAmount: number;
@@ -16,20 +16,13 @@ type GigsTableInput = {
 
 const columns: ColumnDef<GigsTableInput>[] = [
   {
-    accessorKey: "id",
-    header: () => <div className="text-center">Gig ID</div>,
-    cell: ({ row }) => {
-      return <div className="text-center">{row.getValue("id")}</div>;
-    },
-  },
-  {
-    accessorKey: "agencyImage",
-    header: () => <div className="text-center">Logo</div>,
+    accessorKey: "image",
+    header: "",
 
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Avatar>
-          <AvatarImage src={row.getValue("agencyImage")} alt="agency" />
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={row.getValue("image")} alt="agency" />
         </Avatar>
       </div>
     ),
@@ -37,6 +30,23 @@ const columns: ColumnDef<GigsTableInput>[] = [
   {
     accessorKey: "agency",
     header: "Agency",
+  },
+  {
+    accessorKey: "ace",
+    header: "Ace",
+  },
+  {
+    accessorKey: "bindingAmount",
+    header: () => <div className="text-center">Binding Amount</div>,
+    cell: ({ row }) => {
+      const amount = parseInt(row.getValue("bindingAmount"));
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="text-center font-medium">{formatted}</div>;
+    },
   },
   {
     accessorKey: "status",
@@ -62,21 +72,12 @@ const columns: ColumnDef<GigsTableInput>[] = [
       );
     },
   },
-  {
-    accessorKey: "ace",
-    header: "Ace",
-  },
-  {
-    accessorKey: "bindingAmount",
-    header: () => <div className="text-center">Binding Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseInt(row.getValue("bindingAmount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
 
-      return <div className="text-center font-medium">{formatted}</div>;
+  {
+    accessorKey: "id",
+    header: () => <div className="text-center">Gig ID</div>,
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("id")}</div>;
     },
   },
   {
@@ -93,186 +94,247 @@ const columns: ColumnDef<GigsTableInput>[] = [
 
 const data: GigsTableInput[] = [
   {
-    id: "1",
-    agencyImage: "https://picsum.photos/seed/4C8iO/2107/287?grayscale&blur=7",
-    agency: "Larkin and Sons",
+    id: 27,
+    image: "https://picsum.photos/seed/6RYnNU86Ej/1397/128?grayscale&blur=8",
+    agency: "Wilkinson, Renner and O'Hara",
+    ace: "Lee Kulas",
+    bindingAmount: 50,
+    status: "Completed",
+    creationDate: "2024-11-02T10:45:32.741Z",
+  },
+  {
+    id: 26,
+    image: "https://picsum.photos/seed/5Ggg45sp/3038/3744?blur=7",
+    agency: "Boyle, Stanton and Fritsch",
+    ace: "",
+    bindingAmount: 700,
+    status: "Pending",
+    creationDate: "2024-11-03T04:14:19.959Z",
+  },
+  {
+    id: 25,
+    image: "https://picsum.photos/seed/qI4XbiQZnJ/2658/3580?blur=9",
+    agency: "Kuhic, Braun and Hammes",
+    ace: "Dr. Michael Simonis",
+    bindingAmount: 100,
+    status: "Rejected",
+    creationDate: "2024-11-02T17:21:37.181Z",
+  },
+  {
+    id: 24,
+    image: "https://picsum.photos/seed/frNe8lE/2970/3346?blur=3",
+    agency: "Lesch - Wolf",
+    ace: "Beulah Balistreri-Gutkowski",
+    bindingAmount: 950,
+    status: "Completed",
+    creationDate: "2024-11-03T00:32:53.195Z",
+  },
+  {
+    id: 23,
+    image: "https://picsum.photos/seed/d5u0baIIK/117/3880?blur=4",
+    agency: "Jaskolski Group",
+    ace: "Angelica Parisian",
+    bindingAmount: 800,
+    status: "Rejected",
+    creationDate: "2024-11-02T10:03:17.855Z",
+  },
+  {
+    id: 22,
+    image: "https://picsum.photos/seed/vv0k6P/1512/2475?blur=2",
+    agency: "Leannon Group",
+    ace: "",
+    bindingAmount: 200,
+    status: "Pending",
+    creationDate: "2024-11-03T01:01:04.197Z",
+  },
+  {
+    id: 21,
+    image: "https://picsum.photos/seed/pml3cBWsS/1436/1491?grayscale&blur=9",
+    agency: "Schroeder and Sons",
+    ace: "Adrienne Daniel",
+    bindingAmount: 450,
+    status: "Completed",
+    creationDate: "2024-11-03T03:11:51.897Z",
+  },
+  {
+    id: 20,
+    image: "https://picsum.photos/seed/Ylp9A3Xlb/3643/398?grayscale&blur=5",
+    agency: "Balistreri Inc",
+    ace: "Tina Funk",
+    bindingAmount: 800,
+    status: "Completed",
+    creationDate: "2024-11-03T01:48:26.196Z",
+  },
+  {
+    id: 19,
+    image: "https://picsum.photos/seed/sbsNjX7SR/3160/2289?grayscale&blur=2",
+    agency: "McKenzie, Erdman and Labadie",
+    ace: "",
+    bindingAmount: 400,
+    status: "Rejected",
+    creationDate: "2024-11-02T21:43:12.863Z",
+  },
+  {
+    id: 18,
+    image: "https://picsum.photos/seed/myWSa/3148/842?grayscale&blur=8",
+    agency: "Stoltenberg - Farrell",
+    ace: "Shirley Jakubowski V",
+    bindingAmount: 150,
+    status: "Completed",
+    creationDate: "2024-11-03T05:18:05.050Z",
+  },
+  {
+    id: 17,
+    image: "https://picsum.photos/seed/xdp0NCf/1188/49?blur=1",
+    agency: "Bernier Group",
+    ace: "Tommy Reynolds",
+    bindingAmount: 750,
+    status: "Completed",
+    creationDate: "2024-11-02T22:19:08.336Z",
+  },
+  {
+    id: 16,
+    image: "https://picsum.photos/seed/PlAAX6dm/1174/336?blur=3",
+    agency: "Davis, Howell and Botsford",
+    ace: "Mercedes Goodwin",
+    bindingAmount: 650,
+    status: "Completed",
+    creationDate: "2024-11-02T20:30:12.606Z",
+  },
+  {
+    id: 15,
+    image: "https://picsum.photos/seed/ul1yw/92/3436?blur=5",
+    agency: "Kirlin, Wuckert and Nitzsche",
+    ace: "Miss Erica Paucek",
+    bindingAmount: 350,
+    status: "Completed",
+    creationDate: "2024-11-02T14:43:25.227Z",
+  },
+  {
+    id: 14,
+    image: "https://picsum.photos/seed/69ULc1cG3M/471/3472?grayscale&blur=1",
+    agency: "Will, Jacobi and Schmeler",
+    ace: "",
+    bindingAmount: 550,
+    status: "Pending",
+    creationDate: "2024-11-02T23:12:45.751Z",
+  },
+  {
+    id: 13,
+    image: "https://picsum.photos/seed/WhsEoDNnLB/2593/2680?blur=2",
+    agency: "Schulist, Kunze and Kemmer",
+    ace: "",
+    bindingAmount: 300,
+    status: "Pending",
+    creationDate: "2024-11-02T12:54:47.747Z",
+  },
+  {
+    id: 12,
+    image: "https://picsum.photos/seed/ExZJD/814/252?blur=3",
+    agency: "Lakin, Halvorson and Gutkowski",
+    ace: "",
+    bindingAmount: 800,
+    status: "Pending",
+    creationDate: "2024-11-03T05:26:18.279Z",
+  },
+  {
+    id: 11,
+    image: "https://picsum.photos/seed/7A9YC/365/494?blur=5",
+    agency: "Marks - VonRueden",
+    ace: "Stephanie Walsh",
+    bindingAmount: 750,
+    status: "Completed",
+    creationDate: "2024-11-02T08:06:18.260Z",
+  },
+  {
+    id: 10,
+    image: "https://picsum.photos/seed/Yht9NU/402/3350",
+    agency: "Powlowski, Kuhic and Kuhn",
+    ace: "Tyler Huel",
+    bindingAmount: 650,
+    status: "Completed",
+    creationDate: "2024-11-02T09:19:49.971Z",
+  },
+  {
+    id: 9,
+    image: "https://picsum.photos/seed/BZuFhOr/3881/2402?grayscale",
+    agency: "Ankunding, Daniel and Hilll",
+    ace: "",
+    bindingAmount: 650,
+    status: "Pending",
+    creationDate: "2024-11-02T21:30:24.198Z",
+  },
+  {
+    id: 8,
+    image: "https://picsum.photos/seed/AZMIKbKf/3186/1026?grayscale&blur=9",
+    agency: "Ryan, Predovic and Smitham",
+    ace: "Mr. Brandon Dickinson",
+    bindingAmount: 0,
+    status: "Completed",
+    creationDate: "2024-11-02T12:29:23.774Z",
+  },
+  {
+    id: 7,
+    image: "https://picsum.photos/seed/UiFGQ6/3871/3938?grayscale&blur=10",
+    agency: "Erdman, Predovic and Windler",
+    ace: "Lula Shields",
+    bindingAmount: 350,
+    status: "Completed",
+    creationDate: "2024-11-02T11:17:05.940Z",
+  },
+  {
+    id: 6,
+    image: "https://picsum.photos/seed/piqRm2ptEw/333/658?grayscale&blur=5",
+    agency: "Feest, Boyer and Littel",
+    ace: "Cheryl Kulas",
+    bindingAmount: 400,
+    status: "Rejected",
+    creationDate: "2024-11-03T07:30:23.465Z",
+  },
+  {
+    id: 5,
+    image: "https://picsum.photos/seed/YJBBqOkK/1426/1927?blur=1",
+    agency: "Bode - Waters",
     ace: "",
     bindingAmount: 950,
     status: "Pending",
-    creationDate: "2024-10-29T17:51:32.673Z",
+    creationDate: "2024-11-02T08:27:19.518Z",
   },
   {
-    id: "2",
-    agencyImage: "https://picsum.photos/seed/Jzdjm/361/226?blur=7",
-    agency: "O'Keefe - Howe",
-    ace: "Bryan Cremin",
-    bindingAmount: 150,
-    status: "Completed",
-    creationDate: "2024-10-30T05:40:14.712Z",
-  },
-  {
-    id: "3",
-    agencyImage: "https://picsum.photos/seed/Tze8Ti/2429/2651?blur=9",
-    agency: "Goyette - Koepp",
-    ace: "Lauren Skiles",
-    bindingAmount: 550,
-    status: "Completed",
-    creationDate: "2024-10-30T08:49:22.118Z",
-  },
-  {
-    id: "4",
-    agencyImage: "https://picsum.photos/seed/N6PVO2/3381/209?blur=2",
-    agency: "Ledner, Hermann and Feil",
-    ace: "Brendan Marquardt",
-    bindingAmount: 0,
-    status: "Completed",
-    creationDate: "2024-10-29T20:20:25.512Z",
-  },
-  {
-    id: "5",
-    agencyImage: "https://picsum.photos/seed/9sHXyz/396/3053?grayscale&blur=2",
-    agency: "West Inc",
-    ace: "",
-    bindingAmount: 250,
-    status: "Rejected",
-    creationDate: "2024-10-29T23:14:06.524Z",
-  },
-  {
-    id: "6",
-    agencyImage: "https://picsum.photos/seed/huIdTv/2019/1676?grayscale&blur=3",
-    agency: "Yundt, Anderson and Jones",
-    ace: "Eugene Sawayn",
-    bindingAmount: 1000,
-    status: "Rejected",
-    creationDate: "2024-10-30T16:39:05.523Z",
-  },
-  {
-    id: "7",
-    agencyImage: "https://picsum.photos/seed/LCYmR1/3739/522?grayscale&blur=10",
-    agency: "Davis, Powlowski and Keebler",
-    ace: "",
-    bindingAmount: 900,
-    status: "Pending",
-    creationDate: "2024-10-30T03:23:33.419Z",
-  },
-  {
-    id: "8",
-    agencyImage: "https://picsum.photos/seed/VnSgB/3761/3911?blur=4",
-    agency: "McKenzie and Sons",
-    ace: "Andres Toy",
+    id: 4,
+    image: "https://picsum.photos/seed/oEhkaAeoWA/1564/1411?blur=5",
+    agency: "Hermann - Corwin",
+    ace: "Timothy Wintheiser Jr.",
     bindingAmount: 400,
     status: "Completed",
-    creationDate: "2024-10-30T15:01:32.786Z",
+    creationDate: "2024-11-02T20:11:19.450Z",
   },
   {
-    id: "9",
-    agencyImage: "https://picsum.photos/seed/bDgC0g/2834/2131?blur=6",
-    agency: "Welch - Brown",
-    ace: "Ian Schowalter",
+    id: 3,
+    image: "https://picsum.photos/seed/l0DbBBW/2664/1743?blur=1",
+    agency: "Lind, Hoppe and Pollich",
+    ace: "",
     bindingAmount: 700,
-    status: "Completed",
-    creationDate: "2024-10-30T12:28:31.961Z",
-  },
-  {
-    id: "10",
-    agencyImage: "https://picsum.photos/seed/NyOtj/3805/2728?blur=5",
-    agency: "Hackett LLC",
-    ace: "",
-    bindingAmount: 350,
     status: "Pending",
-    creationDate: "2024-10-29T17:44:21.662Z",
+    creationDate: "2024-11-02T21:29:08.315Z",
   },
   {
-    id: "11",
-    agencyImage: "https://picsum.photos/seed/ZSo9YKWC/20/1215?blur=1",
-    agency: "Gorczany, Brown and Pagac",
-    ace: "Brent Pfannerstill",
-    bindingAmount: 600,
-    status: "Completed",
-    creationDate: "2024-10-30T09:27:10.203Z",
-  },
-  {
-    id: "12",
-    agencyImage: "https://picsum.photos/seed/j5mVJ/2089/3601?grayscale&blur=2",
-    agency: "Kessler - Okuneva",
-    ace: "Ben Ryan",
-    bindingAmount: 450,
-    status: "Completed",
-    creationDate: "2024-10-30T14:44:05.418Z",
-  },
-  {
-    id: "13",
-    agencyImage:
-      "https://picsum.photos/seed/EIqCedY/2594/3964?grayscale&blur=10",
-    agency: "Klein LLC",
-    ace: "Dr. Sammy Brakus",
-    bindingAmount: 550,
-    status: "Rejected",
-    creationDate: "2024-10-30T16:09:15.730Z",
-  },
-  {
-    id: "14",
-    agencyImage: "https://picsum.photos/seed/VzKak/813/407?blur=4",
-    agency: "O'Hara, Considine and Schinner",
-    ace: "Ms. Lynda Borer",
-    bindingAmount: 900,
-    status: "Completed",
-    creationDate: "2024-10-30T11:17:35.137Z",
-  },
-  {
-    id: "15",
-    agencyImage:
-      "https://picsum.photos/seed/7FhSBeEjHT/2732/1974?grayscale&blur=8",
-    agency: "Padberg - Vandervort",
-    ace: "Phillip Effertz",
-    bindingAmount: 600,
-    status: "Rejected",
-    creationDate: "2024-10-30T09:27:03.854Z",
-  },
-  {
-    id: "16",
-    agencyImage: "https://picsum.photos/seed/4pJf1je/2596/2435?grayscale",
-    agency: "Mueller, Larkin and Hane",
-    ace: "Mr. Ronnie Towne DVM",
-    bindingAmount: 500,
-    status: "Completed",
-    creationDate: "2024-10-30T02:12:33.361Z",
-  },
-  {
-    id: "17",
-    agencyImage: "https://picsum.photos/seed/K6Myx/1956/1659?blur=7",
-    agency: "Gutkowski - Cruickshank",
+    id: 2,
+    image: "https://picsum.photos/seed/sIJlkSC/3760/3423?blur=1",
+    agency: "Brekke - Stanton",
     ace: "",
-    bindingAmount: 1000,
+    bindingAmount: 300,
     status: "Rejected",
-    creationDate: "2024-10-30T04:15:44.940Z",
+    creationDate: "2024-11-02T17:02:37.734Z",
   },
   {
-    id: "18",
-    agencyImage: "https://picsum.photos/seed/363PU/2677/2317?blur=5",
-    agency: "Veum - Schiller",
-    ace: "Kristine Conn",
-    bindingAmount: 350,
+    id: 1,
+    image: "https://picsum.photos/seed/AqMJXkLKaB/3474/3344?blur=9",
+    agency: "Hoeger - Dooley",
+    ace: "Monique Vandervort",
+    bindingAmount: 600,
     status: "Completed",
-    creationDate: "2024-10-29T20:31:59.047Z",
-  },
-  {
-    id: "19",
-    agencyImage: "https://picsum.photos/seed/Tz5U17Sw/2372/1630?blur=10",
-    agency: "Brakus - Trantow",
-    ace: "Tami Barrows",
-    bindingAmount: 450,
-    status: "Completed",
-    creationDate: "2024-10-30T07:28:14.415Z",
-  },
-  {
-    id: "20",
-    agencyImage: "https://picsum.photos/seed/xhFKXO/1741/631?blur=8",
-    agency: "Abernathy LLC",
-    ace: "Lynette Towne Jr.",
-    bindingAmount: 100,
-    status: "Completed",
-    creationDate: "2024-10-29T22:12:35.524Z",
+    creationDate: "2024-11-03T06:29:31.018Z",
   },
 ];
 

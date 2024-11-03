@@ -136,7 +136,7 @@ export default function DepositDialog({ revalidateCache }: Props) {
               disabled={loading}
             >
               {loading ? (
-                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                <LoaderCircle className="h-4 w-4 animate-spin" />
               ) : (
                 "Deposit"
               )}

@@ -1,6 +1,14 @@
-
 "use client";
 
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,16 +20,6 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
@@ -49,6 +47,11 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
+    },
   });
 
   return (
@@ -64,9 +67,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}

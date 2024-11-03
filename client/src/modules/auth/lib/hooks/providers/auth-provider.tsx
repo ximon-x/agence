@@ -28,7 +28,6 @@ export function AuthProvider(props: Props) {
         return;
       }
 
-      console.log(user);
       setUser(user.data);
     });
   }, [userId, getUser]);
