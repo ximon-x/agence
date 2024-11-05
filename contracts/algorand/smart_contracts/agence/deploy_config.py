@@ -126,7 +126,9 @@ def deploy(
         },
     }
 
-    with open("agence_contracts.json", "w", encoding="utf-8") as f:
+    with open(
+        "smart_contracts/artifacts/agence_contracts.json", "w", encoding="utf-8"
+    ) as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     logger.info(
