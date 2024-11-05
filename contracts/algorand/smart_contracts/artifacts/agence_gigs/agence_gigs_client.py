@@ -23,20 +23,73 @@ from algosdk.atomic_transaction_composer import (
 
 _APP_SPEC_JSON = r"""{
     "hints": {
-        "hello(string)string": {
+        "init(address,uint64)void": {
+            "call_config": {
+                "no_op": "CREATE"
+            }
+        },
+        "create_gig(uint64)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "start_gig(uint64,address)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "update_gig(uint64,string)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "get_gigs()(address,address,string,uint64)[]": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "get_gig_by_address(address)(address,address,string,uint64)[]": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "get_gig(uint64)(address,address,string,uint64)": {
+            "structs": {
+                "output": {
+                    "name": "Gig",
+                    "elements": [
+                        [
+                            "ace",
+                            "address"
+                        ],
+                        [
+                            "agency",
+                            "address"
+                        ],
+                        [
+                            "status",
+                            "string"
+                        ],
+                        [
+                            "binding_amount",
+                            "uint64"
+                        ]
+                    ]
+                }
+            },
             "call_config": {
                 "no_op": "CALL"
             }
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dpZ3MuY29udHJhY3QuQWdlbmNlR2lncy5hcHByb3ZhbF9wcm9ncmFtOgogICAgaW50Y2Jsb2NrIDAgMQogICAgY2FsbHN1YiBfX3B1eWFfYXJjNF9yb3V0ZXJfXwogICAgcmV0dXJuCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9naWdzLmNvbnRyYWN0LkFnZW5jZUdpZ3MuX19wdXlhX2FyYzRfcm91dGVyX18oKSAtPiB1aW50NjQ6Cl9fcHV5YV9hcmM0X3JvdXRlcl9fOgogICAgcHJvdG8gMCAxCiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogX19wdXlhX2FyYzRfcm91dGVyX19fYmFyZV9yb3V0aW5nQDUKICAgIHB1c2hieXRlcyAweDAyYmVjZTExIC8vIG1ldGhvZCAiaGVsbG8oc3RyaW5nKXN0cmluZyIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIF9fcHV5YV9hcmM0X3JvdXRlcl9fX2hlbGxvX3JvdXRlQDIKICAgIGludGNfMCAvLyAwCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX2hlbGxvX3JvdXRlQDI6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBleHRyYWN0IDIgMAogICAgY2FsbHN1YiBoZWxsbwogICAgZHVwCiAgICBsZW4KICAgIGl0b2IKICAgIGV4dHJhY3QgNiAyCiAgICBzd2FwCiAgICBjb25jYXQKICAgIHB1c2hieXRlcyAweDE1MWY3Yzc1CiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fYmFyZV9yb3V0aW5nQDU6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICBibnogX19wdXlhX2FyYzRfcm91dGVyX19fYWZ0ZXJfaWZfZWxzZUA5CiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGlzIGNyZWF0aW5nCiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19hZnRlcl9pZl9lbHNlQDk6CiAgICBpbnRjXzAgLy8gMAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9naWdzLmNvbnRyYWN0LkFnZW5jZUdpZ3MuaGVsbG8obmFtZTogYnl0ZXMpIC0+IGJ5dGVzOgpoZWxsbzoKICAgIHByb3RvIDEgMQogICAgcHVzaGJ5dGVzICJIZWxsbywgIgogICAgZnJhbWVfZGlnIC0xCiAgICBjb25jYXQKICAgIHJldHN1Ygo=",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dpZ3MuY29udHJhY3QuQWdlbmNlR2lncy5hcHByb3ZhbF9wcm9ncmFtOgogICAgaW50Y2Jsb2NrIDAgMSAyIDY0CiAgICBieXRlY2Jsb2NrICJnaWdzIiAibmV4dF9naWdfaWQiIDB4MDA0YSAweDAwMDc1MDY1NmU2NDY5NmU2NyAweDE1MWY3Yzc1ICJHaWcgIiAweDAwIDB4MDAwNjQxNjM3NDY5NzY2NSAweDAwMDAgImdvdmVybmFuY2VfYWNjb3VudCIgMHgwMDAyCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYm56IG1haW5fYWZ0ZXJfaWZfZWxzZUAyCiAgICBjYWxsc3ViIF9faW5pdF9fCgptYWluX2FmdGVyX2lmX2Vsc2VAMjoKICAgIGNhbGxzdWIgX19wdXlhX2FyYzRfcm91dGVyX18KICAgIHJldHVybgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLl9faW5pdF9fKCkgLT4gdm9pZDoKX19pbml0X186CiAgICBwcm90byAwIDAKICAgIGJ5dGVjXzEgLy8gIm5leHRfZ2lnX2lkIgogICAgcHVzaGJ5dGVzIDB4MDAwMDAwMDAwMDAwMDAwMAogICAgYXBwX2dsb2JhbF9wdXQKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBieXRlYyA4IC8vIDB4MDAwMAogICAgYXBwX2dsb2JhbF9wdXQKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLl9fcHV5YV9hcmM0X3JvdXRlcl9fKCkgLT4gdWludDY0OgpfX3B1eWFfYXJjNF9yb3V0ZXJfXzoKICAgIHByb3RvIDAgMQogICAgdHhuIE51bUFwcEFyZ3MKICAgIGJ6IF9fcHV5YV9hcmM0X3JvdXRlcl9fX2FmdGVyX2lmX2Vsc2VAMTIKICAgIHB1c2hieXRlc3MgMHgxZGJhNTU3ZiAweGYxMzcyNWJiIDB4M2UyYTIyMDcgMHgwMWY1OWRjMyAweGJkNTcxOWRhIDB4OGFlNDlhZDYgMHg0NDA3MWU1NiAvLyBtZXRob2QgImluaXQoYWRkcmVzcyx1aW50NjQpdm9pZCIsIG1ldGhvZCAiY3JlYXRlX2dpZyh1aW50NjQpdm9pZCIsIG1ldGhvZCAic3RhcnRfZ2lnKHVpbnQ2NCxhZGRyZXNzKXZvaWQiLCBtZXRob2QgInVwZGF0ZV9naWcodWludDY0LHN0cmluZyl2b2lkIiwgbWV0aG9kICJnZXRfZ2lncygpKGFkZHJlc3MsYWRkcmVzcyxzdHJpbmcsdWludDY0KVtdIiwgbWV0aG9kICJnZXRfZ2lnX2J5X2FkZHJlc3MoYWRkcmVzcykoYWRkcmVzcyxhZGRyZXNzLHN0cmluZyx1aW50NjQpW10iLCBtZXRob2QgImdldF9naWcodWludDY0KShhZGRyZXNzLGFkZHJlc3Msc3RyaW5nLHVpbnQ2NCkiCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAwCiAgICBtYXRjaCBfX3B1eWFfYXJjNF9yb3V0ZXJfX19pbml0X3JvdXRlQDIgX19wdXlhX2FyYzRfcm91dGVyX19fY3JlYXRlX2dpZ19yb3V0ZUAzIF9fcHV5YV9hcmM0X3JvdXRlcl9fX3N0YXJ0X2dpZ19yb3V0ZUA0IF9fcHV5YV9hcmM0X3JvdXRlcl9fX3VwZGF0ZV9naWdfcm91dGVANSBfX3B1eWFfYXJjNF9yb3V0ZXJfX19nZXRfZ2lnc19yb3V0ZUA2IF9fcHV5YV9hcmM0X3JvdXRlcl9fX2dldF9naWdfYnlfYWRkcmVzc19yb3V0ZUA3IF9fcHV5YV9hcmM0X3JvdXRlcl9fX2dldF9naWdfcm91dGVAOAogICAgaW50Y18wIC8vIDAKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19faW5pdF9yb3V0ZUAyOgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGlzIGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAyCiAgICBjYWxsc3ViIGluaXQKICAgIGludGNfMSAvLyAxCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX2NyZWF0ZV9naWdfcm91dGVAMzoKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBpcyBub3QgY3JlYXRpbmcKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDEKICAgIGNhbGxzdWIgY3JlYXRlX2dpZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fc3RhcnRfZ2lnX3JvdXRlQDQ6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAyCiAgICBjYWxsc3ViIHN0YXJ0X2dpZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fdXBkYXRlX2dpZ19yb3V0ZUA1OgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGlzIG5vdCBjcmVhdGluZwogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgY2FsbHN1YiB1cGRhdGVfZ2lnCiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19nZXRfZ2lnc19yb3V0ZUA2OgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGlzIG5vdCBjcmVhdGluZwogICAgY2FsbHN1YiBnZXRfZ2lncwogICAgYnl0ZWMgNCAvLyAweDE1MWY3Yzc1CiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fZ2V0X2dpZ19ieV9hZGRyZXNzX3JvdXRlQDc6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBjYWxsc3ViIGdldF9naWdfYnlfYWRkcmVzcwogICAgYnl0ZWMgNCAvLyAweDE1MWY3Yzc1CiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fZ2V0X2dpZ19yb3V0ZUA4OgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGlzIG5vdCBjcmVhdGluZwogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgY2FsbHN1YiBnZXRfZ2lnCiAgICBieXRlYyA0IC8vIDB4MTUxZjdjNzUKICAgIHN3YXAKICAgIGNvbmNhdAogICAgbG9nCiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19hZnRlcl9pZl9lbHNlQDEyOgogICAgaW50Y18wIC8vIDAKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLmluaXQoZ292ZXJuYW5jZV9hY2NvdW50OiBieXRlcywgZ292ZXJuYW5jZV9hcHBfaWQ6IGJ5dGVzKSAtPiB2b2lkOgppbml0OgogICAgcHJvdG8gMiAwCiAgICBieXRlYyA5IC8vICJnb3Zlcm5hbmNlX2FjY291bnQiCiAgICBmcmFtZV9kaWcgLTIKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBmcmFtZV9kaWcgLTEKICAgIGJ0b2kKICAgIHB1c2hieXRlcyAiZ292ZXJuYW5jZV9hcHBfaWQiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9naWdzLmNvbnRyYWN0LkFnZW5jZUdpZ3MuY3JlYXRlX2dpZyhiaW5kaW5nX2Ftb3VudDogYnl0ZXMpIC0+IHZvaWQ6CmNyZWF0ZV9naWc6CiAgICBwcm90byAxIDAKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18wIC8vICJnaWdzIgogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBzZWxmLmdpZ3MgZXhpc3RzCiAgICB0eG4gU2VuZGVyCiAgICBkdXAKICAgIGNvbmNhdAogICAgYnl0ZWNfMiAvLyAweDAwNGEKICAgIGNvbmNhdAogICAgZnJhbWVfZGlnIC0xCiAgICBjb25jYXQKICAgIGJ5dGVjXzMgLy8gMHgwMDA3NTA2NTZlNjQ2OTZlNjcKICAgIGNvbmNhdAogICAgYnl0ZWMgMTAgLy8gMHgwMDAyCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGRpZyAxCiAgICBpbnRjXzAgLy8gMAogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgZXh0cmFjdCAyIDAKICAgIGludGNfMSAvLyAxCiAgICB1bmNvdmVyIDMKICAgIGNhbGxzdWIgZHluYW1pY19hcnJheV9jb25jYXRfZHluYW1pY19lbGVtZW50CiAgICBieXRlY18wIC8vICJnaWdzIgogICAgc3dhcAogICAgYXBwX2dsb2JhbF9wdXQKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18xIC8vICJuZXh0X2dpZ19pZCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5uZXh0X2dpZ19pZCBleGlzdHMKICAgIGJ0b2kKICAgIGludGNfMSAvLyAxCiAgICArCiAgICBpdG9iCiAgICBieXRlY18xIC8vICJuZXh0X2dpZ19pZCIKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMSAvLyAibmV4dF9naWdfaWQiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYubmV4dF9naWdfaWQgZXhpc3RzCiAgICBieXRlYyA1IC8vICJHaWcgIgogICAgc3dhcAogICAgY29uY2F0CiAgICBwdXNoYnl0ZXMgIiBjcmVhdGVkIgogICAgY29uY2F0CiAgICBsb2cKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLnN0YXJ0X2dpZyhnaWdfaWQ6IGJ5dGVzLCBzZWxlY3RlZF9hY2U6IGJ5dGVzKSAtPiB2b2lkOgpzdGFydF9naWc6CiAgICBwcm90byAyIDAKICAgIGNhbGxzdWIgb25seV9nb3Zlcm5hbmNlCiAgICBieXRlYyA2IC8vIDB4MDAKICAgICE9CiAgICBhc3NlcnQgLy8gT25seSB0aGUgZ292ZXJuYW5jZSBjYW4gc3RhcnQgYSBnaWcKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18xIC8vICJuZXh0X2dpZ19pZCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5uZXh0X2dpZ19pZCBleGlzdHMKICAgIGJ0b2kKICAgIGZyYW1lX2RpZyAtMgogICAgYnRvaQogICAgc3dhcAogICAgZGlnIDEKICAgID4KICAgIGFzc2VydCAvLyBJbnZhbGlkIGdpZyBJRAogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIGR1cAogICAgZXh0cmFjdCAyIDAKICAgIGRpZyAyCiAgICBpbnRjXzIgLy8gMgogICAgKgogICAgZHVwMgogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMwogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2CiAgICBkaWcgNAogICAgaW50Y18xIC8vIDEKICAgICsKICAgIHN3YXAKICAgIGRpZyAxCiAgICAtIC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgZGlnIDQKICAgIGxlbgogICAgZGlnIDIKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBkaWcgNgogICAgZGlnIDEKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDIKICAgIHN3YXAKICAgIHVuY292ZXIgMwogICAgc2VsZWN0CiAgICB1bmNvdmVyIDUKICAgIHVuY292ZXIgNAogICAgdW5jb3ZlciAyCiAgICBzdWJzdHJpbmczCiAgICBkdXAKICAgIGludGNfMyAvLyA2NAogICAgZXh0cmFjdF91aW50MTYKICAgIGRpZyAxCiAgICBsZW4KICAgIHN1YnN0cmluZzMKICAgIGJ5dGVjXzMgLy8gMHgwMDA3NTA2NTZlNjQ2OTZlNjcKICAgID09CiAgICBhc3NlcnQgLy8gR2lnIGlzIG5vdCBwZW5kaW5nCiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5naWdzIGV4aXN0cwogICAgZHVwCiAgICBleHRyYWN0IDIgMAogICAgZHVwCiAgICB1bmNvdmVyIDUKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDIKICAgIGludGNfMCAvLyAwCiAgICBleHRyYWN0X3VpbnQxNgogICAgdW5jb3ZlciA0CiAgICAtIC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgZGlnIDIKICAgIGxlbgogICAgZGlnIDMKICAgIHVuY292ZXIgNQogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgc2VsZWN0CiAgICBzdWJzdHJpbmczCiAgICBkdXAKICAgIGV4dHJhY3QgMzIgMzIgLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBzd2FwCiAgICBleHRyYWN0IDY2IDggLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBmcmFtZV9kaWcgLTEKICAgIHVuY292ZXIgMgogICAgY29uY2F0CiAgICBieXRlY18yIC8vIDB4MDA0YQogICAgY29uY2F0CiAgICBzd2FwCiAgICBjb25jYXQKICAgIGJ5dGVjIDcgLy8gMHgwMDA2NDE2Mzc0Njk3NjY1CiAgICBjb25jYXQKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18wIC8vICJnaWdzIgogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBzZWxmLmdpZ3MgZXhpc3RzCiAgICBzd2FwCiAgICB1bmNvdmVyIDIKICAgIGNhbGxzdWIgZHluYW1pY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBieXRlYyA1IC8vICJHaWcgIgogICAgZnJhbWVfZGlnIC0yCiAgICBjb25jYXQKICAgIHB1c2hieXRlcyAiIHN0YXJ0ZWQiCiAgICBjb25jYXQKICAgIGxvZwogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9naWdzLmNvbnRyYWN0LkFnZW5jZUdpZ3Mub25seV9nb3Zlcm5hbmNlKCkgLT4gYnl0ZXM6Cm9ubHlfZ292ZXJuYW5jZToKICAgIHByb3RvIDAgMQogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjIDkgLy8gImdvdmVybmFuY2VfYWNjb3VudCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5nb3Zlcm5hbmNlX2FjY291bnQgZXhpc3RzCiAgICB0eG4gU2VuZGVyCiAgICA9PQogICAgYnl0ZWMgNiAvLyAweDAwCiAgICBpbnRjXzAgLy8gMAogICAgdW5jb3ZlciAyCiAgICBzZXRiaXQKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLnVwZGF0ZV9naWcoZ2lnX2lkOiBieXRlcywgc3RhdHVzOiBieXRlcykgLT4gdm9pZDoKdXBkYXRlX2dpZzoKICAgIHByb3RvIDIgMAogICAgY2FsbHN1YiBvbmx5X2dvdmVybmFuY2UKICAgIGJ5dGVjIDYgLy8gMHgwMAogICAgIT0KICAgIGFzc2VydCAvLyBPbmx5IHRoZSBnb3Zlcm5hbmNlIG9yIHN0YWtpbmcgY29udHJhY3QgY2FuIGNvbXBsZXRlIGEgZ2lnCiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMSAvLyAibmV4dF9naWdfaWQiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYubmV4dF9naWdfaWQgZXhpc3RzCiAgICBidG9pCiAgICBmcmFtZV9kaWcgLTIKICAgIGJ0b2kKICAgIGR1cAogICAgdW5jb3ZlciAyCiAgICBkaWcgMQogICAgPgogICAgYXNzZXJ0IC8vIEludmFsaWQgZ2lnIElECiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5naWdzIGV4aXN0cwogICAgZHVwCiAgICBleHRyYWN0IDIgMAogICAgZGlnIDIKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBkdXAKICAgIGNvdmVyIDQKICAgIGRpZyAxCiAgICBzd2FwCiAgICBleHRyYWN0X3VpbnQxNgogICAgdW5jb3ZlciAyCiAgICBpbnRjXzAgLy8gMAogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMwogICAgaW50Y18xIC8vIDEKICAgICsKICAgIGR1cAogICAgY292ZXIgNAogICAgc3dhcAogICAgZGlnIDEKICAgIC0gLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBkaWcgMwogICAgbGVuCiAgICB1bmNvdmVyIDIKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBkdXAKICAgIGNvdmVyIDUKICAgIGRpZyA0CiAgICBzd2FwCiAgICBleHRyYWN0X3VpbnQxNgogICAgdW5jb3ZlciAyCiAgICBzZWxlY3QKICAgIHN1YnN0cmluZzMKICAgIGZyYW1lX2RpZyAtMQogICAgZXh0cmFjdCAyIDAKICAgIHB1c2hieXRlc3MgIkFjdGl2ZSIgIkNhbmNlbGVkIiAiQ29tcGxldGVkIiAvLyAiQWN0aXZlIiwgIkNhbmNlbGVkIiwgIkNvbXBsZXRlZCIKICAgIHVuY292ZXIgMwogICAgbWF0Y2ggdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV8wQDEgdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV8xQDIgdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV8yQDMKICAgIGVyciAvLyBJbnZhbGlkIHN0YXR1cwoKdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV8wQDE6CiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5naWdzIGV4aXN0cwogICAgZHVwCiAgICBleHRyYWN0IDIgMAogICAgZHVwCiAgICBmcmFtZV9kaWcgMQogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2CiAgICBmcmFtZV9kaWcgMgogICAgLSAvLyBvbiBlcnJvcjogSW5kZXggYWNjZXNzIGlzIG91dCBvZiBib3VuZHMKICAgIGRpZyAyCiAgICBsZW4KICAgIGRpZyAzCiAgICBmcmFtZV9kaWcgMwogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgc2VsZWN0CiAgICBzdWJzdHJpbmczCiAgICBkdXAKICAgIGludGNfMyAvLyA2NAogICAgZXh0cmFjdF91aW50MTYKICAgIGRpZyAxCiAgICBsZW4KICAgIHN1YnN0cmluZzMKICAgIGJ5dGVjXzMgLy8gMHgwMDA3NTA2NTZlNjQ2OTZlNjcKICAgID09CiAgICBhc3NlcnQgLy8gR2lnIGlzIG5vdCBhY3RpdmUKICAgIGZyYW1lX2RpZyA0CiAgICBkdXAKICAgIGV4dHJhY3QgMCAzMiAvLyBvbiBlcnJvcjogSW5kZXggYWNjZXNzIGlzIG91dCBvZiBib3VuZHMKICAgIGRpZyAxCiAgICBleHRyYWN0IDMyIDMyIC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgdW5jb3ZlciAyCiAgICBleHRyYWN0IDY2IDggLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBjb3ZlciAyCiAgICBjb25jYXQKICAgIGJ5dGVjXzIgLy8gMHgwMDRhCiAgICBjb25jYXQKICAgIHN3YXAKICAgIGNvbmNhdAogICAgYnl0ZWMgNyAvLyAweDAwMDY0MTYzNzQ2OTc2NjUKICAgIGNvbmNhdAogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIHN3YXAKICAgIGZyYW1lX2RpZyAwCiAgICBjYWxsc3ViIGR5bmFtaWNfYXJyYXlfcmVwbGFjZV9keW5hbWljX2VsZW1lbnQKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgYiB1cGRhdGVfZ2lnX3N3aXRjaF9jYXNlX25leHRANQoKdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV8xQDI6CiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5naWdzIGV4aXN0cwogICAgZHVwCiAgICBleHRyYWN0IDIgMAogICAgZHVwCiAgICBmcmFtZV9kaWcgMQogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2CiAgICBmcmFtZV9kaWcgMgogICAgLSAvLyBvbiBlcnJvcjogSW5kZXggYWNjZXNzIGlzIG91dCBvZiBib3VuZHMKICAgIGRpZyAyCiAgICBsZW4KICAgIGRpZyAzCiAgICBmcmFtZV9kaWcgMwogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgc2VsZWN0CiAgICBzdWJzdHJpbmczCiAgICBkdXAKICAgIGludGNfMyAvLyA2NAogICAgZXh0cmFjdF91aW50MTYKICAgIGRpZyAxCiAgICBsZW4KICAgIHN1YnN0cmluZzMKICAgIGJ5dGVjXzMgLy8gMHgwMDA3NTA2NTZlNjQ2OTZlNjcKICAgID09CiAgICBhc3NlcnQgLy8gR2lnIGlzIG5vdCBhY3RpdmUKICAgIGZyYW1lX2RpZyA0CiAgICBkdXAKICAgIGV4dHJhY3QgMCAzMiAvLyBvbiBlcnJvcjogSW5kZXggYWNjZXNzIGlzIG91dCBvZiBib3VuZHMKICAgIGRpZyAxCiAgICBleHRyYWN0IDMyIDMyIC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgdW5jb3ZlciAyCiAgICBleHRyYWN0IDY2IDggLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBjb3ZlciAyCiAgICBjb25jYXQKICAgIGJ5dGVjXzIgLy8gMHgwMDRhCiAgICBjb25jYXQKICAgIHN3YXAKICAgIGNvbmNhdAogICAgcHVzaGJ5dGVzIDB4MDAwODQzNjE2ZTYzNjU2YzY1NjQKICAgIGNvbmNhdAogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIHN3YXAKICAgIGZyYW1lX2RpZyAwCiAgICBjYWxsc3ViIGR5bmFtaWNfYXJyYXlfcmVwbGFjZV9keW5hbWljX2VsZW1lbnQKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgYiB1cGRhdGVfZ2lnX3N3aXRjaF9jYXNlX25leHRANQoKdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV8yQDM6CiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5naWdzIGV4aXN0cwogICAgZHVwCiAgICBleHRyYWN0IDIgMAogICAgZHVwCiAgICBmcmFtZV9kaWcgMQogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2CiAgICBmcmFtZV9kaWcgMgogICAgLSAvLyBvbiBlcnJvcjogSW5kZXggYWNjZXNzIGlzIG91dCBvZiBib3VuZHMKICAgIGRpZyAyCiAgICBsZW4KICAgIGRpZyAzCiAgICBmcmFtZV9kaWcgMwogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgc2VsZWN0CiAgICBzdWJzdHJpbmczCiAgICBkdXAKICAgIGludGNfMyAvLyA2NAogICAgZXh0cmFjdF91aW50MTYKICAgIGRpZyAxCiAgICBsZW4KICAgIHN1YnN0cmluZzMKICAgIGJ5dGVjIDcgLy8gMHgwMDA2NDE2Mzc0Njk3NjY1CiAgICA9PQogICAgYXNzZXJ0IC8vIEdpZyBpcyBub3QgYWN0aXZlCiAgICBmcmFtZV9kaWcgNAogICAgZHVwCiAgICBleHRyYWN0IDAgMzIgLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBkaWcgMQogICAgZXh0cmFjdCAzMiAzMiAvLyBvbiBlcnJvcjogSW5kZXggYWNjZXNzIGlzIG91dCBvZiBib3VuZHMKICAgIHVuY292ZXIgMgogICAgZXh0cmFjdCA2NiA4IC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgY292ZXIgMgogICAgY29uY2F0CiAgICBieXRlY18yIC8vIDB4MDA0YQogICAgY29uY2F0CiAgICBzd2FwCiAgICBjb25jYXQKICAgIHB1c2hieXRlcyAweDAwMDk0MzZmNmQ3MDZjNjU3NDY1NjQKICAgIGNvbmNhdAogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIHN3YXAKICAgIGZyYW1lX2RpZyAwCiAgICBjYWxsc3ViIGR5bmFtaWNfYXJyYXlfcmVwbGFjZV9keW5hbWljX2VsZW1lbnQKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAoKdXBkYXRlX2dpZ19zd2l0Y2hfY2FzZV9uZXh0QDU6CiAgICBieXRlYyA1IC8vICJHaWcgIgogICAgZnJhbWVfZGlnIC0yCiAgICBjb25jYXQKICAgIHB1c2hieXRlcyAiIHVwZGF0ZWQgdG8gIgogICAgY29uY2F0CiAgICBmcmFtZV9kaWcgLTEKICAgIGNvbmNhdAogICAgbG9nCiAgICByZXRzdWIKCgovLyBzbWFydF9jb250cmFjdHMuYWdlbmNlX2dpZ3MuY29udHJhY3QuQWdlbmNlR2lncy5nZXRfZ2lncygpIC0+IGJ5dGVzOgpnZXRfZ2lnczoKICAgIHByb3RvIDAgMQogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLmdldF9naWdfYnlfYWRkcmVzcyh1c2VyX2FkZHJlc3M6IGJ5dGVzKSAtPiBieXRlczoKZ2V0X2dpZ19ieV9hZGRyZXNzOgogICAgcHJvdG8gMSAxCiAgICBpbnRjXzAgLy8gMAogICAgcHVzaGJ5dGVzICIiCiAgICBkdXAKICAgIGJ5dGVjIDggLy8gMHgwMDAwCiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMSAvLyAibmV4dF9naWdfaWQiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYubmV4dF9naWdfaWQgZXhpc3RzCiAgICBidG9pCiAgICBpbnRjXzAgLy8gMAoKZ2V0X2dpZ19ieV9hZGRyZXNzX2Zvcl9oZWFkZXJAMToKICAgIGZyYW1lX2RpZyA1CiAgICBmcmFtZV9kaWcgNAogICAgPAogICAgYnogZ2V0X2dpZ19ieV9hZGRyZXNzX2FmdGVyX2ZvckA3CiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMCAvLyAiZ2lncyIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5naWdzIGV4aXN0cwogICAgZHVwCiAgICBleHRyYWN0IDIgMAogICAgZnJhbWVfZGlnIDUKICAgIGR1cAogICAgY292ZXIgMwogICAgaW50Y18yIC8vIDIKICAgICoKICAgIGR1cAogICAgZnJhbWVfYnVyeSAxCiAgICBkaWcgMQogICAgc3dhcAogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDMKICAgIGludGNfMSAvLyAxCiAgICArCiAgICBkdXAKICAgIGZyYW1lX2J1cnkgNQogICAgc3dhcAogICAgZGlnIDEKICAgIC0gLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBkaWcgMwogICAgbGVuCiAgICB1bmNvdmVyIDIKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBkdXAKICAgIGZyYW1lX2J1cnkgMgogICAgZGlnIDQKICAgIHN3YXAKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDIKICAgIHNlbGVjdAogICAgc3Vic3RyaW5nMwogICAgZXh0cmFjdCAwIDMyIC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgZnJhbWVfZGlnIC0xCiAgICA9PQogICAgYm56IGdldF9naWdfYnlfYWRkcmVzc19pZl9ib2R5QDQKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18wIC8vICJnaWdzIgogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBzZWxmLmdpZ3MgZXhpc3RzCiAgICBkdXAKICAgIGV4dHJhY3QgMiAwCiAgICBkdXAKICAgIGZyYW1lX2RpZyAxCiAgICBleHRyYWN0X3VpbnQxNgogICAgdW5jb3ZlciAyCiAgICBpbnRjXzAgLy8gMAogICAgZXh0cmFjdF91aW50MTYKICAgIGZyYW1lX2RpZyA1CiAgICAtIC8vIG9uIGVycm9yOiBJbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgZGlnIDIKICAgIGxlbgogICAgZGlnIDMKICAgIGZyYW1lX2RpZyAyCiAgICBleHRyYWN0X3VpbnQxNgogICAgdW5jb3ZlciAyCiAgICBzZWxlY3QKICAgIHN1YnN0cmluZzMKICAgIGV4dHJhY3QgMzIgMzIgLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBmcmFtZV9kaWcgLTEKICAgID09CiAgICBmcmFtZV9kaWcgMwogICAgZnJhbWVfYnVyeSAwCiAgICBieiBnZXRfZ2lnX2J5X2FkZHJlc3NfYWZ0ZXJfaWZfZWxzZUA1CgpnZXRfZ2lnX2J5X2FkZHJlc3NfaWZfYm9keUA0OgogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIGR1cAogICAgZXh0cmFjdCAyIDAKICAgIGR1cAogICAgZnJhbWVfZGlnIDEKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDIKICAgIGludGNfMCAvLyAwCiAgICBleHRyYWN0X3VpbnQxNgogICAgZnJhbWVfZGlnIDUKICAgIC0gLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBkaWcgMgogICAgbGVuCiAgICBkaWcgMwogICAgZnJhbWVfZGlnIDIKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDIKICAgIHNlbGVjdAogICAgc3Vic3RyaW5nMwogICAgYnl0ZWMgMTAgLy8gMHgwMDAyCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGZyYW1lX2RpZyAzCiAgICBkdXAKICAgIGludGNfMCAvLyAwCiAgICBleHRyYWN0X3VpbnQxNgogICAgc3dhcAogICAgZXh0cmFjdCAyIDAKICAgIGludGNfMSAvLyAxCiAgICB1bmNvdmVyIDMKICAgIGNhbGxzdWIgZHluYW1pY19hcnJheV9jb25jYXRfZHluYW1pY19lbGVtZW50CiAgICBmcmFtZV9idXJ5IDAKCmdldF9naWdfYnlfYWRkcmVzc19hZnRlcl9pZl9lbHNlQDU6CiAgICBmcmFtZV9kaWcgMAogICAgZnJhbWVfYnVyeSAzCiAgICBiIGdldF9naWdfYnlfYWRkcmVzc19mb3JfaGVhZGVyQDEKCmdldF9naWdfYnlfYWRkcmVzc19hZnRlcl9mb3JANzoKICAgIGZyYW1lX2RpZyAzCiAgICBmcmFtZV9idXJ5IDAKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ2lncy5jb250cmFjdC5BZ2VuY2VHaWdzLmdldF9naWcoZ2lnX2lkOiBieXRlcykgLT4gYnl0ZXM6CmdldF9naWc6CiAgICBwcm90byAxIDEKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18xIC8vICJuZXh0X2dpZ19pZCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5uZXh0X2dpZ19pZCBleGlzdHMKICAgIGJ0b2kKICAgIGZyYW1lX2RpZyAtMQogICAgYnRvaQogICAgc3dhcAogICAgZGlnIDEKICAgID4KICAgIGFzc2VydCAvLyBJbnZhbGlkIGdpZyBJRAogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjXzAgLy8gImdpZ3MiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuZ2lncyBleGlzdHMKICAgIGR1cAogICAgZXh0cmFjdCAyIDAKICAgIGRpZyAyCiAgICBpbnRjXzIgLy8gMgogICAgKgogICAgZGlnIDEKICAgIHN3YXAKICAgIGV4dHJhY3RfdWludDE2CiAgICB1bmNvdmVyIDIKICAgIGludGNfMCAvLyAwCiAgICBleHRyYWN0X3VpbnQxNgogICAgdW5jb3ZlciAzCiAgICBpbnRjXzEgLy8gMQogICAgKwogICAgc3dhcAogICAgZGlnIDEKICAgIC0gLy8gb24gZXJyb3I6IEluZGV4IGFjY2VzcyBpcyBvdXQgb2YgYm91bmRzCiAgICBkaWcgMwogICAgbGVuCiAgICB1bmNvdmVyIDIKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBkaWcgNAogICAgc3dhcAogICAgZXh0cmFjdF91aW50MTYKICAgIHVuY292ZXIgMgogICAgc2VsZWN0CiAgICBzdWJzdHJpbmczCiAgICByZXRzdWIKCgovLyBfcHV5YV9saWIuYXJjNC5keW5hbWljX2FycmF5X2NvbmNhdF9keW5hbWljX2VsZW1lbnQoYXJyYXlfaXRlbXNfY291bnQ6IHVpbnQ2NCwgYXJyYXlfaGVhZF9hbmRfdGFpbDogYnl0ZXMsIG5ld19pdGVtc19jb3VudDogdWludDY0LCBuZXdfaGVhZF9hbmRfdGFpbDogYnl0ZXMpIC0+IGJ5dGVzOgpkeW5hbWljX2FycmF5X2NvbmNhdF9keW5hbWljX2VsZW1lbnQ6CiAgICBwcm90byA0IDEKICAgIHB1c2hieXRlcyAiIgogICAgZHVwCiAgICBmcmFtZV9kaWcgLTIKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBmcmFtZV9kaWcgLTQKICAgIGludGNfMiAvLyAyCiAgICAqCiAgICBpbnRjXzAgLy8gMAoKZHluYW1pY19hcnJheV9jb25jYXRfZHluYW1pY19lbGVtZW50X2Zvcl9oZWFkZXJAMToKICAgIGZyYW1lX2RpZyA0CiAgICBmcmFtZV9kaWcgMwogICAgPAogICAgYnogZHluYW1pY19hcnJheV9jb25jYXRfZHluYW1pY19lbGVtZW50X2FmdGVyX2ZvckA0CiAgICBmcmFtZV9kaWcgLTMKICAgIGZyYW1lX2RpZyA0CiAgICBkdXAKICAgIGNvdmVyIDIKICAgIGV4dHJhY3RfdWludDE2CiAgICBmcmFtZV9kaWcgMgogICAgKwogICAgaXRvYgogICAgZXh0cmFjdCA2IDIKICAgIGZyYW1lX2RpZyAxCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGZyYW1lX2J1cnkgMQogICAgaW50Y18yIC8vIDIKICAgICsKICAgIGZyYW1lX2J1cnkgNAogICAgYiBkeW5hbWljX2FycmF5X2NvbmNhdF9keW5hbWljX2VsZW1lbnRfZm9yX2hlYWRlckAxCgpkeW5hbWljX2FycmF5X2NvbmNhdF9keW5hbWljX2VsZW1lbnRfYWZ0ZXJfZm9yQDQ6CiAgICBmcmFtZV9kaWcgLTMKICAgIGxlbgogICAgZnJhbWVfYnVyeSAwCiAgICBpbnRjXzAgLy8gMAogICAgZnJhbWVfYnVyeSA0CgpkeW5hbWljX2FycmF5X2NvbmNhdF9keW5hbWljX2VsZW1lbnRfZm9yX2hlYWRlckA1OgogICAgZnJhbWVfZGlnIDQKICAgIGZyYW1lX2RpZyAyCiAgICA8CiAgICBieiBkeW5hbWljX2FycmF5X2NvbmNhdF9keW5hbWljX2VsZW1lbnRfYWZ0ZXJfZm9yQDgKICAgIGZyYW1lX2RpZyAtMQogICAgZnJhbWVfZGlnIDQKICAgIGR1cAogICAgY292ZXIgMgogICAgZXh0cmFjdF91aW50MTYKICAgIGZyYW1lX2RpZyAwCiAgICArCiAgICBpdG9iCiAgICBleHRyYWN0IDYgMgogICAgZnJhbWVfZGlnIDEKICAgIHN3YXAKICAgIGNvbmNhdAogICAgZnJhbWVfYnVyeSAxCiAgICBpbnRjXzIgLy8gMgogICAgKwogICAgZnJhbWVfYnVyeSA0CiAgICBiIGR5bmFtaWNfYXJyYXlfY29uY2F0X2R5bmFtaWNfZWxlbWVudF9mb3JfaGVhZGVyQDUKCmR5bmFtaWNfYXJyYXlfY29uY2F0X2R5bmFtaWNfZWxlbWVudF9hZnRlcl9mb3JAODoKICAgIGZyYW1lX2RpZyAtNAogICAgZnJhbWVfZGlnIC0yCiAgICArCiAgICBpdG9iCiAgICBleHRyYWN0IDYgMgogICAgZnJhbWVfZGlnIDEKICAgIGNvbmNhdAogICAgZnJhbWVfZGlnIC0zCiAgICBmcmFtZV9kaWcgMwogICAgZnJhbWVfZGlnIDAKICAgIHN1YnN0cmluZzMKICAgIGNvbmNhdAogICAgZnJhbWVfZGlnIC0xCiAgICBsZW4KICAgIGZyYW1lX2RpZyAtMQogICAgZnJhbWVfZGlnIDIKICAgIHVuY292ZXIgMgogICAgc3Vic3RyaW5nMwogICAgY29uY2F0CiAgICBmcmFtZV9idXJ5IDAKICAgIHJldHN1YgoKCi8vIF9wdXlhX2xpYi5hcmM0LmR5bmFtaWNfYXJyYXlfcmVwbGFjZV9keW5hbWljX2VsZW1lbnQoc291cmNlOiBieXRlcywgbmV3X2l0ZW06IGJ5dGVzLCBpbmRleDogdWludDY0KSAtPiBieXRlczoKZHluYW1pY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudDoKICAgIHByb3RvIDMgMQogICAgZnJhbWVfZGlnIC0zCiAgICBzdWJzdHJpbmcgMCAyCiAgICBkdXAKICAgIGJ0b2kKICAgIGZyYW1lX2RpZyAtMwogICAgZXh0cmFjdCAyIDAKICAgIGZyYW1lX2RpZyAtMgogICAgZnJhbWVfZGlnIC0xCiAgICB1bmNvdmVyIDMKICAgIGNhbGxzdWIgc3RhdGljX2FycmF5X3JlcGxhY2VfZHluYW1pY19lbGVtZW50CiAgICBjb25jYXQKICAgIHJldHN1YgoKCi8vIF9wdXlhX2xpYi5hcmM0LnN0YXRpY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudChhcnJheV9oZWFkX2FuZF90YWlsOiBieXRlcywgbmV3X2l0ZW06IGJ5dGVzLCBpbmRleDogdWludDY0LCBhcnJheV9sZW5ndGg6IHVpbnQ2NCkgLT4gYnl0ZXM6CnN0YXRpY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudDoKICAgIHByb3RvIDQgMQogICAgZnJhbWVfZGlnIC0yCiAgICBpbnRjXzIgLy8gMgogICAgKgogICAgZnJhbWVfZGlnIC00CiAgICBzd2FwCiAgICBleHRyYWN0X3VpbnQxNgogICAgZnJhbWVfZGlnIC0yCiAgICBpbnRjXzEgLy8gMQogICAgKwogICAgaW50Y18yIC8vIDIKICAgICoKICAgIGR1cAogICAgY292ZXIgMgogICAgZnJhbWVfZGlnIC00CiAgICBzd2FwCiAgICBleHRyYWN0X3VpbnQxNgogICAgZnJhbWVfZGlnIC00CiAgICBsZW4KICAgIGZyYW1lX2RpZyAtMQogICAgZnJhbWVfZGlnIC0yCiAgICAtCiAgICBpbnRjXzEgLy8gMQogICAgLQogICAgZGlnIDEKICAgIHVuY292ZXIgMwogICAgdW5jb3ZlciAyCiAgICBzZWxlY3QKICAgIGR1cAogICAgZGlnIDMKICAgIC0KICAgIGNvdmVyIDMKICAgIGZyYW1lX2RpZyAtMwogICAgbGVuCiAgICBjb3ZlciAzCiAgICBmcmFtZV9kaWcgLTQKICAgIGludGNfMCAvLyAwCiAgICB1bmNvdmVyIDQKICAgIHN1YnN0cmluZzMKICAgIGZyYW1lX2RpZyAtMwogICAgY29uY2F0CiAgICBmcmFtZV9kaWcgLTQKICAgIHVuY292ZXIgMgogICAgdW5jb3ZlciAzCiAgICBzdWJzdHJpbmczCiAgICBjb25jYXQKICAgIGZyYW1lX2RpZyAtMQogICAgaW50Y18yIC8vIDIKICAgICoKCnN0YXRpY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudF9mb3JfaGVhZGVyQDE6CiAgICBmcmFtZV9kaWcgMAogICAgZnJhbWVfZGlnIDQKICAgIDwKICAgIGJ6IHN0YXRpY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudF9hZnRlcl9mb3JANAogICAgZnJhbWVfZGlnIDMKICAgIGR1cAogICAgZnJhbWVfZGlnIDAKICAgIGR1cAogICAgY292ZXIgMwogICAgZXh0cmFjdF91aW50MTYKICAgIGZyYW1lX2RpZyAyCiAgICArCiAgICBmcmFtZV9kaWcgMQogICAgLQogICAgaXRvYgogICAgZXh0cmFjdCA2IDIKICAgIGRpZyAyCiAgICBzd2FwCiAgICByZXBsYWNlMwogICAgZnJhbWVfYnVyeSAzCiAgICBpbnRjXzIgLy8gMgogICAgKwogICAgZnJhbWVfYnVyeSAwCiAgICBiIHN0YXRpY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudF9mb3JfaGVhZGVyQDEKCnN0YXRpY19hcnJheV9yZXBsYWNlX2R5bmFtaWNfZWxlbWVudF9hZnRlcl9mb3JANDoKICAgIGZyYW1lX2RpZyAzCiAgICBmcmFtZV9idXJ5IDAKICAgIHJldHN1Ygo=",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dpZ3MuY29udHJhY3QuQWdlbmNlR2lncy5jbGVhcl9zdGF0ZV9wcm9ncmFtOgogICAgcHVzaGludCAxIC8vIDEKICAgIHJldHVybgo="
     },
     "state": {
         "global": {
-            "num_byte_slices": 0,
-            "num_uints": 0
+            "num_byte_slices": 3,
+            "num_uints": 2
         },
         "local": {
             "num_byte_slices": 0,
@@ -45,7 +98,28 @@ _APP_SPEC_JSON = r"""{
     },
     "schema": {
         "global": {
-            "declared": {},
+            "declared": {
+                "gigs": {
+                    "type": "bytes",
+                    "key": "gigs"
+                },
+                "governance_account": {
+                    "type": "bytes",
+                    "key": "governance_account"
+                },
+                "governance_app": {
+                    "type": "uint64",
+                    "key": "governance_app"
+                },
+                "governance_app_id": {
+                    "type": "uint64",
+                    "key": "governance_app_id"
+                },
+                "next_gig_id": {
+                    "type": "bytes",
+                    "key": "next_gig_id"
+                }
+            },
             "reserved": {}
         },
         "local": {
@@ -57,23 +131,100 @@ _APP_SPEC_JSON = r"""{
         "name": "AgenceGigs",
         "methods": [
             {
-                "name": "hello",
+                "name": "init",
                 "args": [
                     {
-                        "type": "string",
-                        "name": "name"
+                        "type": "address",
+                        "name": "governance_account"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "governance_app_id"
                     }
                 ],
                 "returns": {
-                    "type": "string"
+                    "type": "void"
+                }
+            },
+            {
+                "name": "create_gig",
+                "args": [
+                    {
+                        "type": "uint64",
+                        "name": "binding_amount"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "start_gig",
+                "args": [
+                    {
+                        "type": "uint64",
+                        "name": "gig_id"
+                    },
+                    {
+                        "type": "address",
+                        "name": "selected_ace"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "update_gig",
+                "args": [
+                    {
+                        "type": "uint64",
+                        "name": "gig_id"
+                    },
+                    {
+                        "type": "string",
+                        "name": "status"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "get_gigs",
+                "args": [],
+                "returns": {
+                    "type": "(address,address,string,uint64)[]"
+                }
+            },
+            {
+                "name": "get_gig_by_address",
+                "args": [
+                    {
+                        "type": "address",
+                        "name": "user_address"
+                    }
+                ],
+                "returns": {
+                    "type": "(address,address,string,uint64)[]"
+                }
+            },
+            {
+                "name": "get_gig",
+                "args": [
+                    {
+                        "type": "uint64",
+                        "name": "gig_id"
+                    }
+                ],
+                "returns": {
+                    "type": "(address,address,string,uint64)"
                 }
             }
         ],
         "networks": {}
     },
-    "bare_call_config": {
-        "no_op": "CREATE"
-    }
+    "bare_call_config": {}
 }"""
 APP_SPEC = algokit_utils.ApplicationSpecification.from_json(_APP_SPEC_JSON)
 _TReturn = typing.TypeVar("_TReturn")
@@ -92,6 +243,11 @@ _TArgs = typing.TypeVar("_TArgs", bound=_ArgsBase[typing.Any])
 @dataclasses.dataclass(kw_only=True)
 class _TArgsHolder(typing.Generic[_TArgs]):
     args: _TArgs
+
+
+@dataclasses.dataclass(kw_only=True)
+class DeployCreate(algokit_utils.DeployCreateCallArgs, _TArgsHolder[_TArgs], typing.Generic[_TArgs]):
+    pass
 
 
 def _filter_none(value: dict | typing.Any) -> dict | typing.Any:
@@ -149,12 +305,105 @@ def _convert_deploy_args(
 
 
 @dataclasses.dataclass(kw_only=True)
-class HelloArgs(_ArgsBase[str]):
-    name: str
+class CreateGigArgs(_ArgsBase[None]):
+    binding_amount: int
 
     @staticmethod
     def method() -> str:
-        return "hello(string)string"
+        return "create_gig(uint64)void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class StartGigArgs(_ArgsBase[None]):
+    gig_id: int
+    selected_ace: str
+
+    @staticmethod
+    def method() -> str:
+        return "start_gig(uint64,address)void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class UpdateGigArgs(_ArgsBase[None]):
+    gig_id: int
+    status: str
+
+    @staticmethod
+    def method() -> str:
+        return "update_gig(uint64,string)void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class GetGigsArgs(_ArgsBase[list[tuple[str, str, str, int]]]):
+    @staticmethod
+    def method() -> str:
+        return "get_gigs()(address,address,string,uint64)[]"
+
+
+@dataclasses.dataclass(kw_only=True)
+class GetGigByAddressArgs(_ArgsBase[list[tuple[str, str, str, int]]]):
+    user_address: str
+
+    @staticmethod
+    def method() -> str:
+        return "get_gig_by_address(address)(address,address,string,uint64)[]"
+
+
+@dataclasses.dataclass(kw_only=True)
+class Gig:
+    ace: str
+    agency: str
+    status: str
+    binding_amount: int
+
+
+@dataclasses.dataclass(kw_only=True)
+class GetGigArgs(_ArgsBase[Gig]):
+    gig_id: int
+
+    @staticmethod
+    def method() -> str:
+        return "get_gig(uint64)(address,address,string,uint64)"
+
+
+@dataclasses.dataclass(kw_only=True)
+class InitArgs(_ArgsBase[None]):
+    governance_account: str
+    governance_app_id: int
+
+    @staticmethod
+    def method() -> str:
+        return "init(address,uint64)void"
+
+
+class ByteReader:
+    def __init__(self, data: bytes):
+        self._data = data
+
+    @property
+    def as_bytes(self) -> bytes:
+        return self._data
+
+    @property
+    def as_str(self) -> str:
+        return self._data.decode("utf8")
+
+    @property
+    def as_base64(self) -> str:
+        return base64.b64encode(self._data).decode("utf8")
+
+    @property
+    def as_hex(self) -> str:
+        return self._data.hex()
+
+
+class GlobalState:
+    def __init__(self, data: dict[bytes, bytes | int]):
+        self.gigs = ByteReader(typing.cast(bytes, data.get(b"gigs")))
+        self.governance_account = ByteReader(typing.cast(bytes, data.get(b"governance_account")))
+        self.governance_app = typing.cast(int, data.get(b"governance_app"))
+        self.governance_app_id = typing.cast(int, data.get(b"governance_app_id"))
+        self.next_gig_id = ByteReader(typing.cast(bytes, data.get(b"next_gig_id")))
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -188,20 +437,20 @@ class Composer:
     def execute(self) -> AtomicTransactionResponse:
         return self.app_client.execute_atc(self.atc)
 
-    def hello(
+    def create_gig(
         self,
         *,
-        name: str,
+        binding_amount: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to `hello(string)string` ABI method
+        """Adds a call to `create_gig(uint64)void` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param int binding_amount: The `binding_amount` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
-        args = HelloArgs(
-            name=name,
+        args = CreateGigArgs(
+            binding_amount=binding_amount,
         )
         self.app_client.compose_call(
             self.atc,
@@ -211,22 +460,148 @@ class Composer:
         )
         return self
 
-    def create_bare(
+    def start_gig(
         self,
         *,
+        gig_id: int,
+        selected_ace: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `start_gig(uint64,address)void` ABI method
+        
+        :param int gig_id: The `gig_id` ABI parameter
+        :param str selected_ace: The `selected_ace` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = StartGigArgs(
+            gig_id=gig_id,
+            selected_ace=selected_ace,
+        )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def update_gig(
+        self,
+        *,
+        gig_id: int,
+        status: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `update_gig(uint64,string)void` ABI method
+        
+        :param int gig_id: The `gig_id` ABI parameter
+        :param str status: The `status` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = UpdateGigArgs(
+            gig_id=gig_id,
+            status=status,
+        )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def get_gigs(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `get_gigs()(address,address,string,uint64)[]` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = GetGigsArgs()
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def get_gig_by_address(
+        self,
+        *,
+        user_address: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `get_gig_by_address(address)(address,address,string,uint64)[]` ABI method
+        
+        :param str user_address: The `user_address` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = GetGigByAddressArgs(
+            user_address=user_address,
+        )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def get_gig(
+        self,
+        *,
+        gig_id: int,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `get_gig(uint64)(address,address,string,uint64)` ABI method
+        
+        :param int gig_id: The `gig_id` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = GetGigArgs(
+            gig_id=gig_id,
+        )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def create_init(
+        self,
+        *,
+        governance_account: str,
+        governance_app_id: int,
         on_complete: typing.Literal["no_op"] = "no_op",
         transaction_parameters: algokit_utils.CreateTransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to create an application using the no_op bare method
+        """Adds a call to `init(address,uint64)void` ABI method
         
+        :param str governance_account: The `governance_account` ABI parameter
+        :param int governance_app_id: The `governance_app_id` ABI parameter
         :param typing.Literal[no_op] on_complete: On completion type to use
         :param algokit_utils.CreateTransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
+        args = InitArgs(
+            governance_account=governance_account,
+            governance_app_id=governance_app_id,
+        )
         self.app_client.compose_create(
             self.atc,
-            call_abi_method=False,
+            call_abi_method=args.method(),
             transaction_parameters=_convert_create_transaction_parameters(transaction_parameters, on_complete),
+            **_as_dict(args, convert_all=True),
         )
         return self
 
@@ -370,20 +745,26 @@ class AgenceGigsClient:
     def suggested_params(self, value: algosdk.transaction.SuggestedParams | None) -> None:
         self.app_client.suggested_params = value
 
-    def hello(
+    def get_global_state(self) -> GlobalState:
+        """Returns the application's global state wrapped in a strongly typed class with options to format the stored value"""
+
+        state = typing.cast(dict[bytes, bytes | int], self.app_client.get_global_state(raw=True))
+        return GlobalState(state)
+
+    def create_gig(
         self,
         *,
-        name: str,
+        binding_amount: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
-    ) -> algokit_utils.ABITransactionResponse[str]:
-        """Calls `hello(string)string` ABI method
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `create_gig(uint64)void` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param int binding_amount: The `binding_amount` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
-        :returns algokit_utils.ABITransactionResponse[str]: The result of the transaction"""
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
 
-        args = HelloArgs(
-            name=name,
+        args = CreateGigArgs(
+            binding_amount=binding_amount,
         )
         result = self.app_client.call(
             call_abi_method=args.method(),
@@ -392,21 +773,145 @@ class AgenceGigsClient:
         )
         return result
 
-    def create_bare(
+    def start_gig(
         self,
         *,
+        gig_id: int,
+        selected_ace: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `start_gig(uint64,address)void` ABI method
+        
+        :param int gig_id: The `gig_id` ABI parameter
+        :param str selected_ace: The `selected_ace` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = StartGigArgs(
+            gig_id=gig_id,
+            selected_ace=selected_ace,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def update_gig(
+        self,
+        *,
+        gig_id: int,
+        status: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `update_gig(uint64,string)void` ABI method
+        
+        :param int gig_id: The `gig_id` ABI parameter
+        :param str status: The `status` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = UpdateGigArgs(
+            gig_id=gig_id,
+            status=status,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def get_gigs(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[list[tuple[str, str, str, int]]]:
+        """Calls `get_gigs()(address,address,string,uint64)[]` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[list[tuple[str, str, str, int]]]: The result of the transaction"""
+
+        args = GetGigsArgs()
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def get_gig_by_address(
+        self,
+        *,
+        user_address: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[list[tuple[str, str, str, int]]]:
+        """Calls `get_gig_by_address(address)(address,address,string,uint64)[]` ABI method
+        
+        :param str user_address: The `user_address` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[list[tuple[str, str, str, int]]]: The result of the transaction"""
+
+        args = GetGigByAddressArgs(
+            user_address=user_address,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def get_gig(
+        self,
+        *,
+        gig_id: int,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[Gig]:
+        """Calls `get_gig(uint64)(address,address,string,uint64)` ABI method
+        
+        :param int gig_id: The `gig_id` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[Gig]: The result of the transaction"""
+
+        args = GetGigArgs(
+            gig_id=gig_id,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        elements = self.app_spec.hints[args.method()].structs["output"]["elements"]
+        result_dict = {element[0]: value for element, value in zip(elements, result.return_value)}
+        result.return_value = Gig(**result_dict)
+        return result
+
+    def create_init(
+        self,
+        *,
+        governance_account: str,
+        governance_app_id: int,
         on_complete: typing.Literal["no_op"] = "no_op",
         transaction_parameters: algokit_utils.CreateTransactionParameters | None = None,
-    ) -> algokit_utils.TransactionResponse:
-        """Creates an application using the no_op bare method
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `init(address,uint64)void` ABI method
         
+        :param str governance_account: The `governance_account` ABI parameter
+        :param int governance_app_id: The `governance_app_id` ABI parameter
         :param typing.Literal[no_op] on_complete: On completion type to use
         :param algokit_utils.CreateTransactionParameters transaction_parameters: (optional) Additional transaction parameters
-        :returns algokit_utils.TransactionResponse: The result of the transaction"""
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
 
+        args = InitArgs(
+            governance_account=governance_account,
+            governance_app_id=governance_app_id,
+        )
         result = self.app_client.create(
-            call_abi_method=False,
+            call_abi_method=args.method(),
             transaction_parameters=_convert_create_transaction_parameters(transaction_parameters, on_complete),
+            **_as_dict(args, convert_all=True),
         )
         return result
 
@@ -434,7 +939,7 @@ class AgenceGigsClient:
         on_update: algokit_utils.OnUpdate = algokit_utils.OnUpdate.Fail,
         on_schema_break: algokit_utils.OnSchemaBreak = algokit_utils.OnSchemaBreak.Fail,
         template_values: algokit_utils.TemplateValueMapping | None = None,
-        create_args: algokit_utils.DeployCallArgs | None = None,
+        create_args: DeployCreate[InitArgs],
         update_args: algokit_utils.DeployCallArgs | None = None,
         delete_args: algokit_utils.DeployCallArgs | None = None,
     ) -> algokit_utils.DeployResponse:
@@ -468,7 +973,7 @@ class AgenceGigsClient:
         has increased beyond the current allocation
         :param dict[str, int|str|bytes] template_values: Values to use for `TMPL_*` template variables, dictionary keys
         should *NOT* include the TMPL_ prefix
-        :param algokit_utils.DeployCallArgs | None create_args: Arguments used when creating an application
+        :param DeployCreate[InitArgs] create_args: Arguments used when creating an application
         :param algokit_utils.DeployCallArgs | None update_args: Arguments used when updating an application
         :param algokit_utils.DeployCallArgs | None delete_args: Arguments used when deleting an application
         :return DeployResponse: details action taken and relevant transactions

@@ -2,8 +2,23 @@
 
 smart_contracts.agence_governance.contract.AgenceGovernance.approval_program:
     intcblock 0 1
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub __init__
+
+main_after_if_else@2:
     callsub __puya_arc4_router__
     return
+
+
+// smart_contracts.agence_governance.contract.AgenceGovernance.__init__() -> void:
+__init__:
+    proto 0 0
+    pushbytess "next_proposal_id" 0x0000000000000000 // "next_proposal_id", 0x0000000000000000
+    app_global_put
+    pushbytess "proposals" 0x0000 // "proposals", 0x0000
+    app_global_put
+    retsub
 
 
 // smart_contracts.agence_governance.contract.AgenceGovernance.__puya_arc4_router__() -> uint64:
@@ -11,31 +26,23 @@ __puya_arc4_router__:
     proto 0 1
     txn NumAppArgs
     bz __puya_arc4_router___bare_routing@5
-    pushbytes 0x02bece11 // method "hello(string)string"
+    pushbytes 0xbb6dfe45 // method "init(address,uint64,address,uint64)void"
     txna ApplicationArgs 0
-    match __puya_arc4_router___hello_route@2
+    match __puya_arc4_router___init_route@2
     intc_0 // 0
     retsub
 
-__puya_arc4_router___hello_route@2:
+__puya_arc4_router___init_route@2:
     txn OnCompletion
     !
     assert // OnCompletion is NoOp
     txn ApplicationID
     assert // is not creating
     txna ApplicationArgs 1
-    extract 2 0
-    callsub hello
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    pushbytes 0x151f7c75
-    swap
-    concat
-    log
+    txna ApplicationArgs 2
+    txna ApplicationArgs 3
+    txna ApplicationArgs 4
+    callsub init
     intc_1 // 1
     retsub
 
@@ -53,10 +60,40 @@ __puya_arc4_router___after_if_else@9:
     retsub
 
 
-// smart_contracts.agence_governance.contract.AgenceGovernance.hello(name: bytes) -> bytes:
-hello:
-    proto 1 1
-    pushbytes "Hello, "
+// smart_contracts.agence_governance.contract.AgenceGovernance.init(staking_account: bytes, staking_app_id: bytes, gigs_account: bytes, gigs_app_id: bytes) -> void:
+init:
+    proto 4 0
+    callsub only_creator
+    pushbytes 0x00
+    !=
+    assert // Only the creator can init the contract
+    pushbytes "staking_account"
+    frame_dig -4
+    app_global_put
+    frame_dig -3
+    btoi
+    pushbytes "staking_app"
+    swap
+    app_global_put
+    pushbytes "gigs_account"
+    frame_dig -2
+    app_global_put
     frame_dig -1
-    concat
+    btoi
+    pushbytes "gigs_app"
+    swap
+    app_global_put
+    retsub
+
+
+// smart_contracts.agence_governance.contract.AgenceGovernance.only_creator() -> bytes:
+only_creator:
+    proto 0 1
+    global CreatorAddress
+    txn Sender
+    ==
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
     retsub

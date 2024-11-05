@@ -23,20 +23,20 @@ from algosdk.atomic_transaction_composer import (
 
 _APP_SPEC_JSON = r"""{
     "hints": {
-        "hello(string)string": {
+        "init(address,uint64,address,uint64)void": {
             "call_config": {
                 "no_op": "CALL"
             }
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5hcHByb3ZhbF9wcm9ncmFtOgogICAgaW50Y2Jsb2NrIDAgMQogICAgY2FsbHN1YiBfX3B1eWFfYXJjNF9yb3V0ZXJfXwogICAgcmV0dXJuCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9nb3Zlcm5hbmNlLmNvbnRyYWN0LkFnZW5jZUdvdmVybmFuY2UuX19wdXlhX2FyYzRfcm91dGVyX18oKSAtPiB1aW50NjQ6Cl9fcHV5YV9hcmM0X3JvdXRlcl9fOgogICAgcHJvdG8gMCAxCiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogX19wdXlhX2FyYzRfcm91dGVyX19fYmFyZV9yb3V0aW5nQDUKICAgIHB1c2hieXRlcyAweDAyYmVjZTExIC8vIG1ldGhvZCAiaGVsbG8oc3RyaW5nKXN0cmluZyIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIF9fcHV5YV9hcmM0X3JvdXRlcl9fX2hlbGxvX3JvdXRlQDIKICAgIGludGNfMCAvLyAwCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX2hlbGxvX3JvdXRlQDI6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBleHRyYWN0IDIgMAogICAgY2FsbHN1YiBoZWxsbwogICAgZHVwCiAgICBsZW4KICAgIGl0b2IKICAgIGV4dHJhY3QgNiAyCiAgICBzd2FwCiAgICBjb25jYXQKICAgIHB1c2hieXRlcyAweDE1MWY3Yzc1CiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fYmFyZV9yb3V0aW5nQDU6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICBibnogX19wdXlhX2FyYzRfcm91dGVyX19fYWZ0ZXJfaWZfZWxzZUA5CiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGlzIGNyZWF0aW5nCiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19hZnRlcl9pZl9lbHNlQDk6CiAgICBpbnRjXzAgLy8gMAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9nb3Zlcm5hbmNlLmNvbnRyYWN0LkFnZW5jZUdvdmVybmFuY2UuaGVsbG8obmFtZTogYnl0ZXMpIC0+IGJ5dGVzOgpoZWxsbzoKICAgIHByb3RvIDEgMQogICAgcHVzaGJ5dGVzICJIZWxsbywgIgogICAgZnJhbWVfZGlnIC0xCiAgICBjb25jYXQKICAgIHJldHN1Ygo=",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5hcHByb3ZhbF9wcm9ncmFtOgogICAgaW50Y2Jsb2NrIDAgMQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGJueiBtYWluX2FmdGVyX2lmX2Vsc2VAMgogICAgY2FsbHN1YiBfX2luaXRfXwoKbWFpbl9hZnRlcl9pZl9lbHNlQDI6CiAgICBjYWxsc3ViIF9fcHV5YV9hcmM0X3JvdXRlcl9fCiAgICByZXR1cm4KCgovLyBzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5fX2luaXRfXygpIC0+IHZvaWQ6Cl9faW5pdF9fOgogICAgcHJvdG8gMCAwCiAgICBwdXNoYnl0ZXNzICJuZXh0X3Byb3Bvc2FsX2lkIiAweDAwMDAwMDAwMDAwMDAwMDAgLy8gIm5leHRfcHJvcG9zYWxfaWQiLCAweDAwMDAwMDAwMDAwMDAwMDAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBwdXNoYnl0ZXNzICJwcm9wb3NhbHMiIDB4MDAwMCAvLyAicHJvcG9zYWxzIiwgMHgwMDAwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9nb3Zlcm5hbmNlLmNvbnRyYWN0LkFnZW5jZUdvdmVybmFuY2UuX19wdXlhX2FyYzRfcm91dGVyX18oKSAtPiB1aW50NjQ6Cl9fcHV5YV9hcmM0X3JvdXRlcl9fOgogICAgcHJvdG8gMCAxCiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogX19wdXlhX2FyYzRfcm91dGVyX19fYmFyZV9yb3V0aW5nQDUKICAgIHB1c2hieXRlcyAweGJiNmRmZTQ1IC8vIG1ldGhvZCAiaW5pdChhZGRyZXNzLHVpbnQ2NCxhZGRyZXNzLHVpbnQ2NCl2b2lkIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggX19wdXlhX2FyYzRfcm91dGVyX19faW5pdF9yb3V0ZUAyCiAgICBpbnRjXzAgLy8gMAogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19pbml0X3JvdXRlQDI6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAyCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAzCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyA0CiAgICBjYWxsc3ViIGluaXQKICAgIGludGNfMSAvLyAxCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX2JhcmVfcm91dGluZ0A1OgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgYm56IF9fcHV5YV9hcmM0X3JvdXRlcl9fX2FmdGVyX2lmX2Vsc2VAOQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgIGFzc2VydCAvLyBpcyBjcmVhdGluZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fYWZ0ZXJfaWZfZWxzZUA5OgogICAgaW50Y18wIC8vIDAKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ292ZXJuYW5jZS5jb250cmFjdC5BZ2VuY2VHb3Zlcm5hbmNlLmluaXQoc3Rha2luZ19hY2NvdW50OiBieXRlcywgc3Rha2luZ19hcHBfaWQ6IGJ5dGVzLCBnaWdzX2FjY291bnQ6IGJ5dGVzLCBnaWdzX2FwcF9pZDogYnl0ZXMpIC0+IHZvaWQ6CmluaXQ6CiAgICBwcm90byA0IDAKICAgIGNhbGxzdWIgb25seV9jcmVhdG9yCiAgICBwdXNoYnl0ZXMgMHgwMAogICAgIT0KICAgIGFzc2VydCAvLyBPbmx5IHRoZSBjcmVhdG9yIGNhbiBpbml0IHRoZSBjb250cmFjdAogICAgcHVzaGJ5dGVzICJzdGFraW5nX2FjY291bnQiCiAgICBmcmFtZV9kaWcgLTQKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBmcmFtZV9kaWcgLTMKICAgIGJ0b2kKICAgIHB1c2hieXRlcyAic3Rha2luZ19hcHAiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcHVzaGJ5dGVzICJnaWdzX2FjY291bnQiCiAgICBmcmFtZV9kaWcgLTIKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBmcmFtZV9kaWcgLTEKICAgIGJ0b2kKICAgIHB1c2hieXRlcyAiZ2lnc19hcHAiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9nb3Zlcm5hbmNlLmNvbnRyYWN0LkFnZW5jZUdvdmVybmFuY2Uub25seV9jcmVhdG9yKCkgLT4gYnl0ZXM6Cm9ubHlfY3JlYXRvcjoKICAgIHByb3RvIDAgMQogICAgZ2xvYmFsIENyZWF0b3JBZGRyZXNzCiAgICB0eG4gU2VuZGVyCiAgICA9PQogICAgcHVzaGJ5dGVzIDB4MDAKICAgIGludGNfMCAvLyAwCiAgICB1bmNvdmVyIDIKICAgIHNldGJpdAogICAgcmV0c3ViCg==",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5jbGVhcl9zdGF0ZV9wcm9ncmFtOgogICAgcHVzaGludCAxIC8vIDEKICAgIHJldHVybgo="
     },
     "state": {
         "global": {
-            "num_byte_slices": 0,
-            "num_uints": 0
+            "num_byte_slices": 4,
+            "num_uints": 2
         },
         "local": {
             "num_byte_slices": 0,
@@ -45,7 +45,32 @@ _APP_SPEC_JSON = r"""{
     },
     "schema": {
         "global": {
-            "declared": {},
+            "declared": {
+                "gigs_account": {
+                    "type": "bytes",
+                    "key": "gigs_account"
+                },
+                "gigs_app": {
+                    "type": "uint64",
+                    "key": "gigs_app"
+                },
+                "next_proposal_id": {
+                    "type": "bytes",
+                    "key": "next_proposal_id"
+                },
+                "proposals": {
+                    "type": "bytes",
+                    "key": "proposals"
+                },
+                "staking_account": {
+                    "type": "bytes",
+                    "key": "staking_account"
+                },
+                "staking_app": {
+                    "type": "uint64",
+                    "key": "staking_app"
+                }
+            },
             "reserved": {}
         },
         "local": {
@@ -57,15 +82,27 @@ _APP_SPEC_JSON = r"""{
         "name": "AgenceGovernance",
         "methods": [
             {
-                "name": "hello",
+                "name": "init",
                 "args": [
                     {
-                        "type": "string",
-                        "name": "name"
+                        "type": "address",
+                        "name": "staking_account"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "staking_app_id"
+                    },
+                    {
+                        "type": "address",
+                        "name": "gigs_account"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "gigs_app_id"
                     }
                 ],
                 "returns": {
-                    "type": "string"
+                    "type": "void"
                 }
             }
         ],
@@ -149,12 +186,46 @@ def _convert_deploy_args(
 
 
 @dataclasses.dataclass(kw_only=True)
-class HelloArgs(_ArgsBase[str]):
-    name: str
+class InitArgs(_ArgsBase[None]):
+    staking_account: str
+    staking_app_id: int
+    gigs_account: str
+    gigs_app_id: int
 
     @staticmethod
     def method() -> str:
-        return "hello(string)string"
+        return "init(address,uint64,address,uint64)void"
+
+
+class ByteReader:
+    def __init__(self, data: bytes):
+        self._data = data
+
+    @property
+    def as_bytes(self) -> bytes:
+        return self._data
+
+    @property
+    def as_str(self) -> str:
+        return self._data.decode("utf8")
+
+    @property
+    def as_base64(self) -> str:
+        return base64.b64encode(self._data).decode("utf8")
+
+    @property
+    def as_hex(self) -> str:
+        return self._data.hex()
+
+
+class GlobalState:
+    def __init__(self, data: dict[bytes, bytes | int]):
+        self.gigs_account = ByteReader(typing.cast(bytes, data.get(b"gigs_account")))
+        self.gigs_app = typing.cast(int, data.get(b"gigs_app"))
+        self.next_proposal_id = ByteReader(typing.cast(bytes, data.get(b"next_proposal_id")))
+        self.proposals = ByteReader(typing.cast(bytes, data.get(b"proposals")))
+        self.staking_account = ByteReader(typing.cast(bytes, data.get(b"staking_account")))
+        self.staking_app = typing.cast(int, data.get(b"staking_app"))
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -188,20 +259,29 @@ class Composer:
     def execute(self) -> AtomicTransactionResponse:
         return self.app_client.execute_atc(self.atc)
 
-    def hello(
+    def init(
         self,
         *,
-        name: str,
+        staking_account: str,
+        staking_app_id: int,
+        gigs_account: str,
+        gigs_app_id: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to `hello(string)string` ABI method
+        """Adds a call to `init(address,uint64,address,uint64)void` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param str staking_account: The `staking_account` ABI parameter
+        :param int staking_app_id: The `staking_app_id` ABI parameter
+        :param str gigs_account: The `gigs_account` ABI parameter
+        :param int gigs_app_id: The `gigs_app_id` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
-        args = HelloArgs(
-            name=name,
+        args = InitArgs(
+            staking_account=staking_account,
+            staking_app_id=staking_app_id,
+            gigs_account=gigs_account,
+            gigs_app_id=gigs_app_id,
         )
         self.app_client.compose_call(
             self.atc,
@@ -370,20 +450,35 @@ class AgenceGovernanceClient:
     def suggested_params(self, value: algosdk.transaction.SuggestedParams | None) -> None:
         self.app_client.suggested_params = value
 
-    def hello(
+    def get_global_state(self) -> GlobalState:
+        """Returns the application's global state wrapped in a strongly typed class with options to format the stored value"""
+
+        state = typing.cast(dict[bytes, bytes | int], self.app_client.get_global_state(raw=True))
+        return GlobalState(state)
+
+    def init(
         self,
         *,
-        name: str,
+        staking_account: str,
+        staking_app_id: int,
+        gigs_account: str,
+        gigs_app_id: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
-    ) -> algokit_utils.ABITransactionResponse[str]:
-        """Calls `hello(string)string` ABI method
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `init(address,uint64,address,uint64)void` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param str staking_account: The `staking_account` ABI parameter
+        :param int staking_app_id: The `staking_app_id` ABI parameter
+        :param str gigs_account: The `gigs_account` ABI parameter
+        :param int gigs_app_id: The `gigs_app_id` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
-        :returns algokit_utils.ABITransactionResponse[str]: The result of the transaction"""
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
 
-        args = HelloArgs(
-            name=name,
+        args = InitArgs(
+            staking_account=staking_account,
+            staking_app_id=staking_app_id,
+            gigs_account=gigs_account,
+            gigs_app_id=gigs_app_id,
         )
         result = self.app_client.call(
             call_abi_method=args.method(),
