@@ -8,132 +8,196 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import useChain from "@/lib/hooks/use-chain";
-import { toast } from "@/lib/hooks/use-toast";
-import useWallet from "@/lib/hooks/use-wallet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/lib/hooks/use-toast";
 import { Text } from "@/lib/styles/typography";
-import { Check, Copy, Globe, LogIn, UserCheck2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  formatInitialCapitalize,
+  formatAddressToEllipsis,
+} from "@/lib/utils/format";
+import { NetworkId, useWallet } from "@txnlab/use-wallet-react";
+import { Check, Copy, LogIn, Globe, UserCheck2, User2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Skeleton } from "../ui/skeleton";
 
-export default function WalletButton() {
-  const [copied, setCopied] = useState(false);
-  const { chain, setChain } = useChain();
-  const { wallet, signedAccountId } = useWallet();
-
+export default function ConnectButton() {
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
+
+  const { toast } = useToast();
+
+  const { activeAddress, activeNetwork, setActiveNetwork, wallets } =
+    useWallet();
 
   if (!mounted) {
-    return <Skeleton className="h-10 w-40" />;
+    return <Skeleton className="h-10 w-40 px-4 py-2"></Skeleton>;
   }
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, index: number) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
+      setCopiedIndex(index);
       toast({
         title: "Address Copied",
         description: "The wallet address has been copied to your clipboard.",
       });
-
-      setTimeout(() => {
-        setCopied(false);
-      }, 3000);
+      setTimeout(() => setCopiedIndex(null), 2000);
     });
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {signedAccountId ? (
-          <Button variant="outline">{signedAccountId}</Button>
+        {activeAddress ? (
+          <Button variant={"outline"}>
+            Connected: {formatAddressToEllipsis(activeAddress, 3)}
+          </Button>
         ) : (
           <Button>
-            Sign in
+            Connect Wallet
             <LogIn className="ml-2 h-4 w-4" />
           </Button>
         )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            <Text variant="h1">Create Account</Text>
-          </DialogTitle>
+          <DialogTitle>Connect Wallet </DialogTitle>
           <DialogDescription>
-            <Text variant="lead">Select the chain you want to use.</Text>
+            Please select your wallet provider.
           </DialogDescription>
         </DialogHeader>
 
-        <Separator />
+        {wallets.map((provider, index) => (
+          <div key={`${provider.id}-${index}`}>
+            <div className="flex-rol my-1 flex w-full justify-between">
+              <Text variant="lead">{provider.metadata.name}</Text>
+              {provider.isConnected &&
+                (provider.isActive ? (
+                  <Text variant="lead">Active Wallet</Text>
+                ) : (
+                  <Button onClick={() => provider.setActive()} variant="ghost">
+                    Set Active
+                  </Button>
+                ))}
+            </div>
 
-        {/**
-         * TODO: Add support for multiple chains
-         */}
+            {provider.accounts.length > 0 ? (
+              <ul className="space-y-2">
+                {provider.accounts.map((account, index) => (
+                  <li
+                    key={`${provider.id}-${index}`}
+                    className="flex items-center justify-between rounded-lg bg-secondary p-2 transition-all duration-300 ease-in-out hover:shadow-md"
+                  >
+                    {account.address == activeAddress ? (
+                      <UserCheck2 className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <User2
+                        className="h-4 w-4 cursor-pointer"
+                        onClick={() =>
+                          provider.setActiveAccount(account.address)
+                        }
+                      />
+                    )}
 
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => setChain!("Near")}
-          disabled={!!setChain || chain == "Near"}
-        >
-          <Globe className="mr-2 h-4 w-4" />
-          NEAR Protocol
-        </Button>
+                    <span
+                      className="mr-2 cursor-pointer truncate font-mono text-sm"
+                      onClick={() => provider.setActiveAccount(account.address)}
+                    >
+                      {formatAddressToEllipsis(account.address, 18)}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => copyToClipboard(account.address, index)}
+                      className="shrink-0"
+                    >
+                      {copiedIndex === index ? (
+                        <Check className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                      <span className="sr-only">Copy address</span>
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul>
+                <li className="flex items-center justify-between rounded-lg bg-secondary p-3 transition-all duration-300 ease-in-out hover:shadow-md">
+                  No accounts
+                </li>
+              </ul>
+            )}
 
-        <Separator />
+            <div className="my-4 flex justify-end gap-2">
+              <Button
+                key={`connect-${provider.metadata.name}-${index}`}
+                onClick={() => provider.connect()}
+                variant="default"
+                disabled={provider.isConnected}
+              >
+                Connect
+              </Button>
 
-        {signedAccountId ? (
-          <div className="flex items-center justify-between rounded-lg bg-secondary p-2 transition-all duration-300 ease-in-out hover:shadow-md">
-            <UserCheck2 className="h-4 w-4 text-green-500" />
+              <Button
+                key={`disconnect-${provider.metadata.name}-${index}`}
+                onClick={() => provider.connect()}
+                variant="destructive"
+                disabled={!provider.isConnected}
+              >
+                Disconnect
+              </Button>
+            </div>
 
-            <span className="mr-2 cursor-pointer truncate font-mono text-sm">
-              {signedAccountId}
-            </span>
+            <Separator />
+          </div>
+        ))}
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => copyToClipboard(signedAccountId)}
-              className="shrink-0"
-            >
-              {copied ? (
-                <Check className="h-4 w-4 text-green-500" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
-
-              <span className="sr-only">Copy address</span>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button type="button" variant="outline">
+              <Globe className="mr-2 h-4 w-4" />
+              {formatInitialCapitalize(activeNetwork)}
             </Button>
-          </div>
-        ) : (
-          <div className="flex-rol my-1 flex w-full justify-between">
-            <Text variant="lead">No Active Wallet</Text>
-          </div>
-        )}
-
-        <div className="my-4 flex justify-end gap-2">
-          <Button
-            onClick={() => wallet?.signIn()}
-            variant="default"
-            // disabled={!!wallet || !!signedAccountId}
-          >
-            Connect
-          </Button>
-
-          <Button
-            onClick={() => wallet?.signOut()}
-            variant="destructive"
-            // disabled={!!wallet || !signedAccountId}
-          >
-            Disconnect
-          </Button>
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => setActiveNetwork(NetworkId.BETANET)}
+              disabled={activeNetwork === NetworkId.BETANET}
+            >
+              Betanet
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setActiveNetwork(NetworkId.LOCALNET)}
+              disabled={activeNetwork === NetworkId.LOCALNET}
+            >
+              Localnet
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setActiveNetwork(NetworkId.TESTNET)}
+              disabled={activeNetwork === NetworkId.TESTNET}
+            >
+              Testnet
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setActiveNetwork(NetworkId.MAINNET)}
+              disabled={activeNetwork === NetworkId.MAINNET}
+            >
+              Mainnet
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </DialogContent>
     </Dialog>
   );

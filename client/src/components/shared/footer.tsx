@@ -10,15 +10,36 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NAVIGATION_DATA } from "@/data/navigation";
+import { toast } from "@/lib/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-export default function Footer({ logout }: { logout: () => void }) {
+type Props = {
+  signout: () => void;
+};
+
+export default function Footer(props: Props) {
+  const { signout } = props;
+
+  const handleSignout = () => {
+    try {
+      signout();
+    } catch (err) {
+      console.error(err);
+
+      toast({
+        title: "Error",
+        description: "Failed to signout",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
-    <footer className="my-8">
-      <TooltipProvider>
+    <TooltipProvider>
+      <footer className="flex items-center justify-center py-4">
         <Dock direction="middle">
           {NAVIGATION_DATA.navbar.map((item) => (
             <DockIcon key={item.label}>
@@ -41,34 +62,12 @@ export default function Footer({ logout }: { logout: () => void }) {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical" className="h-full py-2" />
-          {Object.entries(NAVIGATION_DATA.external).map(([name, social]) => (
-            <DockIcon key={name}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={social.url}
-                    aria-label={social.name}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full",
-                    )}
-                  >
-                    <social.icon className="size-4" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{name}</p>
-                </TooltipContent>
-              </Tooltip>
-            </DockIcon>
-          ))}
           <Separator orientation="vertical" className="h-full" />
           <DockIcon>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  onClick={() => logout()}
+                  onClick={handleSignout}
                   aria-label={"Logout"}
                   variant={"ghost"}
                   size={"icon"}
@@ -82,7 +81,7 @@ export default function Footer({ logout }: { logout: () => void }) {
             </Tooltip>
           </DockIcon>
         </Dock>
-      </TooltipProvider>
-    </footer>
+      </footer>
+    </TooltipProvider>
   );
 }

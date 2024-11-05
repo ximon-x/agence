@@ -27,6 +27,14 @@ export const env = createEnv({
       .string()
       .min(1, { message: "WALLET URL is required" })
       .url({ message: "WALLET URL is not valid" }),
+
+    NEXT_PUBLIC_SUPABASE_URL: z
+      .string()
+      .min(1, { message: "Supabase URL is required" })
+      .url({ message: "Supabase URL is not valid" }),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: z
+      .string()
+      .min(20, { message: "Supabase anon key is required" }),
   },
 
   runtimeEnv: {
@@ -35,5 +43,7 @@ export const env = createEnv({
     NEXT_PUBLIC_DOC_URL: process.env.NEXT_PUBLIC_DOC_URL,
     NEXT_PUBLIC_CODE_URL: process.env.NEXT_PUBLIC_CODE_URL,
     NEXT_PUBLIC_WALLET_URL: process.env.NEXT_PUBLIC_WALLET_URL,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
 });

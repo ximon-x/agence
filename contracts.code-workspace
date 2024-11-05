@@ -1,10 +1,10 @@
 {
   "folders": [
     {
-      "path": "./modules/algorand"
+      "path": "./contracts/algorand"
     },
     {
-      "path": "./modules/near"
+      "path": "./contracts/near"
     }
   ]
 }

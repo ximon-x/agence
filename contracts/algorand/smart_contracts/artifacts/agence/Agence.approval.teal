@@ -1,0 +1,217 @@
+#pragma version 10
+
+smart_contracts.agence.contract.Agence.approval_program:
+    intcblock 0 1
+    bytecblock 0x151f7c75 "governance_account" "goverance_app" "staking_account" "staking_app" "gigs_account" "gigs_app"
+    callsub __puya_arc4_router__
+    return
+
+
+// smart_contracts.agence.contract.Agence.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    proto 0 1
+    txn NumAppArgs
+    bz __puya_arc4_router___after_if_else@12
+    pushbytess 0xe9ceb18f 0x2f7cbd64 0xf29a70b2 0x7ef694ee 0x5df513ac 0x6abf6505 0xe0161c50 // method "init(address,uint64,address,uint64,address,uint64)void", method "get_governance_account()address", method "get_staking_account()address", method "get_gigs_account()address", method "get_governance_app()uint64", method "get_staking_app()uint64", method "get_gigs_app()uint64"
+    txna ApplicationArgs 0
+    match __puya_arc4_router___init_route@2 __puya_arc4_router___get_governance_account_route@3 __puya_arc4_router___get_staking_account_route@4 __puya_arc4_router___get_gigs_account_route@5 __puya_arc4_router___get_governance_app_route@6 __puya_arc4_router___get_staking_app_route@7 __puya_arc4_router___get_gigs_app_route@8
+    intc_0 // 0
+    retsub
+
+__puya_arc4_router___init_route@2:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    !
+    assert // is creating
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    txna ApplicationArgs 3
+    txna ApplicationArgs 4
+    txna ApplicationArgs 5
+    txna ApplicationArgs 6
+    callsub init
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___get_governance_account_route@3:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_governance_account
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___get_staking_account_route@4:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_staking_account
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___get_gigs_account_route@5:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_gigs_account
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___get_governance_app_route@6:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_governance_app
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___get_staking_app_route@7:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_staking_app
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___get_gigs_app_route@8:
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_gigs_app
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___after_if_else@12:
+    intc_0 // 0
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.init(governance_account: bytes, governance_app_id: bytes, staking_account: bytes, staking_app_id: bytes, gigs_account: bytes, gigs_app_id: bytes) -> void:
+init:
+    proto 6 0
+    bytec_1 // "governance_account"
+    frame_dig -6
+    app_global_put
+    frame_dig -5
+    btoi
+    bytec_2 // "goverance_app"
+    swap
+    app_global_put
+    bytec_3 // "staking_account"
+    frame_dig -4
+    app_global_put
+    frame_dig -3
+    btoi
+    bytec 4 // "staking_app"
+    swap
+    app_global_put
+    bytec 5 // "gigs_account"
+    frame_dig -2
+    app_global_put
+    frame_dig -1
+    btoi
+    bytec 6 // "gigs_app"
+    swap
+    app_global_put
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.get_governance_account() -> bytes:
+get_governance_account:
+    proto 0 1
+    intc_0 // 0
+    bytec_1 // "governance_account"
+    app_global_get_ex
+    assert // check self.governance_account exists
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.get_staking_account() -> bytes:
+get_staking_account:
+    proto 0 1
+    intc_0 // 0
+    bytec_3 // "staking_account"
+    app_global_get_ex
+    assert // check self.staking_account exists
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.get_gigs_account() -> bytes:
+get_gigs_account:
+    proto 0 1
+    intc_0 // 0
+    bytec 5 // "gigs_account"
+    app_global_get_ex
+    assert // check self.gigs_account exists
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.get_governance_app() -> bytes:
+get_governance_app:
+    proto 0 1
+    intc_0 // 0
+    bytec_2 // "goverance_app"
+    app_global_get_ex
+    assert // check self.goverance_app exists
+    itob
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.get_staking_app() -> bytes:
+get_staking_app:
+    proto 0 1
+    intc_0 // 0
+    bytec 4 // "staking_app"
+    app_global_get_ex
+    assert // check self.staking_app exists
+    itob
+    retsub
+
+
+// smart_contracts.agence.contract.Agence.get_gigs_app() -> bytes:
+get_gigs_app:
+    proto 0 1
+    intc_0 // 0
+    bytec 6 // "gigs_app"
+    app_global_get_ex
+    assert // check self.gigs_app exists
+    itob
+    retsub
