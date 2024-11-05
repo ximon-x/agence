@@ -27,15 +27,35 @@ _APP_SPEC_JSON = r"""{
             "call_config": {
                 "no_op": "CALL"
             }
+        },
+        "create_proposal(address,address,string,string,uint64)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "register(string)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "deposit()void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "withdraw()void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5hcHByb3ZhbF9wcm9ncmFtOgogICAgaW50Y2Jsb2NrIDAgMQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGJueiBtYWluX2FmdGVyX2lmX2Vsc2VAMgogICAgY2FsbHN1YiBfX2luaXRfXwoKbWFpbl9hZnRlcl9pZl9lbHNlQDI6CiAgICBjYWxsc3ViIF9fcHV5YV9hcmM0X3JvdXRlcl9fCiAgICByZXR1cm4KCgovLyBzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5fX2luaXRfXygpIC0+IHZvaWQ6Cl9faW5pdF9fOgogICAgcHJvdG8gMCAwCiAgICBwdXNoYnl0ZXNzICJuZXh0X3Byb3Bvc2FsX2lkIiAweDAwMDAwMDAwMDAwMDAwMDAgLy8gIm5leHRfcHJvcG9zYWxfaWQiLCAweDAwMDAwMDAwMDAwMDAwMDAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBwdXNoYnl0ZXNzICJwcm9wb3NhbHMiIDB4MDAwMCAvLyAicHJvcG9zYWxzIiwgMHgwMDAwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9nb3Zlcm5hbmNlLmNvbnRyYWN0LkFnZW5jZUdvdmVybmFuY2UuX19wdXlhX2FyYzRfcm91dGVyX18oKSAtPiB1aW50NjQ6Cl9fcHV5YV9hcmM0X3JvdXRlcl9fOgogICAgcHJvdG8gMCAxCiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogX19wdXlhX2FyYzRfcm91dGVyX19fYmFyZV9yb3V0aW5nQDUKICAgIHB1c2hieXRlcyAweGJiNmRmZTQ1IC8vIG1ldGhvZCAiaW5pdChhZGRyZXNzLHVpbnQ2NCxhZGRyZXNzLHVpbnQ2NCl2b2lkIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggX19wdXlhX2FyYzRfcm91dGVyX19faW5pdF9yb3V0ZUAyCiAgICBpbnRjXzAgLy8gMAogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19pbml0X3JvdXRlQDI6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAyCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAzCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyA0CiAgICBjYWxsc3ViIGluaXQKICAgIGludGNfMSAvLyAxCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX2JhcmVfcm91dGluZ0A1OgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgYm56IF9fcHV5YV9hcmM0X3JvdXRlcl9fX2FmdGVyX2lmX2Vsc2VAOQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgIGFzc2VydCAvLyBpcyBjcmVhdGluZwogICAgaW50Y18xIC8vIDEKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19fYWZ0ZXJfaWZfZWxzZUA5OgogICAgaW50Y18wIC8vIDAKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ292ZXJuYW5jZS5jb250cmFjdC5BZ2VuY2VHb3Zlcm5hbmNlLmluaXQoc3Rha2luZ19hY2NvdW50OiBieXRlcywgc3Rha2luZ19hcHBfaWQ6IGJ5dGVzLCBnaWdzX2FjY291bnQ6IGJ5dGVzLCBnaWdzX2FwcF9pZDogYnl0ZXMpIC0+IHZvaWQ6CmluaXQ6CiAgICBwcm90byA0IDAKICAgIGNhbGxzdWIgb25seV9jcmVhdG9yCiAgICBwdXNoYnl0ZXMgMHgwMAogICAgIT0KICAgIGFzc2VydCAvLyBPbmx5IHRoZSBjcmVhdG9yIGNhbiBpbml0IHRoZSBjb250cmFjdAogICAgcHVzaGJ5dGVzICJzdGFraW5nX2FjY291bnQiCiAgICBmcmFtZV9kaWcgLTQKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBmcmFtZV9kaWcgLTMKICAgIGJ0b2kKICAgIHB1c2hieXRlcyAic3Rha2luZ19hcHAiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcHVzaGJ5dGVzICJnaWdzX2FjY291bnQiCiAgICBmcmFtZV9kaWcgLTIKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBmcmFtZV9kaWcgLTEKICAgIGJ0b2kKICAgIHB1c2hieXRlcyAiZ2lnc19hcHAiCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcmV0c3ViCgoKLy8gc21hcnRfY29udHJhY3RzLmFnZW5jZV9nb3Zlcm5hbmNlLmNvbnRyYWN0LkFnZW5jZUdvdmVybmFuY2Uub25seV9jcmVhdG9yKCkgLT4gYnl0ZXM6Cm9ubHlfY3JlYXRvcjoKICAgIHByb3RvIDAgMQogICAgZ2xvYmFsIENyZWF0b3JBZGRyZXNzCiAgICB0eG4gU2VuZGVyCiAgICA9PQogICAgcHVzaGJ5dGVzIDB4MDAKICAgIGludGNfMCAvLyAwCiAgICB1bmNvdmVyIDIKICAgIHNldGJpdAogICAgcmV0c3ViCg==",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5hcHByb3ZhbF9wcm9ncmFtOgogICAgaW50Y2Jsb2NrIDAgMSA2CiAgICBieXRlY2Jsb2NrIDB4MDAwMDAwMDAwMDAwMjcxMCAic3Rha2luZ19hcHAiICJVU0VSX0NSRUFUSU9OX0ZFRSIgInN0YWtpbmdfYWNjb3VudCIgIlVzZXIgIiAiTUlOX1NUQUtJTkciCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYm56IG1haW5fYWZ0ZXJfaWZfZWxzZUAyCiAgICBjYWxsc3ViIF9faW5pdF9fCgptYWluX2FmdGVyX2lmX2Vsc2VAMjoKICAgIGNhbGxzdWIgX19wdXlhX2FyYzRfcm91dGVyX18KICAgIHJldHVybgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ292ZXJuYW5jZS5jb250cmFjdC5BZ2VuY2VHb3Zlcm5hbmNlLl9faW5pdF9fKCkgLT4gdm9pZDoKX19pbml0X186CiAgICBwcm90byAwIDAKICAgIHB1c2hieXRlcyAiUFJPUE9TQUxfQ1JFQVRJT05fRkVFIgogICAgYnl0ZWNfMCAvLyAweDAwMDAwMDAwMDAwMDI3MTAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBieXRlY18yIC8vICJVU0VSX0NSRUFUSU9OX0ZFRSIKICAgIGJ5dGVjXzAgLy8gMHgwMDAwMDAwMDAwMDAyNzEwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcHVzaGJ5dGVzICJHSUdfQ1JFQVRJT05fRkVFIgogICAgYnl0ZWNfMCAvLyAweDAwMDAwMDAwMDAwMDI3MTAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBieXRlYyA1IC8vICJNSU5fU1RBS0lORyIKICAgIGJ5dGVjXzAgLy8gMHgwMDAwMDAwMDAwMDAyNzEwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcHVzaGJ5dGVzcyAibmV4dF9wcm9wb3NhbF9pZCIgMHgwMDAwMDAwMDAwMDAwMDAwIC8vICJuZXh0X3Byb3Bvc2FsX2lkIiwgMHgwMDAwMDAwMDAwMDAwMDAwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgcHVzaGJ5dGVzcyAicHJvcG9zYWxzIiAweDAwMDAgLy8gInByb3Bvc2FscyIsIDB4MDAwMAogICAgYXBwX2dsb2JhbF9wdXQKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ292ZXJuYW5jZS5jb250cmFjdC5BZ2VuY2VHb3Zlcm5hbmNlLl9fcHV5YV9hcmM0X3JvdXRlcl9fKCkgLT4gdWludDY0OgpfX3B1eWFfYXJjNF9yb3V0ZXJfXzoKICAgIHByb3RvIDAgMQogICAgdHhuIE51bUFwcEFyZ3MKICAgIGJ6IF9fcHV5YV9hcmM0X3JvdXRlcl9fX2JhcmVfcm91dGluZ0A5CiAgICBwdXNoYnl0ZXNzIDB4YmI2ZGZlNDUgMHg3OGFmY2E0NCAweGJkNjA5OWU1IDB4OTJlMDNiMWMgMHhiNzM1NWZkMSAvLyBtZXRob2QgImluaXQoYWRkcmVzcyx1aW50NjQsYWRkcmVzcyx1aW50NjQpdm9pZCIsIG1ldGhvZCAiY3JlYXRlX3Byb3Bvc2FsKGFkZHJlc3MsYWRkcmVzcyxzdHJpbmcsc3RyaW5nLHVpbnQ2NCl2b2lkIiwgbWV0aG9kICJyZWdpc3RlcihzdHJpbmcpdm9pZCIsIG1ldGhvZCAiZGVwb3NpdCgpdm9pZCIsIG1ldGhvZCAid2l0aGRyYXcoKXZvaWQiCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAwCiAgICBtYXRjaCBfX3B1eWFfYXJjNF9yb3V0ZXJfX19pbml0X3JvdXRlQDIgX19wdXlhX2FyYzRfcm91dGVyX19fY3JlYXRlX3Byb3Bvc2FsX3JvdXRlQDMgX19wdXlhX2FyYzRfcm91dGVyX19fcmVnaXN0ZXJfcm91dGVANCBfX3B1eWFfYXJjNF9yb3V0ZXJfX19kZXBvc2l0X3JvdXRlQDUgX19wdXlhX2FyYzRfcm91dGVyX19fd2l0aGRyYXdfcm91dGVANgogICAgaW50Y18wIC8vIDAKICAgIHJldHN1YgoKX19wdXlhX2FyYzRfcm91dGVyX19faW5pdF9yb3V0ZUAyOgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGlzIG5vdCBjcmVhdGluZwogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAogICAgY2FsbHN1YiBpbml0CiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19jcmVhdGVfcHJvcG9zYWxfcm91dGVAMzoKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBpcyBub3QgY3JlYXRpbmcKICAgIGludGNfMSAvLyAxCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX3JlZ2lzdGVyX3JvdXRlQDQ6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBjYWxsc3ViIHJlZ2lzdGVyCiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19kZXBvc2l0X3JvdXRlQDU6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICBjYWxsc3ViIGRlcG9zaXQKICAgIGludGNfMSAvLyAxCiAgICByZXRzdWIKCl9fcHV5YV9hcmM0X3JvdXRlcl9fX3dpdGhkcmF3X3JvdXRlQDY6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICBjYWxsc3ViIHdpdGhkcmF3CiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19iYXJlX3JvdXRpbmdAOToKICAgIHR4biBPbkNvbXBsZXRpb24KICAgIGJueiBfX3B1eWFfYXJjNF9yb3V0ZXJfX19hZnRlcl9pZl9lbHNlQDEzCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGlzIGNyZWF0aW5nCiAgICBpbnRjXzEgLy8gMQogICAgcmV0c3ViCgpfX3B1eWFfYXJjNF9yb3V0ZXJfX19hZnRlcl9pZl9lbHNlQDEzOgogICAgaW50Y18wIC8vIDAKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ292ZXJuYW5jZS5jb250cmFjdC5BZ2VuY2VHb3Zlcm5hbmNlLmluaXQoc3Rha2luZ19hY2NvdW50OiBieXRlcywgc3Rha2luZ19hcHBfaWQ6IGJ5dGVzLCBnaWdzX2FjY291bnQ6IGJ5dGVzLCBnaWdzX2FwcF9pZDogYnl0ZXMpIC0+IHZvaWQ6CmluaXQ6CiAgICBwcm90byA0IDAKICAgIGNhbGxzdWIgb25seV9jcmVhdG9yCiAgICBwdXNoYnl0ZXMgMHgwMAogICAgIT0KICAgIGFzc2VydCAvLyBPbmx5IHRoZSBjcmVhdG9yIGNhbiBpbml0IHRoZSBjb250cmFjdAogICAgYnl0ZWNfMyAvLyAic3Rha2luZ19hY2NvdW50IgogICAgZnJhbWVfZGlnIC00CiAgICBhcHBfZ2xvYmFsX3B1dAogICAgZnJhbWVfZGlnIC0zCiAgICBidG9pCiAgICBieXRlY18xIC8vICJzdGFraW5nX2FwcCIKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICBwdXNoYnl0ZXMgImdpZ3NfYWNjb3VudCIKICAgIGZyYW1lX2RpZyAtMgogICAgYXBwX2dsb2JhbF9wdXQKICAgIGZyYW1lX2RpZyAtMQogICAgYnRvaQogICAgcHVzaGJ5dGVzICJnaWdzX2FwcCIKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICByZXRzdWIKCgovLyBzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5vbmx5X2NyZWF0b3IoKSAtPiBieXRlczoKb25seV9jcmVhdG9yOgogICAgcHJvdG8gMCAxCiAgICBnbG9iYWwgQ3JlYXRvckFkZHJlc3MKICAgIHR4biBTZW5kZXIKICAgID09CiAgICBwdXNoYnl0ZXMgMHgwMAogICAgaW50Y18wIC8vIDAKICAgIHVuY292ZXIgMgogICAgc2V0Yml0CiAgICByZXRzdWIKCgovLyBzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5yZWdpc3Rlcihyb2xlOiBieXRlcykgLT4gdm9pZDoKcmVnaXN0ZXI6CiAgICBwcm90byAxIDAKICAgIHR4biBBbW91bnQKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18yIC8vICJVU0VSX0NSRUFUSU9OX0ZFRSIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5VU0VSX0NSRUFUSU9OX0ZFRSBleGlzdHMKICAgIGJ0b2kKICAgID49CiAgICBhc3NlcnQgLy8gSW5zdWZmaWNpZW50IGZ1bmRzCiAgICB0eG4gQW1vdW50CiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMiAvLyAiVVNFUl9DUkVBVElPTl9GRUUiCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIHNlbGYuVVNFUl9DUkVBVElPTl9GRUUgZXhpc3RzCiAgICBidG9pCiAgICAtCiAgICB0eG4gU2VuZGVyCiAgICBpdHhuX2JlZ2luCiAgICBnbG9iYWwgTWluVHhuRmVlCiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMyAvLyAic3Rha2luZ19hY2NvdW50IgogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBzZWxmLnN0YWtpbmdfYWNjb3VudCBleGlzdHMKICAgIGRpZyAzCiAgICBpdHhuX2ZpZWxkIEFtb3VudAogICAgaXR4bl9maWVsZCBSZWNlaXZlcgogICAgaW50Y18xIC8vIHBheQogICAgaXR4bl9maWVsZCBUeXBlRW51bQogICAgaXR4bl9maWVsZCBGZWUKICAgIGl0eG5fc3VibWl0CiAgICBpdHhuX2JlZ2luCiAgICBnbG9iYWwgTWluVHhuRmVlCiAgICB1bmNvdmVyIDIKICAgIGl0b2IKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18xIC8vICJzdGFraW5nX2FwcCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5zdGFraW5nX2FwcCBleGlzdHMKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25JRAogICAgcHVzaGJ5dGVzIDB4YjQxNjI0MDggLy8gbWV0aG9kICJjcmVhdGVfdXNlcihhZGRyZXNzLHVpbnQ2NCxzdHJpbmcpdm9pZCIKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCiAgICBkaWcgMgogICAgaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCiAgICBmcmFtZV9kaWcgLTEKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCiAgICBpbnRjXzIgLy8gYXBwbAogICAgaXR4bl9maWVsZCBUeXBlRW51bQogICAgaXR4bl9maWVsZCBGZWUKICAgIGl0eG5fc3VibWl0CiAgICBieXRlYyA0IC8vICJVc2VyICIKICAgIHN3YXAKICAgIGNvbmNhdAogICAgcHVzaGJ5dGVzICIgcmVnaXN0ZXJlZCIKICAgIGNvbmNhdAogICAgbG9nCiAgICByZXRzdWIKCgovLyBzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5kZXBvc2l0KCkgLT4gdm9pZDoKZGVwb3NpdDoKICAgIHByb3RvIDAgMAogICAgdHhuIEFtb3VudAogICAgaW50Y18wIC8vIDAKICAgIGJ5dGVjIDUgLy8gIk1JTl9TVEFLSU5HIgogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBzZWxmLk1JTl9TVEFLSU5HIGV4aXN0cwogICAgYnRvaQogICAgPj0KICAgIGFzc2VydCAvLyBOb3QgRW5vdWdoIGZ1bmRzCiAgICBpdHhuX2JlZ2luCiAgICBnbG9iYWwgTWluVHhuRmVlCiAgICBpbnRjXzAgLy8gMAogICAgYnl0ZWNfMyAvLyAic3Rha2luZ19hY2NvdW50IgogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBzZWxmLnN0YWtpbmdfYWNjb3VudCBleGlzdHMKICAgIHR4biBBbW91bnQKICAgIGl0eG5fZmllbGQgQW1vdW50CiAgICBpdHhuX2ZpZWxkIFJlY2VpdmVyCiAgICBpbnRjXzEgLy8gcGF5CiAgICBpdHhuX2ZpZWxkIFR5cGVFbnVtCiAgICBpdHhuX2ZpZWxkIEZlZQogICAgaXR4bl9zdWJtaXQKICAgIGl0eG5fYmVnaW4KICAgIGdsb2JhbCBNaW5UeG5GZWUKICAgIHR4biBTZW5kZXIKICAgIHR4biBBbW91bnQKICAgIGl0b2IKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18xIC8vICJzdGFraW5nX2FwcCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5zdGFraW5nX2FwcCBleGlzdHMKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25JRAogICAgcHVzaGJ5dGVzIDB4ZjU1YjMxYWMgLy8gbWV0aG9kICJzdGFrZShhZGRyZXNzLHVpbnQ2NCl2b2lkIgogICAgaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKICAgIHN3YXAKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCiAgICBpdHhuX2ZpZWxkIEFwcGxpY2F0aW9uQXJncwogICAgaW50Y18yIC8vIGFwcGwKICAgIGl0eG5fZmllbGQgVHlwZUVudW0KICAgIGl0eG5fZmllbGQgRmVlCiAgICBpdHhuX3N1Ym1pdAogICAgYnl0ZWMgNCAvLyAiVXNlciAiCiAgICB0eG4gU2VuZGVyCiAgICBjb25jYXQKICAgIHB1c2hieXRlcyAiIHN0YWtlZCIKICAgIGNvbmNhdAogICAgdHhuIEFtb3VudAogICAgaXRvYgogICAgY29uY2F0CiAgICBsb2cKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy5hZ2VuY2VfZ292ZXJuYW5jZS5jb250cmFjdC5BZ2VuY2VHb3Zlcm5hbmNlLndpdGhkcmF3KCkgLT4gdm9pZDoKd2l0aGRyYXc6CiAgICBwcm90byAwIDAKICAgIGl0eG5fYmVnaW4KICAgIGdsb2JhbCBNaW5UeG5GZWUKICAgIHR4biBTZW5kZXIKICAgIHR4biBBbW91bnQKICAgIGl0b2IKICAgIGludGNfMCAvLyAwCiAgICBieXRlY18xIC8vICJzdGFraW5nX2FwcCIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgc2VsZi5zdGFraW5nX2FwcCBleGlzdHMKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25JRAogICAgcHVzaGJ5dGVzIDB4NzlmYTg3MWUgLy8gbWV0aG9kICJ1bnN0YWtlKGFkZHJlc3MsdWludDY0KXZvaWQiCiAgICBpdHhuX2ZpZWxkIEFwcGxpY2F0aW9uQXJncwogICAgc3dhcAogICAgaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKICAgIGl0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCiAgICBpbnRjXzIgLy8gYXBwbAogICAgaXR4bl9maWVsZCBUeXBlRW51bQogICAgaXR4bl9maWVsZCBGZWUKICAgIGl0eG5fc3VibWl0CiAgICBieXRlYyA0IC8vICJVc2VyICIKICAgIHR4biBTZW5kZXIKICAgIGNvbmNhdAogICAgcHVzaGJ5dGVzICIgdW5zdGFrZWQiCiAgICBjb25jYXQKICAgIHR4biBBbW91bnQKICAgIGl0b2IKICAgIGNvbmNhdAogICAgbG9nCiAgICByZXRzdWIK",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMuYWdlbmNlX2dvdmVybmFuY2UuY29udHJhY3QuQWdlbmNlR292ZXJuYW5jZS5jbGVhcl9zdGF0ZV9wcm9ncmFtOgogICAgcHVzaGludCAxIC8vIDEKICAgIHJldHVybgo="
     },
     "state": {
         "global": {
-            "num_byte_slices": 4,
+            "num_byte_slices": 8,
             "num_uints": 2
         },
         "local": {
@@ -46,6 +66,22 @@ _APP_SPEC_JSON = r"""{
     "schema": {
         "global": {
             "declared": {
+                "GIG_CREATION_FEE": {
+                    "type": "bytes",
+                    "key": "GIG_CREATION_FEE"
+                },
+                "MIN_STAKING": {
+                    "type": "bytes",
+                    "key": "MIN_STAKING"
+                },
+                "PROPOSAL_CREATION_FEE": {
+                    "type": "bytes",
+                    "key": "PROPOSAL_CREATION_FEE"
+                },
+                "USER_CREATION_FEE": {
+                    "type": "bytes",
+                    "key": "USER_CREATION_FEE"
+                },
                 "gigs_account": {
                     "type": "bytes",
                     "key": "gigs_account"
@@ -101,6 +137,60 @@ _APP_SPEC_JSON = r"""{
                         "name": "gigs_app_id"
                     }
                 ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "create_proposal",
+                "args": [
+                    {
+                        "type": "address",
+                        "name": "proposer"
+                    },
+                    {
+                        "type": "address",
+                        "name": "offender"
+                    },
+                    {
+                        "type": "string",
+                        "name": "kind"
+                    },
+                    {
+                        "type": "string",
+                        "name": "metadata"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "end_time"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "register",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "role"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "deposit",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "withdraw",
+                "args": [],
                 "returns": {
                     "type": "void"
                 }
@@ -197,6 +287,42 @@ class InitArgs(_ArgsBase[None]):
         return "init(address,uint64,address,uint64)void"
 
 
+@dataclasses.dataclass(kw_only=True)
+class CreateProposalArgs(_ArgsBase[None]):
+    proposer: str
+    offender: str
+    kind: str
+    metadata: str
+    end_time: int
+
+    @staticmethod
+    def method() -> str:
+        return "create_proposal(address,address,string,string,uint64)void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class RegisterArgs(_ArgsBase[None]):
+    role: str
+
+    @staticmethod
+    def method() -> str:
+        return "register(string)void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class DepositArgs(_ArgsBase[None]):
+    @staticmethod
+    def method() -> str:
+        return "deposit()void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class WithdrawArgs(_ArgsBase[None]):
+    @staticmethod
+    def method() -> str:
+        return "withdraw()void"
+
+
 class ByteReader:
     def __init__(self, data: bytes):
         self._data = data
@@ -220,6 +346,10 @@ class ByteReader:
 
 class GlobalState:
     def __init__(self, data: dict[bytes, bytes | int]):
+        self.GIG_CREATION_FEE = ByteReader(typing.cast(bytes, data.get(b"GIG_CREATION_FEE")))
+        self.MIN_STAKING = ByteReader(typing.cast(bytes, data.get(b"MIN_STAKING")))
+        self.PROPOSAL_CREATION_FEE = ByteReader(typing.cast(bytes, data.get(b"PROPOSAL_CREATION_FEE")))
+        self.USER_CREATION_FEE = ByteReader(typing.cast(bytes, data.get(b"USER_CREATION_FEE")))
         self.gigs_account = ByteReader(typing.cast(bytes, data.get(b"gigs_account")))
         self.gigs_app = typing.cast(int, data.get(b"gigs_app"))
         self.next_proposal_id = ByteReader(typing.cast(bytes, data.get(b"next_proposal_id")))
@@ -283,6 +413,102 @@ class Composer:
             gigs_account=gigs_account,
             gigs_app_id=gigs_app_id,
         )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def create_proposal(
+        self,
+        *,
+        proposer: str,
+        offender: str,
+        kind: str,
+        metadata: str,
+        end_time: int,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `create_proposal(address,address,string,string,uint64)void` ABI method
+        
+        :param str proposer: The `proposer` ABI parameter
+        :param str offender: The `offender` ABI parameter
+        :param str kind: The `kind` ABI parameter
+        :param str metadata: The `metadata` ABI parameter
+        :param int end_time: The `end_time` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = CreateProposalArgs(
+            proposer=proposer,
+            offender=offender,
+            kind=kind,
+            metadata=metadata,
+            end_time=end_time,
+        )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def register(
+        self,
+        *,
+        role: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `register(string)void` ABI method
+        
+        :param str role: The `role` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = RegisterArgs(
+            role=role,
+        )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def deposit(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `deposit()void` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = DepositArgs()
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def withdraw(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `withdraw()void` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = WithdrawArgs()
         self.app_client.compose_call(
             self.atc,
             call_abi_method=args.method(),
@@ -480,6 +706,98 @@ class AgenceGovernanceClient:
             gigs_account=gigs_account,
             gigs_app_id=gigs_app_id,
         )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def create_proposal(
+        self,
+        *,
+        proposer: str,
+        offender: str,
+        kind: str,
+        metadata: str,
+        end_time: int,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `create_proposal(address,address,string,string,uint64)void` ABI method
+        
+        :param str proposer: The `proposer` ABI parameter
+        :param str offender: The `offender` ABI parameter
+        :param str kind: The `kind` ABI parameter
+        :param str metadata: The `metadata` ABI parameter
+        :param int end_time: The `end_time` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = CreateProposalArgs(
+            proposer=proposer,
+            offender=offender,
+            kind=kind,
+            metadata=metadata,
+            end_time=end_time,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def register(
+        self,
+        *,
+        role: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `register(string)void` ABI method
+        
+        :param str role: The `role` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = RegisterArgs(
+            role=role,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def deposit(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `deposit()void` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = DepositArgs()
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def withdraw(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `withdraw()void` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = WithdrawArgs()
         result = self.app_client.call(
             call_abi_method=args.method(),
             transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),

@@ -2,26 +2,9 @@
 
 smart_contracts.agence_staking.contract.AgenceStaking.approval_program:
     intcblock 0 1
-    bytecblock 0x75 0x00 "User " 0x001a "MIN_CREATION_FEE" 0x00000000000003e8 "MIN_STAKING_FEE" "governance_account"
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub __init__
-
-main_after_if_else@2:
+    bytecblock 0x00 0x75 "User " 0x001a "governance_account"
     callsub __puya_arc4_router__
     return
-
-
-// smart_contracts.agence_staking.contract.AgenceStaking.__init__() -> void:
-__init__:
-    proto 0 0
-    bytec 4 // "MIN_CREATION_FEE"
-    bytec 5 // 0x00000000000003e8
-    app_global_put
-    bytec 6 // "MIN_STAKING_FEE"
-    bytec 5 // 0x00000000000003e8
-    app_global_put
-    retsub
 
 
 // smart_contracts.agence_staking.contract.AgenceStaking.__puya_arc4_router__() -> uint64:
@@ -29,7 +12,7 @@ __puya_arc4_router__:
     proto 0 1
     txn NumAppArgs
     bz __puya_arc4_router___after_if_else@13
-    pushbytess 0x1dba557f 0x28ab102d 0xfa268a10 0x0890bd58 0x813ce89a 0x68266041 0xdf8a11ef 0x4bbde7e0 // method "init(address,uint64)void", method "create_user(string)void", method "get_user(address)(string,uint64,uint64,uint64)", method "stake()void", method "unstake(uint64)void", method "lock_stake(address,uint64)void", method "unlock_stake(address,uint64)void", method "slash_stake(address,uint64,address)void"
+    pushbytess 0x1dba557f 0xb4162408 0xfa268a10 0xf55b31ac 0x79fa871e 0x68266041 0xdf8a11ef 0x4bbde7e0 // method "init(address,uint64)void", method "create_user(address,uint64,string)void", method "get_user(address)(string,uint64,uint64,uint64)", method "stake(address,uint64)void", method "unstake(address,uint64)void", method "lock_stake(address,uint64)void", method "unlock_stake(address,uint64)void", method "slash_stake(address,uint64,address)void"
     txna ApplicationArgs 0
     match __puya_arc4_router___init_route@2 __puya_arc4_router___create_user_route@3 __puya_arc4_router___get_user_route@4 __puya_arc4_router___stake_route@5 __puya_arc4_router___unstake_route@6 __puya_arc4_router___lock_stake_route@7 __puya_arc4_router___unlock_stake_route@8 __puya_arc4_router___slash_stake_route@9
     intc_0 // 0
@@ -55,6 +38,8 @@ __puya_arc4_router___create_user_route@3:
     txn ApplicationID
     assert // is not creating
     txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    txna ApplicationArgs 3
     callsub create_user
     intc_1 // 1
     retsub
@@ -80,6 +65,8 @@ __puya_arc4_router___stake_route@5:
     assert // OnCompletion is NoOp
     txn ApplicationID
     assert // is not creating
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
     callsub stake
     intc_1 // 1
     retsub
@@ -91,6 +78,7 @@ __puya_arc4_router___unstake_route@6:
     txn ApplicationID
     assert // is not creating
     txna ApplicationArgs 1
+    txna ApplicationArgs 2
     callsub unstake
     intc_1 // 1
     retsub
@@ -140,7 +128,7 @@ __puya_arc4_router___after_if_else@13:
 // smart_contracts.agence_staking.contract.AgenceStaking.init(governance_account: bytes, governance_app_id: bytes) -> void:
 init:
     proto 2 0
-    bytec 7 // "governance_account"
+    bytec 4 // "governance_account"
     frame_dig -2
     app_global_put
     frame_dig -1
@@ -151,54 +139,60 @@ init:
     retsub
 
 
-// smart_contracts.agence_staking.contract.AgenceStaking.create_user(role: bytes) -> void:
+// smart_contracts.agence_staking.contract.AgenceStaking.create_user(user_address: bytes, amount: bytes, role: bytes) -> void:
 create_user:
-    proto 1 0
+    proto 3 0
+    callsub only_governance
+    bytec_0 // 0x00
+    !=
+    assert // Only the governance contract can call this method
     frame_dig -1
     callsub valid_role
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     !=
     assert // Invalid role
-    txn TypeEnum
-    intc_1 // pay
-    ==
-    assert // Invalid transaction type
-    txn Amount
-    intc_0 // 0
-    bytec 4 // "MIN_CREATION_FEE"
-    app_global_get_ex
-    assert // check self.MIN_CREATION_FEE exists
-    btoi
-    >=
-    assert // Insufficient amount
-    bytec_0 // 0x75
-    txn Sender
+    bytec_1 // 0x75
+    frame_dig -3
     concat
+    dup
     box_len
     bury 1
     !
     assert // User already created
-    txn Amount
+    frame_dig -2
+    btoi
     itob
     pushbytes 0x001a00000000000000000000000000000000
     swap
     concat
     frame_dig -1
     concat
-    bytec_0 // 0x75
-    txn Sender
-    concat
-    dup
+    dig 1
     box_del
     pop
-    swap
     box_put
     bytec_2 // "User "
-    txn Sender
+    frame_dig -3
     concat
     pushbytes " created"
     concat
     log
+    retsub
+
+
+// smart_contracts.agence_staking.contract.AgenceStaking.only_governance() -> bytes:
+only_governance:
+    proto 0 1
+    intc_0 // 0
+    bytec 4 // "governance_account"
+    app_global_get_ex
+    assert // check self.governance_account exists
+    txn Sender
+    ==
+    bytec_0 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
     retsub
 
 
@@ -222,7 +216,7 @@ valid_role_bool_false@3:
     intc_0 // 0
 
 valid_role_bool_merge@4:
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     uncover 2
     setbit
@@ -232,62 +226,58 @@ valid_role_bool_merge@4:
 // smart_contracts.agence_staking.contract.AgenceStaking.get_user(user: bytes) -> bytes:
 get_user:
     proto 1 1
-    bytec_0 // 0x75
-    txn Sender
+    bytec_1 // 0x75
+    frame_dig -1
     concat
+    dup
     box_len
     bury 1
     assert // User not found
-    bytec_0 // 0x75
-    frame_dig -1
-    concat
     box_get
     assert // check self.users entry exists
     retsub
 
 
-// smart_contracts.agence_staking.contract.AgenceStaking.stake() -> void:
+// smart_contracts.agence_staking.contract.AgenceStaking.stake(user_address: bytes, amount: bytes) -> void:
 stake:
-    proto 0 0
-    bytec_0 // 0x75
-    txn Sender
+    proto 2 0
+    callsub only_governance
+    bytec_0 // 0x00
+    !=
+    assert // Only the governance contract can call this method
+    bytec_1 // 0x75
+    frame_dig -2
     concat
+    dup
     box_len
     bury 1
     assert // User not found
-    txn Amount
-    intc_0 // 0
-    bytec 6 // "MIN_STAKING_FEE"
-    app_global_get_ex
-    assert // check self.MIN_STAKING_FEE exists
-    btoi
-    >=
-    assert // Insufficient amount
-    bytec_0 // 0x75
-    txn Sender
-    concat
+    dup
     box_get
     assert // check self.users entry exists
     dup
     extract 18 8 // on error: Index access is out of bounds
     btoi
-    txn Amount
-    +
+    frame_dig -1
+    btoi
+    swap
     dig 1
+    +
+    dig 2
     extract 2 8 // on error: Index access is out of bounds
     btoi
     dup2
     -
-    dig 3
+    dig 4
     intc_0 // 0
     extract_uint16
-    dig 4
+    dig 5
     len
-    uncover 5
+    uncover 6
     cover 2
     substring3
-    txn Amount
-    uncover 3
+    uncover 2
+    uncover 4
     +
     itob
     uncover 2
@@ -303,74 +293,76 @@ stake:
     concat
     swap
     concat
-    bytec_0 // 0x75
-    txn Sender
-    concat
-    dup
+    dig 1
     box_del
     pop
-    swap
     box_put
     bytec_2 // "User "
-    txn Sender
+    frame_dig -2
     concat
     pushbytes " staked "
     concat
-    txn Amount
-    itob
+    frame_dig -1
     concat
     log
     retsub
 
 
-// smart_contracts.agence_staking.contract.AgenceStaking.unstake(amount: bytes) -> void:
+// smart_contracts.agence_staking.contract.AgenceStaking.unstake(user_address: bytes, amount: bytes) -> void:
 unstake:
-    proto 1 0
-    bytec_0 // 0x75
-    txn Sender
+    proto 2 0
+    callsub only_governance
+    bytec_0 // 0x00
+    !=
+    assert // Only the governance contract can call this method
+    bytec_1 // 0x75
+    frame_dig -2
     concat
+    dup
     box_len
     bury 1
     assert // User not found
-    itxn_begin
-    global MinTxnFee
-    txn Sender
+    dup
+    box_get
+    assert // check self.users entry exists
     frame_dig -1
     btoi
-    dup
+    dig 1
+    extract 10 8 // on error: Index access is out of bounds
+    btoi
+    dig 1
+    >=
+    assert // Insufficient locked stake
+    itxn_begin
+    global MinTxnFee
+    dig 1
     itxn_field Amount
-    swap
+    frame_dig -2
     itxn_field Receiver
     intc_1 // pay
     itxn_field TypeEnum
-    swap
     itxn_field Fee
     itxn_submit
-    bytec_0 // 0x75
-    txn Sender
-    concat
-    box_get
-    assert // check self.users entry exists
-    dup
+    dig 1
     extract 18 8 // on error: Index access is out of bounds
     btoi
-    uncover 2
-    -
     dig 1
+    -
+    dig 2
     extract 2 8 // on error: Index access is out of bounds
     btoi
     dup2
     -
-    dig 3
+    dig 4
     intc_0 // 0
     extract_uint16
-    dig 4
+    dig 5
     len
-    uncover 5
+    uncover 6
     cover 2
     substring3
-    txn Amount
-    uncover 3
+    uncover 2
+    uncover 4
     +
     itob
     uncover 2
@@ -386,16 +378,12 @@ unstake:
     concat
     swap
     concat
-    bytec_0 // 0x75
-    txn Sender
-    concat
-    dup
+    dig 1
     box_del
     pop
-    swap
     box_put
     bytec_2 // "User "
-    txn Sender
+    frame_dig -2
     concat
     pushbytes " unstaked "
     concat
@@ -409,10 +397,10 @@ unstake:
 lock_stake:
     proto 2 0
     callsub only_governance
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     !=
-    assert // Only the governance can start a gig
-    bytec_0 // 0x75
+    assert // Only the governance contract can call this method
+    bytec_1 // 0x75
     frame_dig -2
     concat
     dup
@@ -476,30 +464,14 @@ lock_stake:
     retsub
 
 
-// smart_contracts.agence_staking.contract.AgenceStaking.only_governance() -> bytes:
-only_governance:
-    proto 0 1
-    intc_0 // 0
-    bytec 7 // "governance_account"
-    app_global_get_ex
-    assert // check self.governance_account exists
-    txn Sender
-    ==
-    bytec_1 // 0x00
-    intc_0 // 0
-    uncover 2
-    setbit
-    retsub
-
-
 // smart_contracts.agence_staking.contract.AgenceStaking.unlock_stake(user_address: bytes, amount: bytes) -> void:
 unlock_stake:
     proto 2 0
     callsub only_governance
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     !=
-    assert // Only the governance can start a gig
-    bytec_0 // 0x75
+    assert // Only the governance contract can call this method
+    bytec_1 // 0x75
     frame_dig -2
     concat
     dup
@@ -565,10 +537,10 @@ unlock_stake:
 slash_stake:
     proto 3 0
     callsub only_governance
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     !=
-    assert // Only the governance can start a gig
-    bytec_0 // 0x75
+    assert // Only the governance contract can call this method
+    bytec_1 // 0x75
     frame_dig -3
     concat
     dup

@@ -42,11 +42,15 @@ class AgenceGigs(ARC4Contract):
     """
 
     @abimethod()
-    def create_gig(self, binding_amount: UInt64) -> None:
+    def create_gig(self, agency: Address, binding_amount: UInt64) -> None:
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
+
         self.gigs.append(
             Gig(
-                ace=Address(Txn.sender),
-                agency=Address(Txn.sender),
+                ace=agency,
+                agency=agency,
                 status=String("Pending"),
                 binding_amount=binding_amount,
             )
@@ -57,7 +61,9 @@ class AgenceGigs(ARC4Contract):
 
     @abimethod()
     def start_gig(self, gig_id: UInt64, selected_ace: Address) -> None:
-        assert self.only_governance(), "Only the governance can start a gig"
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
         assert self.next_gig_id.native > gig_id.native, "Invalid gig ID"
         assert self.gigs[gig_id.native].status == "Pending", "Gig is not pending"
 
@@ -76,7 +82,7 @@ class AgenceGigs(ARC4Contract):
     def update_gig(self, gig_id: UInt64, status: String) -> None:
         assert (
             self.only_governance()
-        ), "Only the governance or staking contract can complete a gig"
+        ), "Only the governance contract can call this method"
         assert self.next_gig_id.native > gig_id.native, "Invalid gig ID"
 
         gig = self.gigs[gig_id.native].copy()

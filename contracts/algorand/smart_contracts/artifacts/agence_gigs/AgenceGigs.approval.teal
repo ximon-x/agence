@@ -2,7 +2,7 @@
 
 smart_contracts.agence_gigs.contract.AgenceGigs.approval_program:
     intcblock 0 1 2 64
-    bytecblock "gigs" "next_gig_id" 0x004a 0x000750656e64696e67 0x151f7c75 "Gig " 0x00 0x0006416374697665 0x0000 "governance_account" 0x0002
+    bytecblock "gigs" "next_gig_id" 0x004a 0x00 0x000750656e64696e67 0x151f7c75 "Gig " 0x0006416374697665 0x0000 "governance_account" 0x0002
     txn ApplicationID
     bnz main_after_if_else@2
     callsub __init__
@@ -29,7 +29,7 @@ __puya_arc4_router__:
     proto 0 1
     txn NumAppArgs
     bz __puya_arc4_router___after_if_else@12
-    pushbytess 0x1dba557f 0xf13725bb 0x3e2a2207 0x01f59dc3 0xbd5719da 0x8ae49ad6 0x44071e56 // method "init(address,uint64)void", method "create_gig(uint64)void", method "start_gig(uint64,address)void", method "update_gig(uint64,string)void", method "get_gigs()(address,address,string,uint64)[]", method "get_gig_by_address(address)(address,address,string,uint64)[]", method "get_gig(uint64)(address,address,string,uint64)"
+    pushbytess 0x1dba557f 0x5988213d 0x3e2a2207 0x01f59dc3 0xbd5719da 0x8ae49ad6 0x44071e56 // method "init(address,uint64)void", method "create_gig(address,uint64)void", method "start_gig(uint64,address)void", method "update_gig(uint64,string)void", method "get_gigs()(address,address,string,uint64)[]", method "get_gig_by_address(address)(address,address,string,uint64)[]", method "get_gig(uint64)(address,address,string,uint64)"
     txna ApplicationArgs 0
     match __puya_arc4_router___init_route@2 __puya_arc4_router___create_gig_route@3 __puya_arc4_router___start_gig_route@4 __puya_arc4_router___update_gig_route@5 __puya_arc4_router___get_gigs_route@6 __puya_arc4_router___get_gig_by_address_route@7 __puya_arc4_router___get_gig_route@8
     intc_0 // 0
@@ -55,6 +55,7 @@ __puya_arc4_router___create_gig_route@3:
     txn ApplicationID
     assert // is not creating
     txna ApplicationArgs 1
+    txna ApplicationArgs 2
     callsub create_gig
     intc_1 // 1
     retsub
@@ -90,7 +91,7 @@ __puya_arc4_router___get_gigs_route@6:
     txn ApplicationID
     assert // is not creating
     callsub get_gigs
-    bytec 4 // 0x151f7c75
+    bytec 5 // 0x151f7c75
     swap
     concat
     log
@@ -105,7 +106,7 @@ __puya_arc4_router___get_gig_by_address_route@7:
     assert // is not creating
     txna ApplicationArgs 1
     callsub get_gig_by_address
-    bytec 4 // 0x151f7c75
+    bytec 5 // 0x151f7c75
     swap
     concat
     log
@@ -120,7 +121,7 @@ __puya_arc4_router___get_gig_route@8:
     assert // is not creating
     txna ApplicationArgs 1
     callsub get_gig
-    bytec 4 // 0x151f7c75
+    bytec 5 // 0x151f7c75
     swap
     concat
     log
@@ -146,21 +147,25 @@ init:
     retsub
 
 
-// smart_contracts.agence_gigs.contract.AgenceGigs.create_gig(binding_amount: bytes) -> void:
+// smart_contracts.agence_gigs.contract.AgenceGigs.create_gig(agency: bytes, binding_amount: bytes) -> void:
 create_gig:
-    proto 1 0
+    proto 2 0
+    callsub only_governance
+    bytec_3 // 0x00
+    !=
+    assert // Only the governance contract can call this method
     intc_0 // 0
     bytec_0 // "gigs"
     app_global_get_ex
     assert // check self.gigs exists
-    txn Sender
+    frame_dig -2
     dup
     concat
     bytec_2 // 0x004a
     concat
     frame_dig -1
     concat
-    bytec_3 // 0x000750656e64696e67
+    bytec 4 // 0x000750656e64696e67
     concat
     bytec 10 // 0x0002
     swap
@@ -191,7 +196,7 @@ create_gig:
     bytec_1 // "next_gig_id"
     app_global_get_ex
     assert // check self.next_gig_id exists
-    bytec 5 // "Gig "
+    bytec 6 // "Gig "
     swap
     concat
     pushbytes " created"
@@ -200,13 +205,29 @@ create_gig:
     retsub
 
 
+// smart_contracts.agence_gigs.contract.AgenceGigs.only_governance() -> bytes:
+only_governance:
+    proto 0 1
+    intc_0 // 0
+    bytec 9 // "governance_account"
+    app_global_get_ex
+    assert // check self.governance_account exists
+    txn Sender
+    ==
+    bytec_3 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    retsub
+
+
 // smart_contracts.agence_gigs.contract.AgenceGigs.start_gig(gig_id: bytes, selected_ace: bytes) -> void:
 start_gig:
     proto 2 0
     callsub only_governance
-    bytec 6 // 0x00
+    bytec_3 // 0x00
     !=
-    assert // Only the governance can start a gig
+    assert // Only the governance contract can call this method
     intc_0 // 0
     bytec_1 // "next_gig_id"
     app_global_get_ex
@@ -260,7 +281,7 @@ start_gig:
     dig 1
     len
     substring3
-    bytec_3 // 0x000750656e64696e67
+    bytec 4 // 0x000750656e64696e67
     ==
     assert // Gig is not pending
     intc_0 // 0
@@ -308,7 +329,7 @@ start_gig:
     bytec_0 // "gigs"
     swap
     app_global_put
-    bytec 5 // "Gig "
+    bytec 6 // "Gig "
     frame_dig -2
     concat
     pushbytes " started"
@@ -317,29 +338,13 @@ start_gig:
     retsub
 
 
-// smart_contracts.agence_gigs.contract.AgenceGigs.only_governance() -> bytes:
-only_governance:
-    proto 0 1
-    intc_0 // 0
-    bytec 9 // "governance_account"
-    app_global_get_ex
-    assert // check self.governance_account exists
-    txn Sender
-    ==
-    bytec 6 // 0x00
-    intc_0 // 0
-    uncover 2
-    setbit
-    retsub
-
-
 // smart_contracts.agence_gigs.contract.AgenceGigs.update_gig(gig_id: bytes, status: bytes) -> void:
 update_gig:
     proto 2 0
     callsub only_governance
-    bytec 6 // 0x00
+    bytec_3 // 0x00
     !=
-    assert // Only the governance or staking contract can complete a gig
+    assert // Only the governance contract can call this method
     intc_0 // 0
     bytec_1 // "next_gig_id"
     app_global_get_ex
@@ -426,7 +431,7 @@ update_gig_switch_case_0@1:
     dig 1
     len
     substring3
-    bytec_3 // 0x000750656e64696e67
+    bytec 4 // 0x000750656e64696e67
     ==
     assert // Gig is not active
     frame_dig 4
@@ -485,7 +490,7 @@ update_gig_switch_case_1@2:
     dig 1
     len
     substring3
-    bytec_3 // 0x000750656e64696e67
+    bytec 4 // 0x000750656e64696e67
     ==
     assert // Gig is not active
     frame_dig 4
@@ -574,7 +579,7 @@ update_gig_switch_case_2@3:
     app_global_put
 
 update_gig_switch_case_next@5:
-    bytec 5 // "Gig "
+    bytec 6 // "Gig "
     frame_dig -2
     concat
     pushbytes " updated to "

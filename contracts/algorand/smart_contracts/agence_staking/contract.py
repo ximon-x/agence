@@ -5,7 +5,6 @@ from algopy import (
     Global,
     subroutine,
     Txn,
-    TransactionType,
     log,
     Account,
     itxn,
@@ -21,20 +20,12 @@ class User(Struct):
 
 
 class AgenceStaking(ARC4Contract):
-    MIN_CREATION_FEE: UInt64
-    MIN_STAKING_FEE: UInt64
-
     governance_account: Account
     governance_app: Application
 
     users: BoxMap[Account, User]
 
     def __init__(self) -> None:
-        # Global Storage
-        self.MIN_CREATION_FEE = UInt64(1000)
-        self.MIN_STAKING_FEE = UInt64(1000)
-
-        # Box Storage
         self.users = BoxMap(Account, User, key_prefix=b"u")
 
     @abimethod(create="require")
@@ -51,22 +42,25 @@ class AgenceStaking(ARC4Contract):
     """
 
     @abimethod()
-    def create_user(self, role: String) -> None:
+    def create_user(self, user_address: Address, amount: UInt64, role: String) -> None:
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
         assert self.valid_role(role), "Invalid role"
-        assert Txn.type_enum == TransactionType.Payment, "Invalid transaction type"
-        assert Txn.amount >= self.MIN_CREATION_FEE.native, "Insufficient amount"
-        assert Txn.sender not in self.users, "User already created"
+        assert user_address.native not in self.users, "User already created"
 
-        total_stake = UInt64(Txn.amount)
+        total_stake = UInt64(amount.native)
         locked_stake = UInt64(0)
         available_stake = UInt64()
 
-        self.users[Txn.sender] = User(role, locked_stake, available_stake, total_stake)
-        log("User ", Txn.sender, " created")
+        self.users[user_address.native] = User(
+            role, locked_stake, available_stake, total_stake
+        )
+        log("User ", user_address, " created")
 
     @abimethod()
     def get_user(self, user: Address) -> User:
-        assert Txn.sender in self.users, "User not found"
+        assert user.native in self.users, "User not found"
         return self.users[user.native]
 
     """
@@ -74,51 +68,59 @@ class AgenceStaking(ARC4Contract):
     """
 
     @abimethod()
-    def stake(self) -> None:
-        assert Txn.sender in self.users, "User not found"
-        assert Txn.amount >= self.MIN_STAKING_FEE.native, "Insufficient amount"
+    def stake(self, user_address: Address, amount: UInt64) -> None:
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
+        assert user_address.native in self.users, "User not found"
 
-        user = self.users[Txn.sender].copy()
+        user = self.users[user_address.native].copy()
 
-        new_total_stake = user.total_stake.native + Txn.amount
+        new_total_stake = user.total_stake.native + amount.native
         new_available_stake = new_total_stake - user.locked_stake.native
 
-        self.users[Txn.sender] = User(
+        self.users[user_address.native] = User(
             role=user.role,
-            locked_stake=UInt64(user.locked_stake.native + Txn.amount),
+            locked_stake=UInt64(user.locked_stake.native + amount.native),
             available_stake=UInt64(new_available_stake),
             total_stake=UInt64(new_total_stake),
         )
 
-        log("User ", Txn.sender, " staked ", Txn.amount)
+        log("User ", user_address, " staked ", amount)
 
     @abimethod()
-    def unstake(self, amount: UInt64) -> None:
-        assert Txn.sender in self.users, "User not found"
+    def unstake(self, user_address: Address, amount: UInt64) -> None:
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
+        assert user_address.native in self.users, "User not found"
+
+        user = self.users[user_address.native].copy()
+        assert amount.native <= user.available_stake.native, "Insufficient locked stake"
 
         itxn.Payment(
-            receiver=Txn.sender,
+            receiver=user_address.native,
             amount=amount.native,
             fee=Global.min_txn_fee,
         ).submit()
 
-        user = self.users[Txn.sender].copy()
-
         new_total_stake = user.total_stake.native - amount.native
         new_available_stake = new_total_stake - user.locked_stake.native
 
-        self.users[Txn.sender] = User(
+        self.users[user_address.native] = User(
             role=user.role,
-            locked_stake=UInt64(user.locked_stake.native + Txn.amount),
+            locked_stake=UInt64(user.locked_stake.native + amount.native),
             available_stake=UInt64(new_available_stake),
             total_stake=UInt64(new_total_stake),
         )
 
-        log("User ", Txn.sender, " unstaked ", amount)
+        log("User ", user_address, " unstaked ", amount)
 
     @abimethod()
     def lock_stake(self, user_address: Address, amount: UInt64) -> None:
-        assert self.only_governance(), "Only the governance can start a gig"
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
         assert user_address.native in self.users, "User not found"
 
         user = self.users[user_address.native].copy()
@@ -141,7 +143,9 @@ class AgenceStaking(ARC4Contract):
 
     @abimethod()
     def unlock_stake(self, user_address: Address, amount: UInt64) -> None:
-        assert self.only_governance(), "Only the governance can start a gig"
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
         assert user_address.native in self.users, "User not found"
 
         user = self.users[user_address.native].copy()
@@ -164,7 +168,9 @@ class AgenceStaking(ARC4Contract):
     def slash_stake(
         self, offender_address: Address, amount: UInt64, proposer_address: Address
     ) -> None:
-        assert self.only_governance(), "Only the governance can start a gig"
+        assert (
+            self.only_governance()
+        ), "Only the governance contract can call this method"
         assert offender_address.native in self.users, "User not found"
 
         user = self.users[offender_address.native].copy()
