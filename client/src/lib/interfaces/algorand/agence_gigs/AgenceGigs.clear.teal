@@ -1,5 +1,0 @@
-#pragma version 10
-
-smart_contracts.agence_gigs.contract.AgenceGigs.clear_state_program:
-    pushint 1 // 1
-    return
