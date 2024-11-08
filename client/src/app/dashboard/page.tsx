@@ -5,7 +5,7 @@ import Header from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AccountAlert } from "@/modules/auth/components/account-alert";
+// import { AccountAlert } from "@/modules/auth/components/account-alert";
 import { AccountProvider } from "@/modules/auth/lib/hooks/providers/account-provider";
 import { AuthProvider } from "@/modules/auth/lib/hooks/providers/auth-provider";
 import { signout } from "@/modules/auth/lib/services/supabase/actions";
@@ -37,7 +37,7 @@ export default async function DashboardPage() {
     <AuthProvider getUser={getUser} userId={user.id}>
       <AccountProvider>
         <div className="h-screen w-full flex-col md:flex">
-          <AccountAlert />
+          {/* <AccountAlert /> */}
           <Header title="Dashboard" />
           <main className="flex-1 space-y-4 px-8 py-4">
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
