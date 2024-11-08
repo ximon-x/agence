@@ -11,7 +11,7 @@ import { Text } from "@/lib/styles/typography";
 import Footer from "@/modules/auth/components/footer";
 import Header from "@/modules/auth/components/header";
 import { SigninForm } from "@/modules/auth/components/signin-form";
-import { signin } from "@/modules/auth/lib/services/actions";
+import { signin } from "@/modules/auth/lib/services/supabase/actions";
 import { Metadata } from "next";
 import Link from "next/link";
 

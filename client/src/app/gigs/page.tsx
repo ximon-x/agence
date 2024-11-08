@@ -2,7 +2,7 @@ import { getUser } from "@/api/users";
 import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
 import { AuthProvider } from "@/modules/auth/lib/hooks/providers/auth-provider";
-import { signout } from "@/modules/auth/lib/services/actions";
+import { signout } from "@/modules/auth/lib/services/supabase/actions";
 import { createClient } from "@/modules/auth/lib/services/supabase/server";
 import CreateGigDialog from "@/modules/gigs/components/create-gig-dialog";
 import GetGigDialog from "@/modules/gigs/components/get-gig-dialog";
