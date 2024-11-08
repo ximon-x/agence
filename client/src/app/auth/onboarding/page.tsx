@@ -2,7 +2,7 @@ import { createUser } from "@/api/users";
 import Footer from "@/modules/auth/components/footer";
 import Header from "@/modules/auth/components/header";
 import OnboardingForm from "@/modules/auth/components/onboarding-form";
-import { onboarded } from "@/modules/auth/lib/services/actions";
+import { onboarded } from "@/modules/auth/lib/services/supabase/actions";
 import { createClient } from "@/modules/auth/lib/services/supabase/server";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";

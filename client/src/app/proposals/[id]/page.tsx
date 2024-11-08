@@ -4,7 +4,7 @@ import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AuthProvider } from "@/modules/auth/lib/hooks/providers/auth-provider";
-import { signout } from "@/modules/auth/lib/services/actions";
+import { signout } from "@/modules/auth/lib/services/supabase/actions";
 import { createClient } from "@/modules/auth/lib/services/supabase/server";
 import { redirect } from "next/navigation";
 
