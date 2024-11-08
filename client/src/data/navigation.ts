@@ -14,7 +14,7 @@ export const NAVIGATION_DATA = {
     { href: "/dashboard", icon: HomeIcon, label: "Home" },
     { href: "/inbox", icon: Inbox, label: "Inbox" },
     { href: "/gigs", icon: BriefcaseBusiness, label: "Gigs" },
-    { href: "proposals", icon: Vote, label: "Proposals" },
+    { href: "/proposals", icon: Vote, label: "Proposals" },
     { href: "/settings", icon: Settings, label: "Settings" },
   ],
   external: {
