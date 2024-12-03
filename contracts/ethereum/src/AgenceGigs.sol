@@ -1,145 +1,151 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-contract AgenceGigs {
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+event GigCreated(address agency, uint256 bindingAmount);
+
+event GigStarted(address ace, address agency);
+
+event GigCanceled(address ace, address agency);
+
+event GigFlagged(address ace, address agency);
+
+event GigCompleted(address ace, address agency);
+
+error InvalidGigStatus();
+
+error InvalidGigId();
+
+contract AgenceGigs is Ownable {
+    enum Status {
+        Pending,
+        Active,
+        Canceled,
+        Flagged,
+        Completed
+    }
+
     struct Gig {
+        uint256 id;
         address ace;
         address agency;
-        string status;
+        Status status;
         uint256 bindingAmount;
     }
 
-    uint256 public nextGigId = 0;
-    Gig[] public gigs;
+    mapping(address => Gig[]) public gigsByAddress;
+
+    constructor(address governance) Ownable(governance) {}
+
+    receive() external payable {}
+
+    fallback() external payable {}
+
+    function createGig(address _agency, uint256 _bindingAmount) external payable onlyOwner {
+        uint256 n = gigsByAddress[_agency].length;
+
+        Gig memory newGig =
+            Gig({id: n, ace: msg.sender, agency: _agency, status: Status.Pending, bindingAmount: _bindingAmount});
+
+        gigsByAddress[_agency].push(newGig);
+        emit GigCreated(_agency, _bindingAmount);
+    }
+
+    function startGig(uint256 gigId, address agency, address ace) external onlyOwner {
+        if (gigsByAddress[agency].length <= gigId) {
+            revert InvalidGigId();
+        }
+
+        Gig memory gig = gigsByAddress[agency][gigId];
+
+        if (gig.status != Status.Pending) {
+            revert InvalidGigStatus();
+        }
+
+        gigsByAddress[agency][gigId].status = Status.Active;
+        gigsByAddress[agency][gigId].ace = ace;
+
+        gigsByAddress[ace].push(gig);
+        emit GigStarted(ace, agency);
+    }
+
+    function cancelGig(uint256 gigId, address agency, address ace) external onlyOwner {
+        if (gigsByAddress[msg.sender].length <= gigId) {
+            revert InvalidGigId();
+        }
+
+        if (gigsByAddress[agency][gigId].status != Status.Active) {
+            revert InvalidGigStatus();
+        }
+
+        gigsByAddress[agency][gigId].status = Status.Canceled;
+
+        for (uint256 i = 0; i < gigsByAddress[ace].length; i++) {
+            if (gigsByAddress[ace][i].id == gigId) {
+                gigsByAddress[ace][i].status = Status.Canceled;
+            }
+        }
+        emit GigCanceled(ace, agency);
+    }
+
+    function completeGig(uint256 gigId, address agency, address ace) external onlyOwner {
+        if (gigsByAddress[msg.sender].length <= gigId) {
+            revert InvalidGigId();
+        }
+
+        if (gigsByAddress[agency][gigId].status != Status.Active) {
+            revert InvalidGigStatus();
+        }
+
+        gigsByAddress[agency][gigId].status = Status.Completed;
+
+        for (uint256 i = 0; i < gigsByAddress[ace].length; i++) {
+            if (gigsByAddress[ace][i].id == gigId) {
+                gigsByAddress[ace][i].status = Status.Completed;
+            }
+        }
+
+        emit GigCompleted(ace, agency);
+    }
+
+    function flagGig(uint256 gigId, address agency, address ace) external onlyOwner {
+        if (gigsByAddress[msg.sender].length <= gigId) {
+            revert InvalidGigId();
+        }
+
+        if (gigsByAddress[agency][gigId].status != Status.Active) {
+            revert InvalidGigStatus();
+        }
+
+        gigsByAddress[agency][gigId].status = Status.Flagged;
+
+        for (uint256 i = 0; i < gigsByAddress[ace].length; i++) {
+            if (gigsByAddress[ace][i].id == gigId) {
+                gigsByAddress[ace][i].status = Status.Flagged;
+            }
+        }
+
+        emit GigFlagged(ace, agency);
+    }
+
+    function getGigsByAddress(address user) external view returns (Gig[] memory) {
+        return gigsByAddress[user];
+    }
+
+    function getGig(uint256 gigId, address user) external view returns (Gig memory) {
+        if (gigsByAddress[user].length <= gigId) {
+            revert InvalidGigId();
+        }
+
+        Gig memory gig;
+
+        for (uint256 i = 0; i < gigsByAddress[user].length; i++) {
+            if (gigsByAddress[user][i].id == gigId) {
+                gig = gigsByAddress[user][i];
+            }
+        }
+
+        return gig;
+    }
 }
-
-// class AgenceGigs(ARC4Contract):
-//     governance_account: Account
-//     governance_app: Application
-
-//     gigs: DynamicArray[Gig]
-//     next_gig_id: UInt64
-
-//     def __init__(self) -> None:
-//         self.next_gig_id = UInt64(0)
-//         self.gigs = DynamicArray[Gig]()
-
-//     @abimethod(create="require")
-//     def init(
-//         self,
-//         governance_account: Address,
-//         governance_app_id: UInt64,
-//     ) -> None:
-//         self.governance_account = governance_account.native
-//         self.governance_app_id = Application(governance_app_id.native)
-
-//     """
-//     Gig methods
-//     """
-
-//     @abimethod()
-//     def create_gig(self, agency: Address, binding_amount: UInt64) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-
-//         self.gigs.append(
-//             Gig(
-//                 ace=agency,
-//                 agency=agency,
-//                 status=String("Pending"),
-//                 binding_amount=binding_amount,
-//             )
-//         )
-//         self.next_gig_id = UInt64(self.next_gig_id.native + 1)
-
-//         log("Gig ", self.next_gig_id, " created")
-
-//     @abimethod()
-//     def start_gig(self, gig_id: UInt64, selected_ace: Address) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert self.next_gig_id.native > gig_id.native, "Invalid gig ID"
-//         assert self.gigs[gig_id.native].status == "Pending", "Gig is not pending"
-
-//         old_gig = self.gigs[gig_id.native].copy()
-
-//         self.gigs[gig_id.native] = Gig(
-//             ace=selected_ace,
-//             agency=old_gig.agency,
-//             status=String("Active"),
-//             binding_amount=old_gig.binding_amount,
-//         )
-
-//         log("Gig ", gig_id, " started")
-
-//     @abimethod()
-//     def update_gig(self, gig_id: UInt64, status: String) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert self.next_gig_id.native > gig_id.native, "Invalid gig ID"
-
-//         gig = self.gigs[gig_id.native].copy()
-
-//         match status.native:
-//             case "Active":
-//                 assert self.gigs[gig_id.native].status == "Pending", "Gig is not active"
-//                 self.gigs[gig_id.native] = Gig(
-//                     ace=gig.ace,
-//                     agency=gig.agency,
-//                     status=String("Active"),
-//                     binding_amount=gig.binding_amount,
-//                 )
-
-//             case "Canceled":
-//                 assert self.gigs[gig_id.native].status == "Pending", "Gig is not active"
-//                 self.gigs[gig_id.native] = Gig(
-//                     ace=gig.ace,
-//                     agency=gig.agency,
-//                     status=String("Canceled"),
-//                     binding_amount=gig.binding_amount,
-//                 )
-
-//             case "Completed":
-//                 assert self.gigs[gig_id.native].status == "Active", "Gig is not active"
-//                 self.gigs[gig_id.native] = Gig(
-//                     ace=gig.ace,
-//                     agency=gig.agency,
-//                     status=String("Completed"),
-//                     binding_amount=gig.binding_amount,
-//                 )
-
-//             case _:
-//                 assert False, "Invalid status"
-
-//         log("Gig ", gig_id, " updated to ", status)
-
-//     @abimethod()
-//     def get_gigs(self) -> DynamicArray[Gig]:
-//         return self.gigs
-
-//     @abimethod()
-//     def get_gig_by_address(self, user_address: Address) -> DynamicArray[Gig]:
-//         user_gigs = DynamicArray[Gig]()
-//         n = self.next_gig_id
-
-//         for i in urange(n.native):
-//             if self.gigs[i].ace == user_address or self.gigs[i].agency == user_address:
-//                 user_gigs.append(self.gigs[i].copy())
-
-//         return user_gigs
-
-//     @abimethod()
-//     def get_gig(self, gig_id: UInt64) -> Gig:
-//         assert self.next_gig_id.native > gig_id.native, "Invalid gig ID"
-//         return self.gigs[gig_id.native]
-
-//     """
-//     Subroutines
-//     """
-
-//     @subroutine
-//     def only_governance(self) -> Bool:
-//         return Bool(self.governance_account == Txn.sender)

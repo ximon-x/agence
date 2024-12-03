@@ -6,11 +6,7 @@ contract Agence {
     address public immutable stakingContract;
     address public immutable gigsContract;
 
-    constructor(
-        address _governanceContract,
-        address _stakingContract,
-        address _gigsContract
-    ) {
+    constructor(address _governanceContract, address _stakingContract, address _gigsContract) {
         governanceContract = _governanceContract;
         stakingContract = _stakingContract;
         gigsContract = _gigsContract;
