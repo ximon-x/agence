@@ -4,6 +4,9 @@
       "path": "./contracts/algorand"
     },
     {
+      "path": "./contracts/ethereum/"
+    },
+    {
       "path": "./contracts/near"
     }
   ]
