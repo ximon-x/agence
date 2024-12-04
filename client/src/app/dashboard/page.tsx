@@ -15,6 +15,7 @@ import ProposalsTable from "@/modules/proposals/components/proposals-table";
 import AddStakeDialog from "@/modules/staking/components/add-stake-dialog";
 import { LockIcon, TrendingUpIcon, WalletIcon, UnlockIcon } from "lucide-react";
 import { Metadata } from "next";
+import Image from "next/image";
 
 // import { redirect } from "next/navigation";
 
@@ -50,7 +51,10 @@ export default async function DashboardPage() {
                 <UnlockIcon className="h-4 w-4" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$280.30</div>
+                <div className="flex items-center justify-start gap-2">
+                  <Image src="USDe.svg" width={24} height={24} alt="USDe" />
+                  <span className="text-2xl font-bold">280.30</span>
+                </div>
               </CardContent>
             </Card>
             <Card>
@@ -61,7 +65,10 @@ export default async function DashboardPage() {
                 <LockIcon className="h-4 w-4" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$575.28</div>
+                <div className="flex items-center justify-start gap-2">
+                  <Image src="USDe.svg" width={24} height={24} alt="USDe" />
+                  <span className="text-2xl font-bold">575.28</span>
+                </div>
               </CardContent>
             </Card>
             <Card>
@@ -72,7 +79,10 @@ export default async function DashboardPage() {
                 <TrendingUpIcon className="h-4 w-4" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$32.05</div>
+                <div className="flex items-center justify-start gap-2">
+                  <Image src="sUSDe.svg" width={24} height={24} alt="USDe" />
+                  <span className="text-2xl font-bold">32.05</span>
+                </div>
               </CardContent>
             </Card>
             <Card>
@@ -83,14 +93,17 @@ export default async function DashboardPage() {
                 <WalletIcon className="h-4 w-4" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$887.63</div>
+                <div className="flex items-center justify-start gap-2">
+                  <Image src="USDe.svg" width={24} height={24} alt="USDe" />
+                  <span className="text-2xl font-bold">887.63</span>
+                </div>
               </CardContent>
             </Card>
           </div>
 
           <div className="flex items-center justify-end space-x-4">
             <AddStakeDialog revalidateCache={revalidateCache} />
-            <Button variant="destructive">Withdraw Funds</Button>
+            <Button variant="destructive">Unstake USDe</Button>
           </div>
 
           <Tabs defaultValue="gigs" className="space-y-4">

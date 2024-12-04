@@ -100,7 +100,7 @@ export default function DepositDialog({ revalidateCache }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default">Add Stake</Button>
+        <Button variant="default">Stake USDe</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
