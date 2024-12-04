@@ -1,38 +1,39 @@
-import { getUser } from "@/api/users";
+// import { getUser } from "@/api/users";
 import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
-import { AuthProvider } from "@/modules/auth/lib/hooks/providers/auth-provider";
+// import { AuthProvider } from "@/modules/auth/lib/hooks/providers/auth-provider";
 import { signout } from "@/modules/auth/lib/services/supabase/actions";
-import { createClient } from "@/modules/auth/lib/services/supabase/server";
+// import { createClient } from "@/modules/auth/lib/services/supabase/server";
 import CreateGigDialog from "@/modules/gigs/components/create-gig-dialog";
 import GetGigDialog from "@/modules/gigs/components/get-gig-dialog";
 import GigsTable from "@/modules/gigs/components/gigs-table";
-import { redirect } from "next/navigation";
+
+// import { redirect } from "next/navigation";
 
 export default async function GigsPage() {
-  const supabase = await createClient();
+  // const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
-  if (!user || !user.id) {
-    return redirect("/auth/sign-in");
-  }
+  // if (!user || !user.id) {
+  //   return redirect("/auth/sign-in");
+  // }
 
   return (
-    <AuthProvider getUser={getUser} userId={user.id}>
-      <div className="min-h-screen w-full flex-col md:flex">
-        <Header title="Gigs" />
-        <main className="space-y-4 px-8">
-          <div className="flex items-center justify-end gap-4">
-            <CreateGigDialog />
-            <GetGigDialog />
-          </div>
-          <GigsTable pageSize={8} className="col-span-2" />
-        </main>
-        <Footer signout={signout} />
-      </div>
-    </AuthProvider>
+    // <AuthProvider getUser={getUser} userId={user.id}>
+    <div className="min-h-screen w-full flex-col md:flex">
+      <Header title="Gigs" />
+      <main className="space-y-4 px-8">
+        <div className="flex items-center justify-end gap-4">
+          <CreateGigDialog />
+          <GetGigDialog />
+        </div>
+        <GigsTable pageSize={8} className="col-span-2" />
+      </main>
+      <Footer signout={signout} />
+    </div>
+    // </AuthProvider>
   );
 }

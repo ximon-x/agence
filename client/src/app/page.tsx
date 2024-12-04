@@ -29,7 +29,9 @@ export default function HomePage() {
                 Simplying the hiring process.
               </Text>
 
-              <Link href="/auth/sign-in" className="flex items-center">
+              {/* TODO: Enable Authentication */}
+              {/* <Link href="/auth/sign-in" className="flex items-center"> */}
+              <Link href="/dashboard" className="flex items-center">
                 <Button variant="default" size="lg">
                   Get Started
                   <LogIn className="ml-2 h-4 w-4" />
@@ -41,8 +43,8 @@ export default function HomePage() {
               <span className="flex items-center gap-2">
                 <Text variant="muted">Powered by</Text>
                 <Image
-                  src="/algorand.png"
-                  alt="Algorand"
+                  src="/ethena.svg"
+                  alt="Ethena"
                   width={100}
                   height={100}
                 />
@@ -51,7 +53,6 @@ export default function HomePage() {
               <Safari
                 url="https://ximon-agence-client.vercel.app/"
                 className="h-full w-[80%]"
-                // src="https://via.placeholder.com/1200x750"
                 src="/banner.gif"
               />
             </div>
