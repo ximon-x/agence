@@ -3,21 +3,8 @@ pragma solidity ^0.8.27;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-event GigCreated(address agency, uint256 bindingAmount);
-
-event GigStarted(address ace, address agency);
-
-event GigCanceled(address ace, address agency);
-
-event GigFlagged(address ace, address agency);
-
-event GigCompleted(address ace, address agency);
-
-error InvalidGigStatus();
-
-error InvalidGigId();
-
 contract AgenceGigs is Ownable {
+    // Type Declarations
     enum Status {
         Pending,
         Active,
@@ -34,14 +21,27 @@ contract AgenceGigs is Ownable {
         uint256 bindingAmount;
     }
 
+    // State Variables
     mapping(address => Gig[]) public gigsByAddress;
 
-    constructor(address governance) Ownable(governance) {}
+    // Events
+    event GigCreated(address agency, uint256 bindingAmount);
+    event GigStarted(address ace, address agency);
+    event GigFlagged(address ace, address agency);
+    event GigCanceled(address ace, address agency);
+    event GigCompleted(address ace, address agency);
+
+    // Errors
+    error InvalidGigStatus();
+    error InvalidGigId();
+
+    constructor(address _agence) Ownable(_agence) {}
 
     receive() external payable {}
 
     fallback() external payable {}
 
+    // External Functions
     function createGig(address _agency, uint256 _bindingAmount) external payable onlyOwner {
         uint256 n = gigsByAddress[_agency].length;
 

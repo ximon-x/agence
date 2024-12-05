@@ -8,7 +8,7 @@ event UserCreated(address userAddress, uint256 amount);
 
 error UserAlreadyCreated();
 
-contract AgenceStaking is Ownable {
+contract AgenceTreasury is Ownable {
     IERC20 public immutable stakingToken;
     IERC20 public immutable rewardsToken;
 
@@ -26,7 +26,7 @@ contract AgenceStaking is Ownable {
 
     mapping(address => User) public users;
 
-    constructor(address governance, address _stakingToken, address _rewardsToken) Ownable(governance) {
+    constructor(address _agence, address _stakingToken, address _rewardsToken) Ownable(_agence) {
         stakingToken = IERC20(_stakingToken);
         rewardsToken = IERC20(_rewardsToken);
     }
