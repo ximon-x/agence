@@ -11,7 +11,6 @@ error UserAlreadyCreated();
 contract AgenceTreasury is Ownable {
     IERC20 public immutable stakingToken;
     IERC20 public immutable rewardsToken;
-    IERC20 public immutable votingToken;
 
     enum Role {
         Ace,
@@ -27,12 +26,9 @@ contract AgenceTreasury is Ownable {
 
     mapping(address => User) public users;
 
-    constructor(address governance, address _stakingToken, address _rewardsToken, address _votingToken)
-        Ownable(governance)
-    {
+    constructor(address _agence, address _stakingToken, address _rewardsToken) Ownable(_agence) {
         stakingToken = IERC20(_stakingToken);
         rewardsToken = IERC20(_rewardsToken);
-        votingToken = IERC20(_votingToken);
     }
 
     receive() external payable {}

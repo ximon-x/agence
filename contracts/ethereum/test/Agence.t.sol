@@ -8,4 +8,12 @@ contract AgenceTest is Test {
     Agence public agence;
 
     function setUp() public {}
+
+    function testDeployment() public {
+        agence = new Agence();
+
+        assertEq(agence.votingToken().totalSupply(), 1000 ether);
+        assertEq(agence.stakingToken().totalSupply(), 1000 ether);
+        assertEq(agence.rewardsToken().totalSupply(), 1000 ether);
+    }
 }

@@ -4,7 +4,8 @@ pragma solidity ^0.8.27;
 import {IGovernor, Governor} from "@openzeppelin/contracts/governance/Governor.sol";
 import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
 
-import {GovernorVotesQuorumFraction} from "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import {GovernorVotesQuorumFraction} from
+    "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import {GovernorTimelockControl} from "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
@@ -19,10 +20,7 @@ contract AgenceGovernor is
     GovernorVotesQuorumFraction,
     GovernorTimelockControl
 {
-    constructor(
-        IVotes _token,
-        TimelockController _timelock
-    )
+    constructor(IVotes _token, TimelockController _timelock)
         Governor("AgenceGovernor")
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(4)
@@ -41,9 +39,7 @@ contract AgenceGovernor is
         return 0;
     }
 
-    function state(
-        uint256 proposalId
-    )
+    function state(uint256 proposalId)
         public
         view
         override(Governor, GovernorTimelockControl)
@@ -52,9 +48,7 @@ contract AgenceGovernor is
         return super.state(proposalId);
     }
 
-    function proposalNeedsQueuing(
-        uint256 proposalId
-    )
+    function proposalNeedsQueuing(uint256 proposalId)
         public
         view
         virtual
@@ -71,14 +65,7 @@ contract AgenceGovernor is
         bytes[] memory calldatas,
         bytes32 descriptionHash
     ) internal override(Governor, GovernorTimelockControl) returns (uint48) {
-        return
-            super._queueOperations(
-                proposalId,
-                targets,
-                values,
-                calldatas,
-                descriptionHash
-            );
+        return super._queueOperations(proposalId, targets, values, calldatas, descriptionHash);
     }
 
     function _executeOperations(
@@ -88,13 +75,7 @@ contract AgenceGovernor is
         bytes[] memory calldatas,
         bytes32 descriptionHash
     ) internal override(Governor, GovernorTimelockControl) {
-        super._executeOperations(
-            proposalId,
-            targets,
-            values,
-            calldatas,
-            descriptionHash
-        );
+        super._executeOperations(proposalId, targets, values, calldatas, descriptionHash);
     }
 
     function _cancel(
@@ -106,12 +87,7 @@ contract AgenceGovernor is
         return super._cancel(targets, values, calldatas, descriptionHash);
     }
 
-    function _executor()
-        internal
-        view
-        override(Governor, GovernorTimelockControl)
-        returns (address)
-    {
+    function _executor() internal view override(Governor, GovernorTimelockControl) returns (address) {
         return super._executor();
     }
 }

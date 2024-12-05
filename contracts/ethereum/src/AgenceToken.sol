@@ -7,7 +7,9 @@ import {ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Vo
 import {Nonces} from "@openzeppelin/contracts/utils/Nonces.sol";
 
 contract AgenceToken is ERC20, ERC20Permit, ERC20Votes {
-    constructor() ERC20("AgenceToken", "ATK") ERC20Permit("AgenceToken") {}
+    constructor(uint256 initialSupply, address creator) ERC20("AgenceToken", "ATK") ERC20Permit("AgenceToken") {
+        _mint(creator, initialSupply);
+    }
 
     function _update(address from, address to, uint256 amount) internal override(ERC20, ERC20Votes) {
         super._update(from, to, amount);
