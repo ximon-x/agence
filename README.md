@@ -23,19 +23,23 @@ Agence aims to be a one-stop shop for job seekers and job providers by creating 
 </div>
 
 ### Registration
+
 To join Agence, users deposit USDe (currently a mock token freely available) which is then staked to earn yield. In return, users receive ATK, a **LayerZero OFT**; ATK is also the governance token of the protocol which allows users to participate in platform decisions. Users can easily withdraw their deposits by swapping ATK back to USDe at any time unless their funds are locked in an active gig.
 
 ### Gigs
-To create a gig, employers ("Agencies") must lock up a "binding amount" of their USDe, acting as a security deposit. This deposit can be slashed if the agency repeatedly fails to hire someone or is found to be scamming freelancers ("Aces").  Aces also need to have funds matching the binding amount to apply for gigs. When an Ace is hired and the gig begins, both the agency's and the Ace's USDe are locked to ensure commitment and fair play.
+
+To create a gig, employers ("Agencies") must lock up a "binding amount" of their USDe, acting as a security deposit. This deposit can be slashed if the agency repeatedly fails to hire someone or is found to be scamming freelancers ("Aces"). Aces also need to have funds matching the binding amount to apply for gigs. When an Ace is hired and the gig begins, both the agency's and the Ace's USDe are locked to ensure commitment and fair play.
 
 ### Governance
+
 Agence has a built-in system to identify and penalize bad actors. Any user can initiate an investigation into suspicious behaviour, and the community votes to determine guilt. Future plans include integrating video conferencing with AI-generated summaries to provide evidence and support informed decision-making. Penalties are categorized as follows:
 
 - Scam (50% slash): Serious offences like attempting to steal personal information (e.g., private keys, credit card details).
 - Sham (25% slash): Dishonest behaviour such as agencies creating fake job postings for marketing purposes.
 - Spam (5% slash): Nuisance actions like Aces submitting irrelevant applications.
 
- ### Rewards
+### Rewards
+
 Agence encourages active participation in governance by rewarding users who vote on proposals with sUSDe tokens. These rewards incentivize users to contribute to the platform's security and help ensure informed decision-making. This system fosters a safer environment for all users by promoting collective responsibility and discouraging malicious activities that could jeopardize their stake.
 
 ## 🛠️ Technologies
@@ -44,7 +48,7 @@ Agence leverages a few key technologies:
 
 1. **Ethena's USDe**: This stablecoin is used for all transactions on the platform. Agencies lock up USDe as a security deposit when creating gigs, ensuring commitment and discouraging scams. This deposit is staked to earn yield.
 
-2. **LayerZero**:  Agence utilizes LayerZero's OFT (Omnichain Fungible Token) technology for its governance token (ATK). This allows users to participate in platform governance from various EVM-compatible blockchains. Future development aims to make the governance contract an OApp, enabling cross-chain voting from any EVM chain.
+2. **LayerZero**: Agence utilizes LayerZero's OFT (Omnichain Fungible Token) technology for its governance token (ATK). This allows users to participate in platform governance from various EVM-compatible blockchains. Future development aims to make the governance contract an OApp, enabling cross-chain voting from any EVM chain.
 
 3. **Base Blockchain**: This is the main blockchain where Agence is deployed and where all core contracts reside.
 
