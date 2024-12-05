@@ -2,25 +2,25 @@
 pragma solidity ^0.8.27;
 
 contract Agence {
-    address public immutable governanceContract;
-    address public immutable stakingContract;
-    address public immutable gigsContract;
+    address public immutable governorAddress;
+    address public immutable treasuryAddress;
+    address public immutable gigsAddress;
 
-    constructor(address _governanceContract, address _stakingContract, address _gigsContract) {
-        governanceContract = _governanceContract;
-        stakingContract = _stakingContract;
-        gigsContract = _gigsContract;
+    constructor(address _governorAddress, address _treasuryAddress, address _gigsAddress) {
+        governorAddress = _governorAddress;
+        treasuryAddress = _treasuryAddress;
+        gigsAddress = _gigsAddress;
     }
 
-    function getGovernance() external view returns (address) {
-        return governanceContract;
+    function getGovernor() external view returns (address) {
+        return governorAddress;
     }
 
-    function getStaking() external view returns (address) {
-        return stakingContract;
+    function getTreasury() external view returns (address) {
+        return treasuryAddress;
     }
 
     function getGigs() external view returns (address) {
-        return gigsContract;
+        return gigsAddress;
     }
 }

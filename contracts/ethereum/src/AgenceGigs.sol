@@ -36,7 +36,7 @@ contract AgenceGigs is Ownable {
 
     mapping(address => Gig[]) public gigsByAddress;
 
-    constructor(address governance) Ownable(governance) {}
+    constructor(address governor) Ownable(governor) {}
 
     receive() external payable {}
 
