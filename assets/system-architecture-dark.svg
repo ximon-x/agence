@@ -1,6 +1,7 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1337.7168972504483 819.3319925184755"
-    width="1337.7168972504483" height="819.3319925184755">
+    width="1337.7168972504483" height="819.3319925184755"
+    filter="invert(93%) hue-rotate(180deg)">
     <symbol id="image-0dbc09cc5f8aaadd1ab8b9fb0eac38f663517222">
         <image
             href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXItcm91bmQtbWludXMiPjxwYXRoIGQ9Ik0yIDIxYTggOCAwIDAgMSAxMy4yOTItNiIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iOCIgcj0iNSIvPjxwYXRoIGQ9Ik0yMiAxOWgtNiIvPjwvc3ZnPg=="
@@ -41,6 +42,7 @@
             href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzOTEiIGhlaWdodD0iMzkxIiB2aWV3Qm94PSIwIDAgMzkxIDM5MSIgZmlsbD0ibm9uZSI+CiAgICA8cGF0aCBkPSJNMTk1LjA5NSAzLjUyODUzSDE5NS4xMDJDMzAwLjkwMSAzLjUyODUzIDM4Ni42NjggODkuMjk1NSAzODYuNjY4IDE5NS4wOTVWMTk1LjEwMkMzODYuNjY4IDMwMC45MDEgMzAwLjkwMSAzODYuNjY4IDE5NS4xMDIgMzg2LjY2OEgxOTUuMDk1Qzg5LjI5NTUgMzg2LjY2OCAzLjUyODUzIDMwMC45MDEgMy41Mjg1MyAxOTUuMTAyVjE5NS4wOTVDMy41Mjg1MyA4OS4yOTU1IDg5LjI5NTUgMy41Mjg1MyAxOTUuMDk1IDMuNTI4NTNaIiBmaWxsPSJibGFjayIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSI3LjA1NzA2Ii8+CiAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE2My44IDM0LjU1OTFDODguNDkyMSA0OS4wNjQ3IDMxLjYwNjQgMTE1LjMyIDMxLjYwNjQgMTk0Ljg2MkMzMS42MDY0IDI3NC40MDQgODguNDkyMSAzNDAuNjU5IDE2My44IDM1NS4xNjVWMzM5Ljg2NUM5Ni44MjkzIDMyNS41ODkgNDYuNTk5MSAyNjYuMDkxIDQ2LjU5OTEgMTk0Ljg2MkM0Ni41OTkxIDEyMy42MzMgOTYuODI5MyA2NC4xMzU1IDE2My44IDQ5Ljg1OTRWMzQuNTU5MVpNMjI2LjIwMSA0OS45MTk0VjM0LjYxMzNDMzAxLjM3IDQ5LjIyOTEgMzU4LjExNSAxMTUuNDE5IDM1OC4xMTUgMTk0Ljg2MkMzNTguMTE1IDI3NC4zMDUgMzAxLjM3IDM0MC40OTUgMjI2LjIwMSAzNTUuMTExVjMzOS44MDVDMjkzLjAzMiAzMjUuNDIzIDM0My4xMjIgMjY1Ljk5MiAzNDMuMTIyIDE5NC44NjJDMzQzLjEyMiAxMjMuNzMyIDI5My4wMzIgNjQuMzAxNCAyMjYuMjAxIDQ5LjkxOTRaIiBmaWxsPSJ3aGl0ZSIvPgogICAgPHBhdGggZD0iTTIxOC4xMTkgMTg5LjQwN0MyMzAuNTc2IDE5MS43ODEgMjQwLjIzNyAxOTYuMzU5IDI0Ny4xMDQgMjAzLjE0MkMyNTMuOTcxIDIwOS43NTUgMjU3LjQwNSAyMTguMjMzIDI1Ny40MDUgMjI4LjU3N1YyNDQuODU2QzI1Ny40MDUgMjU3LjIzNCAyNTIuOTMzIDI2Ny4yMzkgMjQzLjk5IDI3NC44NjlDMjM1LjA0NyAyODIuMzMgMjIzLjMxIDI4Ni4wNjEgMjA4Ljc3NyAyODYuMDYxSDIwMy43NDdWMzEyLjAwNUgxODYuNVYyODYuMDYxSDE4MS4yM0MxNzEuNjQ4IDI4Ni4wNjEgMTYzLjE4NCAyODMuOTQxIDE1NS44MzggMjc5LjcwMkMxNDguNDkyIDI3NS4yOTMgMTQyLjc0MyAyNjkuMTg5IDEzOC41OTEgMjYxLjM4OEMxMzQuNTk5IDI1My40MTkgMTMyLjYwMyAyNDQuMjYyIDEzMi42MDMgMjMzLjkxOEgxNDkuODVDMTQ5Ljg1IDI0NC40MzIgMTUyLjcyNCAyNTIuOTk1IDE1OC40NzMgMjU5LjYwOEMxNjQuMzgyIDI2Ni4wNTIgMTcyLjEyNyAyNjkuMjczIDE4MS43MDkgMjY5LjI3M0gyMDguMjk4QzIxNy43MiAyNjkuMjczIDIyNS4zMDYgMjY3LjA2OSAyMzEuMDU1IDI2Mi42NkMyMzYuODA0IDI1OC4wODIgMjM5LjY3OCAyNTIuMTQ3IDIzOS42NzggMjQ0Ljg1NlYyMjguNTc3QzIzOS42NzggMjIyLjgxMiAyMzcuNTIyIDIxNy44OTQgMjMzLjIxMSAyMTMuODI1QzIyOS4wNTkgMjA5Ljc1NSAyMjMuMzEgMjA3LjEyNyAyMTUuOTY0IDIwNS45NEwxNzIuODQ2IDE5OC4zMDlDMTYwLjcwOSAxOTYuMTA1IDE1MS4yODcgMTkxLjUyNiAxNDQuNTggMTg0LjU3NEMxMzcuODcyIDE3Ny42MjIgMTM0LjUxOSAxNjguODg5IDEzNC41MTkgMTU4LjM3NlYxNDQuNjQxQzEzNC41MTkgMTMyLjI2MiAxMzguODMxIDEyMi40MjggMTQ3LjQ1NCAxMTUuMTM2QzE1Ni4yMzcgMTA3LjY3NSAxNjcuODE1IDEwMy45NDUgMTgyLjE4OCAxMDMuOTQ1SDE4Ni41Vjc4LjAwMDdIMjAzLjc0N1YxMDMuOTQ1SDIwOS4yNTZDMjIyLjgzIDEwMy45NDUgMjMzLjc3IDEwOC4zNTMgMjQyLjA3NCAxMTcuMTcxQzI1MC4zNzggMTI1LjgxOSAyNTQuNTMgMTM3LjI2NSAyNTQuNTMgMTUxLjUwOEgyMzcuMjgzQzIzNy4yODMgMTQyLjE4MiAyMzQuNzI4IDEzNC43MjEgMjI5LjYxOCAxMjkuMTI1QzIyNC41MDcgMTIzLjUzIDIxNy43MiAxMjAuNzMyIDIwOS4yNTYgMTIwLjczMkgxODIuMTg4QzE3My4wODUgMTIwLjczMiAxNjUuODE5IDEyMi45MzYgMTYwLjM5IDEyNy4zNDVDMTU0Ljk2IDEzMS41ODQgMTUyLjI0NSAxMzcuMzUgMTUyLjI0NSAxNDQuNjQxVjE1OC4zNzZDMTUyLjI0NSAxNjQuMzExIDE1NC4yNDEgMTY5LjMxMyAxNTguMjM0IDE3My4zODNDMTYyLjM4NiAxNzcuNDUyIDE2OC4wNTUgMTgwLjE2NSAxNzUuMjQxIDE4MS41MjJMMjE4LjExOSAxODkuNDA3WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+"
             preserveAspectRatio="none" width="100%" height="100%"></image>
     </symbol>
+
     <!-- svg-source:excalidraw -->
 
     <defs>
@@ -52,8 +54,6 @@
         </style>
 
     </defs>
-    <rect x="0" y="0" width="1337.7168972504483" height="819.3319925184755"
-        fill="#ffffff"></rect>
     <g stroke-linecap="round"
         transform="translate(941.7607732772183 409.63295003430994) rotate(0 185.80542605436904 31.76453055708876)">
         <path
@@ -141,7 +141,7 @@
             style="white-space: pre;" direction="ltr"
             dominant-baseline="alphabetic">Ace</text></g>
     <g
-        transform="translate(520.0660881377485 702.4095329913448) rotate(0 25.928571428571445 25.928571428571388)">
+        transform="translate(520.0660881377485 702.4095329913448) rotate(0 25.928571428571388 25.928571428571388)">
         <use href="#image-26413e78ec18a095fa0c78d9f7a7b28851ed66d9" width="52"
             height="52" opacity="1"></use>
     </g>
@@ -307,7 +307,7 @@
             stroke="transparent" stroke-width="1" fill="none"></path>
     </g>
     <g
-        transform="translate(460.16950741927997 427.51782972675716) rotate(0 43.999946594238224 12.5)">
+        transform="translate(460.16950741927997 427.51782972675716) rotate(0 43.99994659423828 12.5)">
         <text x="43.99994659423828" y="17.5"
             font-family="Comic Shanns, Segoe UI Emoji" font-size="20px"
             fill="#1e1e1e" text-anchor="middle" style="white-space: pre;"
@@ -362,7 +362,8 @@
     <mask></mask>
     <g
         transform="translate(264.60155502831344 435.95653223704534) rotate(0 12.786178645504151 12.786178645504123)">
-        <use href="#image-45abb68399f534325d787ed9d5b871ce49bf8a20" width="26"
+        <use href="#image-45abb68399f534325d787ed9d5b871ce49bf8a20"
+            filter="invert(100%) hue-rotate(180deg) saturate(1.25)" width="26"
             height="26" opacity="1"></use>
     </g>
     <g stroke-linecap="round">
@@ -430,7 +431,7 @@
     <mask id="mask-7BqMvdo4MJzm_YicUkE-3">
         <rect x="0" y="0" fill="#fff" width="442.64568539938386"
             height="859.4134402395041"></rect>
-        <rect x="280.8845800026593" y="625.165529619233" fill="#000"
+        <rect x="280.8845800026594" y="625.165529619233" fill="#000"
             width="52.80010986328125" height="20" opacity="1"></rect>
     </mask>
     <g
@@ -526,11 +527,11 @@
     <mask id="mask-2MRjLf6nDnCIrR3Izi4VT">
         <rect x="0" y="0" fill="#fff" width="660.6209717928382"
             height="891.9741742642755"></rect>
-        <rect x="532.8681558780322" y="637.2042951968208" fill="#000"
+        <rect x="532.8681558780324" y="637.204295196821" fill="#000"
             width="44.2000732421875" height="20" opacity="1"></rect>
     </mask>
     <g
-        transform="translate(532.8681558780322 637.2042951968211) rotate(0 22.100036621093864 10)">
+        transform="translate(532.8681558780322 637.2042951968209) rotate(0 22.10003662109375 10)">
         <text x="22.10003662109375" y="14"
             font-family="Comic Shanns, Segoe UI Emoji" font-size="16px"
             fill="#1e1e1e" text-anchor="middle" style="white-space: pre;"
@@ -558,11 +559,11 @@
     <mask id="mask--iQvff25nCs_K8iJxH8Ou">
         <rect x="0" y="0" fill="#fff" width="852.5296018006188"
             height="873.4718110499343"></rect>
-        <rect x="644.0866981783279" y="628.4156726700087" fill="#000"
+        <rect x="644.0866981783279" y="628.4156726700089" fill="#000"
             width="44.2000732421875" height="20" opacity="1"></rect>
     </mask>
     <g
-        transform="translate(644.0866981783279 628.4156726700088) rotate(0 22.100036621093636 10)">
+        transform="translate(644.0866981783279 628.415672670009) rotate(0 22.100036621093636 10)">
         <text x="22.10003662109375" y="14"
             font-family="Comic Shanns, Segoe UI Emoji" font-size="16px"
             fill="#1e1e1e" text-anchor="middle" style="white-space: pre;"
@@ -656,7 +657,7 @@
             style="white-space: pre;" direction="ltr"
             dominant-baseline="alphabetic">Agency</text></g>
     <g
-        transform="translate(995.938542512406 194.8738684648496) rotate(0 11.17412583973055 11.174125839730507)">
+        transform="translate(995.938542512406 194.8738684648496) rotate(0 11.17412583973055 11.174125839730493)">
         <use href="#image-fd18a0330c854096ddf4f0f848a5e78ba375edf1" width="22"
             height="22" opacity="1"></use>
     </g>
