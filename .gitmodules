@@ -7,3 +7,6 @@
 [submodule "contracts/ethereum/lib/layerzero-v2"]
 	path = contracts/ethereum/lib/layerzero-v2
 	url = https://github.com/LayerZero-Labs/layerzero-v2
+[submodule "contracts/ethereum/lib/devtools"]
+	path = contracts/ethereum/lib/devtools
+	url = https://github.com/LayerZero-Labs/devtools
