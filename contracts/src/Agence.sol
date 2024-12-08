@@ -73,6 +73,22 @@ contract Agence is OApp {
         );
     }
 
+    /// @notice Estimates the gas associated with sending a message.
+    /// @param _dstEid The endpoint ID of the destination chain.
+    /// @param _message The message to be sent.
+    /// @param _options The message execution options (e.g. gas to use on destination).
+    /// @return nativeFee Estimated gas fee in native gas.
+    /// @return lzTokenFee Estimated gas fee in ZRO token.
+    function estimateFee(
+        uint32 _dstEid,
+        string memory _message,
+        bytes calldata _options
+    ) public view returns (uint256 nativeFee, uint256 lzTokenFee) {
+        bytes memory _payload = abi.encode(_message);
+        MessagingFee memory fee = _quote(_dstEid, _payload, _options, false);
+        return (fee.nativeFee, fee.lzTokenFee);
+    }
+
     /**
      * @dev Called when data is received from the protocol. It overrides the equivalent function in the parent contract.
      * Protocol messages are defined as packets, comprised of the following parameters.
