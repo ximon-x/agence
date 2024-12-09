@@ -35,9 +35,9 @@ contract Agence is OApp {
         address _endpoint,
         address _owner
     ) OApp(_endpoint, _owner) Ownable(_owner) {
-        votingToken = new AgenceToken(INITIAL_SUPPLY, msg.sender);
-        rewardsToken = new sUSDe(INITIAL_SUPPLY, msg.sender);
-        stakingToken = new USDe(INITIAL_SUPPLY, msg.sender);
+        votingToken = new AgenceToken(INITIAL_SUPPLY, address(this));
+        rewardsToken = new sUSDe(INITIAL_SUPPLY, address(this));
+        stakingToken = new USDe(INITIAL_SUPPLY, address(this));
 
         // TODO: Uncomment this line once the AgenceGovernor contract is ready
         // governor = new AgenceGovernor(msg.sender);
