@@ -3,24 +3,23 @@ pragma solidity ^0.8.27;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
+enum Status {
+    Pending,
+    Active,
+    Canceled,
+    Flagged,
+    Completed
+}
+
+struct Gig {
+    uint256 id;
+    address ace;
+    address agency;
+    Status status;
+    uint256 bindingAmount;
+}
+
 contract AgenceGigs is Ownable {
-    // Type Declarations
-    enum Status {
-        Pending,
-        Active,
-        Canceled,
-        Flagged,
-        Completed
-    }
-
-    struct Gig {
-        uint256 id;
-        address ace;
-        address agency;
-        Status status;
-        uint256 bindingAmount;
-    }
-
     // State Variables
     mapping(address => Gig[]) public gigsByAddress;
 

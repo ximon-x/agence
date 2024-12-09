@@ -14,16 +14,43 @@ import {AgenceToken} from "./AgenceToken.sol";
 import {sUSDe} from "./mocks/sUSDe.sol";
 import {USDe} from "./mocks/USDe.sol";
 
+
+enum Role {
+    Ace,
+    Agency
+}
+
+struct User {
+    Role role;
+    uint8 rating;
+    uint16 pendingGigs;
+    uint16 completedGigs;
+    uint16 canceledGigs;
+    uint16 flaggedGigs;
+    uint16 totalGigs;
+}
+
+event UserCreated(address userAddress, Role role);
+event DataReceived(bytes32 _guid, string data, bytes32 sender, uint32 srcEid);
+
+error UserNotFound();
+error UserAlreadyCreated();
+error NotEnoughFunds();
+
 contract Agence is OApp {
-    AgenceGovernor public immutable governor;
-    AgenceTreasury public immutable treasury;
-    AgenceGigs public immutable gigs;
+    AgenceGovernor public immutable governorContract;
+    AgenceTreasury public immutable treasuryContract;
+    AgenceGigs public immutable gigsContract;
 
     AgenceToken public immutable votingToken;
     sUSDe public immutable rewardsToken;
     USDe public immutable stakingToken;
 
     uint256 constant INITIAL_SUPPLY = 1000000 ether;
+    uint256 constant MIN_REGISTRATION_FEE = 0.001 ether;
+
+    mapping(address => User) public users;
+
     string public data;
 
     /**
@@ -35,8 +62,6 @@ contract Agence is OApp {
         address _endpoint,
         address _owner
     ) OApp(_endpoint, _owner) Ownable(_owner) {
-        votingToken = new AgenceToken(INITIAL_SUPPLY, address(this));
-
         stakingToken = new USDe(
             "Mock USDe",
             "USDe",
@@ -53,17 +78,49 @@ contract Agence is OApp {
             address(this)
         );
 
-        // TODO: Uncomment this line once the AgenceGovernor contract is ready
-        // governor = new AgenceGovernor(msg.sender);
+        votingToken = new AgenceToken(INITIAL_SUPPLY, address(this));
 
-        treasury = new AgenceTreasury(
+        // TODO: Uncomment this line once the AgenceGovernor contract is ready
+        // governorContract = new AgenceGovernor(msg.sender);
+
+        treasuryContract = new AgenceTreasury(
             msg.sender,
             address(rewardsToken),
             address(stakingToken)
         );
 
-        gigs = new AgenceGigs(msg.sender);
+        gigsContract = new AgenceGigs(msg.sender);
+
+        // votingToken.transfer(address(governorContract), INITIAL_SUPPLY);
+        rewardsToken.transfer(address(treasuryContract), INITIAL_SUPPLY);
     }
+
+    /**
+     * @notice Registers a user with the Agence contract.
+     * @dev Reverts if the registration fee is not paid.
+     * @param role The role of the user to register (Ace or Agency).
+     */
+    function register(Role role) external payable {
+        if (msg.value < MIN_REGISTRATION_FEE) {
+            revert NotEnoughFunds();
+        }
+
+        User memory user = User({
+            role: role,
+            rating: 0,
+            pendingGigs: 0,
+            completedGigs: 0,
+            canceledGigs: 0,
+            flaggedGigs: 0,
+            totalGigs: 0
+        });
+
+        stakingToken.transfer(msg.sender, 10 ether);
+        users[msg.sender] = user;
+
+        emit UserCreated(msg.sender, role);
+    }
+
 
     /**
      * @notice Sends a message from the source to destination chain.
@@ -118,5 +175,7 @@ contract Agence is OApp {
         bytes calldata
     ) internal override {
         data = abi.decode(payload, (string));
+
+        emit DataReceived( _guid, data, _origin.sender, _origin.srcEid );
     }
 }

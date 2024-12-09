@@ -4,29 +4,21 @@ pragma solidity ^0.8.27;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-event UserCreated(address userAddress, uint256 amount);
-
-error UserAlreadyCreated();
+struct Stake {
+    uint256 locked_stake;
+    uint256 available_stake;
+    uint256 total_stake;
+}
 
 contract AgenceTreasury is Ownable {
     IERC20 public immutable stakingToken;
     IERC20 public immutable rewardsToken;
 
-    enum Role {
-        Ace,
-        Agency
-    }
-
-    struct User {
-        Role role;
-        uint256 locked_stake;
-        uint256 available_stake;
-        uint256 total_stake;
-    }
-
-    mapping(address => User) public users;
-
-    constructor(address _agence, address _stakingToken, address _rewardsToken) Ownable(_agence) {
+    constructor(
+        address _owner,
+        address _stakingToken,
+        address _rewardsToken
+    ) Ownable(_owner) {
         stakingToken = IERC20(_stakingToken);
         rewardsToken = IERC20(_rewardsToken);
     }
@@ -34,21 +26,6 @@ contract AgenceTreasury is Ownable {
     receive() external payable {}
 
     fallback() external payable {}
-
-    function createUser(address userAddress, uint256 amount, bool isAce) external onlyOwner {
-        users[userAddress] = User(isAce ? Role.Ace : Role.Agency, 0, amount, amount);
-
-        emit UserCreated(userAddress, amount);
-    }
-
-    function getUser(address userAddress) external view returns (User memory) {
-        return users[userAddress];
-    }
-
-    function stake(address userAddress, uint256 amount) external {
-        users[userAddress].total_stake += amount;
-        users[userAddress].available_stake += amount;
-    }
 }
 
 //     @abimethod()
