@@ -23,7 +23,7 @@ contract Agence is OApp {
     sUSDe public immutable rewardsToken;
     USDe public immutable stakingToken;
 
-    uint256 constant INITIAL_SUPPLY = 1000 ether;
+    uint256 constant INITIAL_SUPPLY = 1000000 ether;
     string public data;
 
     /**
@@ -36,8 +36,22 @@ contract Agence is OApp {
         address _owner
     ) OApp(_endpoint, _owner) Ownable(_owner) {
         votingToken = new AgenceToken(INITIAL_SUPPLY, address(this));
-        rewardsToken = new sUSDe(INITIAL_SUPPLY, address(this));
-        stakingToken = new USDe(INITIAL_SUPPLY, address(this));
+
+        stakingToken = new USDe(
+            "Mock USDe",
+            "USDe",
+            INITIAL_SUPPLY,
+            _endpoint,
+            address(this)
+        );
+
+        rewardsToken = new sUSDe(
+            "Mock sUSDe",
+            "sUSDe",
+            INITIAL_SUPPLY,
+            _endpoint,
+            address(this)
+        );
 
         // TODO: Uncomment this line once the AgenceGovernor contract is ready
         // governor = new AgenceGovernor(msg.sender);
