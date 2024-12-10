@@ -82,8 +82,8 @@ contract Agence is OApp {
         // Deploy the Agence voting token and set the Agence contract as the
         // voting token's delegate
         votingToken = new AgenceToken(
-            "Agence Voting Token",
-            "AVT",
+            "Agence",
+            "AGE",
             address(this)
         );
 
@@ -98,7 +98,7 @@ contract Agence is OApp {
         );
 
         // Deploy the AgenceGigs contract
-        gigsContract = new AgenceGigs(this, treasuryContract);
+        gigsContract = new AgenceGigs(this);
 
         stakingToken.mint(address(this), INITIAL_SUPPLY);
         votingToken.mint(address(treasuryContract), INITIAL_SUPPLY);
@@ -115,13 +115,8 @@ contract Agence is OApp {
      */
     function register(Role role) external payable {
         // Sanity checks
-        if (msg.value < MIN_REGISTRATION_FEE) {
-            revert NotEnoughFunds();
-        }
-
-        if (users[msg.sender].isValid) {
-            revert UserAlreadyCreated();
-        }
+        require (msg.value > MIN_REGISTRATION_FEE,  NotEnoughFunds());
+        require(!users[msg.sender].isValid, UserAlreadyCreated());
 
         // Create the user 
         User memory user = User({
@@ -135,7 +130,7 @@ contract Agence is OApp {
             totalGigs: 0
         });
 
-        // Transfer the registration fee
+        // Transfer 10 USDe tokens to the user.
         stakingToken.transfer(msg.sender, 10 ether);
         users[msg.sender] = user;
 
@@ -164,12 +159,14 @@ contract Agence is OApp {
         );
     }
 
-    /// @notice Estimates the gas associated with sending a message.
-    /// @param _dstEid The endpoint ID of the destination chain.
-    /// @param _message The message to be sent.
-    /// @param _options The message execution options (e.g. gas to use on destination).
-    /// @return nativeFee Estimated gas fee in native gas.
-    /// @return lzTokenFee Estimated gas fee in ZRO token.
+    /**
+    * @notice Estimates the gas associated with sending a message.
+    * @param _dstEid The endpoint ID of the destination chain.
+    * @param _message The message to be sent.
+    * @param _options The message execution options (e.g. gas to use on destination).
+    * @return nativeFee Estimated gas fee in native gas.
+    * @return lzTokenFee Estimated gas fee in ZRO token.
+    */
     function estimateFee(
         uint32 _dstEid,
         string memory _message,

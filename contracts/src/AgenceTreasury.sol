@@ -8,18 +8,23 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {AgenceGovernor} from "./AgenceGovernor.sol";
 import {AgenceTreasury} from "./AgenceTreasury.sol";
 import {AgenceGigs} from "./AgenceGigs.sol";
-import {Agence} from "./Agence.sol";
+import {Agence, User} from "./Agence.sol";
 
 struct Stake {
     uint256 locked_stake;
     uint256 available_stake;
-    uint256 total_stake;
 }
 
-event TokenDeposited(address indexed user, address indexed token, uint256 amount);
+event StakeDeposited(address indexed user, address indexed token, uint256 amount);
+event StakeWithdrawn(address indexed user, address indexed token, uint256 amount);
+event StakeLocked(address indexed user, address indexed token, uint256 amount);
+event StakeUnlocked(address indexed user, address indexed token, uint256 amount);
+event StakeSlashed(address indexed offender, address indexed proposer, address indexed token, uint256 amount);
+event RewardsClaimed(address indexed user, address indexed token, uint256 amount);
 
 error UserNotRegistered();
 error DepositTooSmall();
+error TransferFailed();
 error InsufficientFunds();
 error InsufficientTokenAllowance();
 
@@ -34,6 +39,13 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
 
     mapping (address => Stake) public stakes;
 
+    modifier onlyUsers {
+        User memory user = agenceContract.getUser(msg.sender);
+        require(user.isValid, UserNotRegistered());
+
+        _;
+    }
+
     constructor(
         Agence _agence,
         IERC20 _stakingToken,
@@ -47,177 +59,171 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
         votingToken = _votingToken;
     }
 
-    function init (
-    ) external onlyOwner {
+    /**
+     * @notice Locks a user's stake.
+     * @notice Stake locking is required in order to participate in a gig.
+     * @dev Reverts if the user is not registered.
+     * @dev Reverts if the user does not have enough available stake.
+     * @param amount The amount of stake to be locked.
+     * @param userAddress The address of the user to lock the stake of.
+     */
+    function lock(uint256 amount, address userAddress) external onlyOwner {
+        User memory user = agenceContract.getUser(userAddress);
+
+        require(user.isValid, UserNotRegistered()); 
+        require(amount <= stakes[userAddress].available_stake, InsufficientFunds());
+
+        stakes[userAddress].locked_stake += amount;
+        stakes[userAddress].available_stake -= amount;
+
+        emit StakeLocked(userAddress, address(stakingToken), amount);
     }
 
-    function deposit(uint256 amount) external nonReentrant {
+    /**
+     * @notice Unlocks a user's stake.
+     * @notice Stake unlocking occurs when a gig is completed or canceled.
+     * @dev Reverts if the user is not registered.
+     * @dev Reverts if the user does not have enough locked stake.
+     * @param amount The amount of stake to be unlocked.
+     * @param userAddress The address of the user to unlock the stake of.
+     */
+    function unlock(uint256 amount, address userAddress) external onlyOwner {
+        User memory user = agenceContract.getUser(userAddress);
+
+        require(user.isValid, UserNotRegistered());
+        require(amount <= stakes[userAddress].locked_stake, InsufficientFunds());
+
+        stakes[userAddress].locked_stake -= amount;
+        stakes[userAddress].available_stake += amount;
+
+        emit StakeUnlocked(userAddress, address(stakingToken), amount);
+    }
+
+    /**
+     * @notice Slashes a user's stake.
+     * @notice Stake slashing occurs when a user is penalized for misbehavior.
+     * @dev Reverts if the offender is not registered.
+     * @dev Reverts if the proposer is not registered.
+     * @dev Reverts if the offender does not have enough locked stake.
+     * @param amount The amount of stake to be slashed.
+     * @param offenderAddress The address of the user to slash the stake of.
+     * @param proposerAddress The address of the user who proposed the slash (Ace or Agency).
+     */
+    function slash(uint256 amount, address offenderAddress, address proposerAddress) external onlyOwner {
+        User memory offender = agenceContract.getUser(offenderAddress);
+        User memory proposer = agenceContract.getUser(proposerAddress);
+        
+        require(offender.isValid, UserNotRegistered());
+        require(proposer.isValid, UserNotRegistered());
+        require(amount <= stakes[offenderAddress].locked_stake, InsufficientFunds());
+
+        stakes[offenderAddress].locked_stake -= amount;
+        stakes[proposerAddress].locked_stake += amount;
+
+        emit StakeSlashed(offenderAddress, proposerAddress, address(stakingToken), amount);
+    }
+
+    /** 
+     * @notice Deposits a user's stake.
+     * @notice Sends the equivalent AGE tokens to the user.
+     * @dev Reverts if the stake is less than the minimum stake.
+     * @dev Reverts if the user does not have enough funds.
+     * @dev Reverts if the user has not approved the amount of tokens to be transferred.
+     * @param amount The amount of the stake to be deposited.
+    */
+    function deposit(uint256 amount) external onlyUsers nonReentrant {
         // Sanity Checks
-        if (amount < MIN_STAKE) {
-            revert DepositTooSmall();
-        }
+        require(amount >= MIN_STAKE, DepositTooSmall());
 
-        if (stakingToken.balanceOf(msg.sender) < amount) {
-            revert InsufficientFunds();
-        }
+        require(
+            stakingToken.balanceOf(msg.sender) >= amount, 
+            InsufficientFunds()
+        );
 
-        if (stakingToken.allowance(msg.sender, address(this)) < amount) {
-            revert InsufficientTokenAllowance();
-        }
+        require(
+            stakingToken.allowance(msg.sender, address(this)) >= amount, 
+            InsufficientTokenAllowance()
+        );
+
+        require (
+            votingToken.balanceOf(address(this)) >= amount, 
+            InsufficientFunds()
+        );
         
         // Transfer tokens from user to contract
         bool success = stakingToken.transferFrom(msg.sender, address(this), amount);
-        require(success, "Token transfer failed");
+        require(success, TransferFailed());
 
+        // Transfer tokens from contract to user
         success = votingToken.transferFrom(msg.sender, address(this), amount);
-        require(success, "Token transfer failed");
+        require(success, TransferFailed());
         
-        // Update user's deposited balance
-        stakes[msg.sender].total_stake += amount;
+        // Update user's balance
         stakes[msg.sender].available_stake += amount;
         
         // Emit deposit event
-        emit TokenDeposited(msg.sender, address(stakingToken), amount);
+        emit StakeDeposited(msg.sender, address(stakingToken), amount);
+    }
+
+    /**
+     * @notice Withdraws a user's stake.
+     * @notice The equivalent AGE tokens are sent to the contract.
+     * @dev Reverts if the user does not have enough available stake.
+     * @dev Reverts if the transfer fails.
+     * @param amount The amount of the stake to be withdrawn.
+    */
+    function withdraw(uint256 amount) external onlyUsers nonReentrant {
+        // Sanity Checks
+        require(stakes[msg.sender].available_stake <= amount, InsufficientFunds());
+
+        require(
+            votingToken.balanceOf(msg.sender) >= amount, 
+            InsufficientFunds()
+        );
+
+        require(
+            votingToken.allowance(msg.sender, address(this)) >= amount, 
+            InsufficientTokenAllowance()
+        );
+
+        require (
+            stakingToken.balanceOf(address(this)) >= amount, 
+            InsufficientFunds()
+        );
+        
+        // Transfer tokens from contract to user
+        bool success = stakingToken.transfer(msg.sender, amount);
+        require(success, TransferFailed());
+
+        // Transfer tokens from user to contract
+        success = votingToken.transferFrom(msg.sender, address(this), amount);
+        require(success, TransferFailed());
+        
+        // Update user's balance
+        stakes[msg.sender].available_stake -= amount;
+        
+        // Emit withdraw event
+        emit StakeWithdrawn(msg.sender, address(stakingToken), amount);
+    }
+
+    /**
+     * @notice Claims rewards for the user.
+     * @notice Simulates a claim of accrued rewards for the user.
+     * @dev Reverts if the contract does not have enough funds.
+     */
+    function claim() external onlyUsers nonReentrant {
+        uint256 amount = 1 ether;
+
+        require(
+            stakingToken.balanceOf(address(this)) >= amount, 
+            InsufficientFunds()
+        );
+
+        // Transfer tokens from contract to user
+        bool success = stakingToken.transfer(msg.sender, amount);
+        require(success, TransferFailed());
+
+        // Emit rewards claimed event
+        emit RewardsClaimed(msg.sender, address(stakingToken), amount);
     }
 }
-
-//     @abimethod()
-//     def stake(self, user_address: Address, amount: UInt64) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert user_address.native in self.users, "User not found"
-
-//         user = self.users[user_address.native].copy()
-
-//         new_total_stake = user.total_stake.native + amount.native
-//         new_available_stake = new_total_stake - user.locked_stake.native
-
-//         self.users[user_address.native] = User(
-//             role=user.role,
-//             locked_stake=UInt64(user.locked_stake.native + amount.native),
-//             available_stake=UInt64(new_available_stake),
-//             total_stake=UInt64(new_total_stake),
-//         )
-
-//         log("User ", user_address, " staked ", amount)
-
-//     @abimethod()
-//     def unstake(self, user_address: Address, amount: UInt64) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert user_address.native in self.users, "User not found"
-
-//         user = self.users[user_address.native].copy()
-//         assert amount.native <= user.available_stake.native, "Insufficient locked stake"
-
-//         itxn.Payment(
-//             receiver=user_address.native,
-//             amount=amount.native,
-//             fee=Global.min_txn_fee,
-//         ).submit()
-
-//         new_total_stake = user.total_stake.native - amount.native
-//         new_available_stake = new_total_stake - user.locked_stake.native
-
-//         self.users[user_address.native] = User(
-//             role=user.role,
-//             locked_stake=UInt64(user.locked_stake.native + amount.native),
-//             available_stake=UInt64(new_available_stake),
-//             total_stake=UInt64(new_total_stake),
-//         )
-
-//         log("User ", user_address, " unstaked ", amount)
-
-//     @abimethod()
-//     def lock_stake(self, user_address: Address, amount: UInt64) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert user_address.native in self.users, "User not found"
-
-//         user = self.users[user_address.native].copy()
-
-//         assert (
-//             amount.native <= user.available_stake.native
-//         ), "Insufficient available stake"
-
-//         new_locked_stake = user.locked_stake.native + amount.native
-//         new_available_stake = user.total_stake.native - new_locked_stake
-
-//         self.users[user_address.native] = User(
-//             role=user.role,
-//             locked_stake=UInt64(new_locked_stake),
-//             available_stake=UInt64(new_available_stake),
-//             total_stake=user.total_stake,
-//         )
-
-//         log("User ", user_address, " locked ", amount)
-
-//     @abimethod()
-//     def unlock_stake(self, user_address: Address, amount: UInt64) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert user_address.native in self.users, "User not found"
-
-//         user = self.users[user_address.native].copy()
-
-//         assert amount.native <= user.locked_stake.native, "Insufficient locked stake"
-
-//         new_locked_stake = user.locked_stake.native - amount.native
-//         new_available_stake = user.total_stake.native - new_locked_stake
-
-//         self.users[user_address.native] = User(
-//             role=user.role,
-//             locked_stake=UInt64(new_locked_stake),
-//             available_stake=UInt64(new_available_stake),
-//             total_stake=user.total_stake,
-//         )
-
-//         log("User ", user_address, " unlocked ", amount)
-
-//     @abimethod()
-//     def slash_stake(
-//         self, offender_address: Address, amount: UInt64, proposer_address: Address
-//     ) -> None:
-//         assert (
-//             self.only_governance()
-//         ), "Only the governance contract can call this method"
-//         assert offender_address.native in self.users, "User not found"
-
-//         user = self.users[offender_address.native].copy()
-//         assert amount.native <= user.locked_stake.native, "Insufficient locked stake"
-
-//         itxn.Payment(
-//             receiver=proposer_address.native,
-//             amount=amount.native,
-//             fee=Global.min_txn_fee,
-//         ).submit()
-
-//         new_total_stake = user.total_stake.native - amount.native
-//         new_locked_stake = user.locked_stake.native - amount.native
-//         new_available_stake = new_total_stake - new_locked_stake
-
-//         self.users[offender_address.native] = User(
-//             role=user.role,
-//             locked_stake=UInt64(new_locked_stake),
-//             available_stake=UInt64(new_available_stake),
-//             total_stake=UInt64(new_total_stake),
-//         )
-
-//         log("Offender ", offender_address, " slashed ", amount)
-//         log("Proposer ", proposer_address, " received ", amount)
-
-//     """
-//     Subroutines
-//     """
-
-//     @subroutine
-//     def only_governance(self) -> Bool:
-//         return Bool(self.governance_account == Txn.sender)
-
-//     @subroutine
-//     def valid_role(self, role: String) -> Bool:
-//         return Bool(role == "Ace" or role == "Agency")
