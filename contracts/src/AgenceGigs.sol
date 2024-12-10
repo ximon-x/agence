@@ -3,6 +3,11 @@ pragma solidity ^0.8.27;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
+import {AgenceGovernor} from "./AgenceGovernor.sol";
+import {AgenceTreasury} from "./AgenceTreasury.sol";
+import {AgenceGigs} from "./AgenceGigs.sol";
+import {Agence} from "./Agence.sol";
+
 enum Status {
     Pending,
     Active,
@@ -20,6 +25,9 @@ struct Gig {
 }
 
 contract AgenceGigs is Ownable {
+    Agence public immutable agenceContract;
+    AgenceTreasury public immutable agenceTreasury;
+
     // State Variables
     mapping(address => Gig[]) public gigsByAddress;
 
@@ -34,7 +42,13 @@ contract AgenceGigs is Ownable {
     error InvalidGigStatus();
     error InvalidGigId();
 
-    constructor(address _agence) Ownable(_agence) {}
+    constructor(
+        Agence _agence,
+        AgenceTreasury _agenceTreasury
+    ) Ownable(address(_agence)) {
+        agenceContract = Agence(_agence);
+        agenceTreasury = _agenceTreasury;
+    }
 
     receive() external payable {}
 

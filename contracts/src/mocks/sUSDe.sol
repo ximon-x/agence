@@ -8,10 +8,11 @@ contract sUSDe is OFT {
     constructor(
         string memory _name,
         string memory _symbol,
-        uint256 _initialSupply,
         address _lzEndpoint,
         address _delegate
-    ) OFT(_name, _symbol, _lzEndpoint, _delegate) Ownable(_delegate) {
-        _mint(_delegate, _initialSupply);
+    ) OFT(_name, _symbol, _lzEndpoint, _delegate) Ownable(_delegate) {}
+
+    function mint(address _to, uint256 _amount) external onlyOwner {
+        _mint(_to, _amount);
     }
 }

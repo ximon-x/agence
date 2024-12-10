@@ -3,6 +3,12 @@ pragma solidity ^0.8.27;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+import {AgenceGovernor} from "./AgenceGovernor.sol";
+import {AgenceTreasury} from "./AgenceTreasury.sol";
+import {AgenceGigs} from "./AgenceGigs.sol";
+import {Agence} from "./Agence.sol";
 
 struct Stake {
     uint256 locked_stake;
@@ -10,22 +16,69 @@ struct Stake {
     uint256 total_stake;
 }
 
-contract AgenceTreasury is Ownable {
+event TokenDeposited(address indexed user, address indexed token, uint256 amount);
+
+error UserNotRegistered();
+error DepositTooSmall();
+error InsufficientFunds();
+error InsufficientTokenAllowance();
+
+contract AgenceTreasury is Ownable, ReentrancyGuard {
+    Agence public immutable agenceContract;
+
     IERC20 public immutable stakingToken;
     IERC20 public immutable rewardsToken;
+    IERC20 public immutable votingToken;
+
+    uint256 constant MIN_STAKE = 1 ether;
+
+    mapping (address => Stake) public stakes;
 
     constructor(
-        address _owner,
-        address _stakingToken,
-        address _rewardsToken
-    ) Ownable(_owner) {
-        stakingToken = IERC20(_stakingToken);
-        rewardsToken = IERC20(_rewardsToken);
+        Agence _agence,
+        IERC20 _stakingToken,
+        IERC20 _rewardsToken,
+        IERC20 _votingToken
+    ) Ownable(address(_agence)) {
+        agenceContract = _agence;
+
+        stakingToken = _stakingToken;
+        rewardsToken = _rewardsToken;
+        votingToken = _votingToken;
     }
 
-    receive() external payable {}
+    function init (
+    ) external onlyOwner {
+    }
 
-    fallback() external payable {}
+    function deposit(uint256 amount) external nonReentrant {
+        // Sanity Checks
+        if (amount < MIN_STAKE) {
+            revert DepositTooSmall();
+        }
+
+        if (stakingToken.balanceOf(msg.sender) < amount) {
+            revert InsufficientFunds();
+        }
+
+        if (stakingToken.allowance(msg.sender, address(this)) < amount) {
+            revert InsufficientTokenAllowance();
+        }
+        
+        // Transfer tokens from user to contract
+        bool success = stakingToken.transferFrom(msg.sender, address(this), amount);
+        require(success, "Token transfer failed");
+
+        success = votingToken.transferFrom(msg.sender, address(this), amount);
+        require(success, "Token transfer failed");
+        
+        // Update user's deposited balance
+        stakes[msg.sender].total_stake += amount;
+        stakes[msg.sender].available_stake += amount;
+        
+        // Emit deposit event
+        emit TokenDeposited(msg.sender, address(stakingToken), amount);
+    }
 }
 
 //     @abimethod()
