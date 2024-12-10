@@ -98,7 +98,7 @@ contract Agence is OApp {
         );
 
         // Deploy the AgenceGigs contract
-        gigsContract = new AgenceGigs(this);
+        gigsContract = new AgenceGigs(this, treasuryContract);
 
         stakingToken.mint(address(this), INITIAL_SUPPLY);
         votingToken.mint(address(treasuryContract), INITIAL_SUPPLY);

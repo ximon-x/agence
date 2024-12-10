@@ -5,14 +5,12 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {AgenceGovernor} from "./AgenceGovernor.sol";
-import {AgenceTreasury} from "./AgenceTreasury.sol";
-import {AgenceGigs} from "./AgenceGigs.sol";
 import {Agence, User} from "./Agence.sol";
 
 struct Stake {
-    uint256 locked_stake;
-    uint256 available_stake;
+    bool isValid;
+    uint256 lockedStake;
+    uint256 availableStake;
 }
 
 event StakeDeposited(address indexed user, address indexed token, uint256 amount);
@@ -22,11 +20,11 @@ event StakeUnlocked(address indexed user, address indexed token, uint256 amount)
 event StakeSlashed(address indexed offender, address indexed proposer, address indexed token, uint256 amount);
 event RewardsClaimed(address indexed user, address indexed token, uint256 amount);
 
+error InsufficientTokenAllowance();
+error InsufficientFunds();
 error UserNotRegistered();
 error DepositTooSmall();
 error TransferFailed();
-error InsufficientFunds();
-error InsufficientTokenAllowance();
 
 contract AgenceTreasury is Ownable, ReentrancyGuard {
     Agence public immutable agenceContract;
@@ -42,6 +40,14 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
     modifier onlyUsers {
         User memory user = agenceContract.getUser(msg.sender);
         require(user.isValid, UserNotRegistered());
+
+        if (!stakes[msg.sender].isValid) {
+            stakes[msg.sender] = Stake({
+                isValid: true,
+                lockedStake: 0,
+                availableStake: 0
+            });
+        }
 
         _;
     }
@@ -71,10 +77,10 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
         User memory user = agenceContract.getUser(userAddress);
 
         require(user.isValid, UserNotRegistered()); 
-        require(amount <= stakes[userAddress].available_stake, InsufficientFunds());
+        require(amount <= stakes[userAddress].availableStake, InsufficientFunds());
 
-        stakes[userAddress].locked_stake += amount;
-        stakes[userAddress].available_stake -= amount;
+        stakes[userAddress].lockedStake += amount;
+        stakes[userAddress].availableStake -= amount;
 
         emit StakeLocked(userAddress, address(stakingToken), amount);
     }
@@ -91,10 +97,10 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
         User memory user = agenceContract.getUser(userAddress);
 
         require(user.isValid, UserNotRegistered());
-        require(amount <= stakes[userAddress].locked_stake, InsufficientFunds());
+        require(amount <= stakes[userAddress].lockedStake, InsufficientFunds());
 
-        stakes[userAddress].locked_stake -= amount;
-        stakes[userAddress].available_stake += amount;
+        stakes[userAddress].lockedStake -= amount;
+        stakes[userAddress].availableStake += amount;
 
         emit StakeUnlocked(userAddress, address(stakingToken), amount);
     }
@@ -115,10 +121,10 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
         
         require(offender.isValid, UserNotRegistered());
         require(proposer.isValid, UserNotRegistered());
-        require(amount <= stakes[offenderAddress].locked_stake, InsufficientFunds());
+        require(amount <= stakes[offenderAddress].lockedStake, InsufficientFunds());
 
-        stakes[offenderAddress].locked_stake -= amount;
-        stakes[proposerAddress].locked_stake += amount;
+        stakes[offenderAddress].lockedStake -= amount;
+        stakes[proposerAddress].lockedStake += amount;
 
         emit StakeSlashed(offenderAddress, proposerAddress, address(stakingToken), amount);
     }
@@ -159,7 +165,7 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
         require(success, TransferFailed());
         
         // Update user's balance
-        stakes[msg.sender].available_stake += amount;
+        stakes[msg.sender].availableStake += amount;
         
         // Emit deposit event
         emit StakeDeposited(msg.sender, address(stakingToken), amount);
@@ -174,7 +180,7 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
     */
     function withdraw(uint256 amount) external onlyUsers nonReentrant {
         // Sanity Checks
-        require(stakes[msg.sender].available_stake <= amount, InsufficientFunds());
+        require(stakes[msg.sender].availableStake <= amount, InsufficientFunds());
 
         require(
             votingToken.balanceOf(msg.sender) >= amount, 
@@ -200,7 +206,7 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
         require(success, TransferFailed());
         
         // Update user's balance
-        stakes[msg.sender].available_stake -= amount;
+        stakes[msg.sender].availableStake -= amount;
         
         // Emit withdraw event
         emit StakeWithdrawn(msg.sender, address(stakingToken), amount);
@@ -225,5 +231,9 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
 
         // Emit rewards claimed event
         emit RewardsClaimed(msg.sender, address(stakingToken), amount);
+    }
+
+    function getStake(address userAddress) external view returns (Stake memory) {
+        return stakes[userAddress];
     }
 }
