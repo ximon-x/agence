@@ -37,9 +37,9 @@ error UserAlreadyCreated();
 error NotEnoughFunds();
 
 contract Agence is OApp {
-    AgenceGovernor public immutable governorContract;
-    AgenceTreasury public immutable treasuryContract;
-    AgenceGigs public immutable gigsContract;
+    AgenceGovernor public governorContract;
+    AgenceTreasury public treasuryContract;
+    AgenceGigs public gigsContract;
 
     AgenceToken public immutable votingToken;
     sUSDe public immutable rewardsToken;
@@ -87,20 +87,18 @@ contract Agence is OApp {
             address(this)
         );
 
-        // TODO: Uncomment this line once the AgenceGovernor contract is ready
-        // governorContract = new AgenceGovernor(address(this));
-
-        // Deploy the AgenceTreasury contract
-        treasuryContract = new AgenceTreasury(this,
-            stakingToken,
-            rewardsToken,
-            votingToken
-        );
-
-        // Deploy the AgenceGigs contract
-        gigsContract = new AgenceGigs(this, treasuryContract);
-
         stakingToken.mint(address(this), INITIAL_SUPPLY);
+    }
+
+    function init(
+        // address _governor,
+        address _treasury,
+        address _gigs
+    ) external onlyOwner {
+        // governorContract = AgenceGovernor(payable(_governor));
+        treasuryContract = AgenceTreasury(_treasury);
+        gigsContract = AgenceGigs(_gigs);
+
         votingToken.mint(address(treasuryContract), INITIAL_SUPPLY);
         rewardsToken.mint(address(treasuryContract), INITIAL_SUPPLY);
     }
@@ -185,6 +183,30 @@ contract Agence is OApp {
      */
     function getUser(address userAddress) public view returns (User memory) {
         return users[userAddress];
+    }
+
+    /**
+     * @notice Retrieves the staking token address.
+     * @return The address of the staking token.
+     */
+    function getStakingTokenAddress() public view returns (address) {
+        return address(stakingToken);
+    }
+
+    /**
+     * @notice Retrieves the rewards token address.
+     * @return The address of the rewards token.
+     */
+    function getRewardsTokenAddress() public view returns (address) {
+        return address(rewardsToken);
+    }
+
+    /**
+     * @notice Retrieves the voting token address.
+     * @return The address of the voting token.
+     */
+    function getVotingTokenAddress() public view returns (address) {
+        return address(votingToken);
     }
 
     /**

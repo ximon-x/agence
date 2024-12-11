@@ -54,15 +54,15 @@ contract AgenceTreasury is Ownable, ReentrancyGuard {
 
     constructor(
         Agence _agence,
-        IERC20 _stakingToken,
-        IERC20 _rewardsToken,
-        IERC20 _votingToken
+        address _stakingToken,
+        address _rewardsToken,
+        address _votingToken
     ) Ownable(address(_agence)) {
         agenceContract = _agence;
 
-        stakingToken = _stakingToken;
-        rewardsToken = _rewardsToken;
-        votingToken = _votingToken;
+        stakingToken = IERC20(_stakingToken);
+        rewardsToken = IERC20(_rewardsToken);
+        votingToken = IERC20(_votingToken);
     }
 
     /**
