@@ -1,9 +1,15 @@
-[submodule "contracts/ethereum/lib/forge-std"]
-	path = contracts/ethereum/lib/forge-std
+[submodule "contracts/lib/forge-std"]
+	path = contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-[submodule "contracts/ethereum/lib/openzeppelin-contracts"]
-	path = contracts/ethereum/lib/openzeppelin-contracts
+[submodule "contracts/lib/solidity-bytes-utils"]
+	path = contracts/lib/solidity-bytes-utils
+	url = https://github.com/GNSPS/solidity-bytes-utils
+[submodule "contracts/lib/openzeppelin-contracts"]
+	path = contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
-[submodule "contracts/ethereum/lib/layerzero-v2"]
-	path = contracts/ethereum/lib/layerzero-v2
+[submodule "contracts/lib/layerzero-v2"]
+	path = contracts/lib/layerzero-v2
 	url = https://github.com/LayerZero-Labs/layerzero-v2
+[submodule "contracts/lib/devtools"]
+	path = contracts/lib/devtools
+	url = https://github.com/LayerZero-Labs/devtools
