@@ -2,6 +2,7 @@
 help:
 	@echo "Available targets:"
 	@echo "  deploy       	- Deploy to Base Sepolia and Polygon Amoy, and set peers"
+	@echo "  deploy-local  	- Deploy to Local Anvil Network" 
 	@echo "  deploy-base  	- Deploy only to Base Sepolia"
 	@echo "  deploy-polygon - Deploy only to Polygon Amoy"
 	@echo "  set-peers    	- Set peer configurations between Base Sepolia and Polygon Amoy"
@@ -13,6 +14,11 @@ deploy.sh:
 
 # Load environment variables
 include .env
+
+# Deploy to Local Anvil Network
+.PHONY: deploy-local
+deploy-local: deploy.sh
+	@NETWORK=anvil ./deploy.sh
 
 # Full deployment to all networks with peer configuration
 .PHONY: deploy

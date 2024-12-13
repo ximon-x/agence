@@ -86,8 +86,6 @@ contract Agence is OApp {
             "AGE",
             address(this)
         );
-
-        stakingToken.mint(address(this), INITIAL_SUPPLY);
     }
 
     function init(
@@ -99,6 +97,7 @@ contract Agence is OApp {
         treasuryContract = AgenceTreasury(_treasury);
         gigsContract = AgenceGigs(_gigs);
 
+        stakingToken.mint(address(this), INITIAL_SUPPLY);
         votingToken.mint(address(treasuryContract), INITIAL_SUPPLY);
         rewardsToken.mint(address(treasuryContract), INITIAL_SUPPLY);
     }

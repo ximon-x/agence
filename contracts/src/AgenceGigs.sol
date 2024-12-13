@@ -59,8 +59,6 @@ contract AgenceGigs is Ownable {
     constructor(Agence _agence, AgenceTreasury _treasury) Ownable(address(_agence)) {
         agenceContract = Agence(_agence);
         treasuryContract = AgenceTreasury(_treasury);
-
-        gigs = new Gig[](0);
     }
 
     /**

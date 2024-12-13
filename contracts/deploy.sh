@@ -27,18 +27,38 @@ echo -e "\n=== Deploying to $NETWORK_NAME ==="
 # Create network-specific data directory
 mkdir -p "data/$NETWORK_NAME"
 
-# Deploy Agence Contract
+
+#================================================================
+#|                                                              |
+#|                  AGENCE CONTRACT DEPLOYMENT                  |
+#|                                                              |
+#================================================================
+
 echo "Deploying Agence Contract..."
 forge create src/Agence.sol:Agence --json \
     --rpc-url "${!RPC_URL_VAR}" \
     --account deployer --broadcast \
     --constructor-args "${!ENDPOINT_VAR}" "$DEPLOYER" \
-    --etherscan-api-key "${!ETHERSCAN_API_KEY_VAR}" --verify \
     > "data/$NETWORK_NAME/agence.json" || error_exit "Agence contract deployment failed"
 
 # Extract Agence contract address
 AGENCE_ADDRESS=$(jq -r .deployedTo "./data/$NETWORK_NAME/agence.json")
 echo "Agence deployed to $AGENCE_ADDRESS on $NETWORK_NAME."
+
+forge verify-contract $AGENCE_ADDRESS \
+    --rpc-url ${!RPC_URL_VAR} \
+    --constructor-args $(\
+        cast abi-encode "constructor(address,address)" \
+            "${!ENDPOINT_VAR}" "$DEPLOYER") \
+    --etherscan-api-key ${!ETHERSCAN_API_KEY_VAR} --watch \
+    src/Agence.sol:Agence 
+
+
+#================================================================
+#|                                                              |
+#|                  AGENCE TREASURY DEPLOYMENT                  |
+#|                                                              |
+#================================================================
 
 # Retrieve token addresses from Agence contract
 STAKING_TOKEN=$(cast call "$AGENCE_ADDRESS" \
@@ -60,25 +80,52 @@ forge create src/AgenceTreasury.sol:AgenceTreasury --json \
     --account deployer --broadcast \
     --constructor-args "$AGENCE_ADDRESS" \
         "$STAKING_TOKEN" "$REWARDS_TOKEN" "$VOTING_TOKEN" \
-    --etherscan-api-key "${!ETHERSCAN_API_KEY_VAR}" --verify \
     > "data/$NETWORK_NAME/agence_treasury.json" || error_exit "Agence Treasury deployment failed"
 
 # Extract Agence Treasury address
 AGENCE_TREASURY_ADDRESS=$(jq -r .deployedTo "./data/$NETWORK_NAME/agence_treasury.json")
 echo "Agence Treasury deployed to $AGENCE_TREASURY_ADDRESS on $NETWORK_NAME."
 
-# Deploy Agence Gigs
+forge verify-contract $AGENCE_TREASURY_ADDRESS \
+    --rpc-url ${!RPC_URL_VAR} \
+    --constructor-args $(\
+        cast abi-encode "constructor(address,address,address,address)" \
+            "$AGENCE_ADDRESS" "$STAKING_TOKEN" "$REWARDS_TOKEN" "$VOTING_TOKEN") \
+    --etherscan-api-key ${!ETHERSCAN_API_KEY_VAR} --watch \
+    src/AgenceTreasury.sol:AgenceTreasury
+
+
+#================================================================
+#|                                                              |
+#|                  AGENCE GIGS DEPLOYMENT                      |
+#|                                                              |
+#================================================================
+
 echo "Deploying Agence Gigs..."
 forge create src/AgenceGigs.sol:AgenceGigs --json \
     --rpc-url "${!RPC_URL_VAR}" \
     --account deployer --broadcast \
     --constructor-args "$AGENCE_ADDRESS" "$AGENCE_TREASURY_ADDRESS" \
-    --etherscan-api-key "${!ETHERSCAN_API_KEY_VAR}" --verify \
     > "data/$NETWORK_NAME/agence_gigs.json" || error_exit "Agence Gigs deployment failed"
 
 # Extract Agence Gigs address
 AGENCE_GIGS_ADDRESS=$(jq -r .deployedTo "./data/$NETWORK_NAME/agence_gigs.json")
 echo "Agence Gigs deployed to $AGENCE_GIGS_ADDRESS on $NETWORK_NAME."
+
+forge verify-contract $AGENCE_GIGS_ADDRESS \
+    --rpc-url ${!RPC_URL_VAR} \
+    --constructor-args $(\
+        cast abi-encode "constructor(address,address)" \
+            "$AGENCE_ADDRESS" "$AGENCE_TREASURY_ADDRESS") \
+    --etherscan-api-key ${!ETHERSCAN_API_KEY_VAR} --watch \
+    src/AgenceGigs.sol:AgenceGigs
+
+
+#================================================================
+#|                                                              |
+#|                  AGENCE INITIALIZATION                       |
+#|                                                              |
+#================================================================
 
 # Initialize Agence with Treasury and Gigs addresses
 echo "Initializing Agence..."

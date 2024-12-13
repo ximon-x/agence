@@ -2,7 +2,6 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-via_ir = true
 
 remappings = [
     "solidity-bytes-utils/=lib/solidity-bytes-utils",
